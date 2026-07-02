@@ -10,10 +10,11 @@ initiative** (RFC-style) exploring how to keep a dependable baseline of capable,
 open-weight AI available to everyone — running on hardware people own, and
 impossible to switch off from above.
 
-The goal is **not** to compete with frontier model providers, and **not** to
-build a business. It is to guarantee a **reliable floor** of useful intelligence:
-not the most advanced model in existence, but an advanced-enough one people can
-always rely on. See [Why DII Exists](./Why_DII_Exists.md).
+The project works alongside frontier model providers rather than competing with
+them, and it operates as a non-commercial effort. The aim is a **reliable floor**
+of useful intelligence: an advanced-enough model people can always rely on, while
+the frontier stays with the labs that build it. See
+[Why DII Exists](./Why_DII_Exists.md).
 
 ---
 
@@ -22,7 +23,7 @@ always rely on. See [Why DII Exists](./Why_DII_Exists.md).
 Access to the most capable AI is centralized, and therefore revocable. In June
 2026 a frontier model was disabled worldwide by government directive within hours,
 then restored two weeks later — proving that centralized access is something users
-are *permitted to use for now*, not something they *have*.
+are *permitted to use for now* rather than something they own.
 
 The central research question is:
 
@@ -34,12 +35,12 @@ The central research question is:
 
 # Vision
 
-Users request **capabilities**, not hardware — reasoning, coding, vision, speech,
-retrieval. A router determines where work executes based on capability, trust,
-sovereignty/privacy, latency, and availability, always preferring the user's own
-machine first.
+Users request **capabilities** — reasoning, coding, vision, speech, retrieval —
+and the router places each request on suitable hardware, always preferring the
+user's own machine first. Routing weighs capability, trust, sovereignty/privacy,
+latency, and availability.
 
-The measure of success is **continuity**, not frontier parity.
+Success is measured by **continuity** of access.
 
 ---
 
@@ -48,11 +49,11 @@ The measure of success is **continuity**, not frontier parity.
 - People are the infrastructure.
 - Intelligence should be requested as a capability.
 - Local-first, network-as-overflow is the resilient shape.
-- A federation of trusted **pods** beats a global swarm of strangers.
-- Contribution should earn **access** (reciprocity), not credits or currency.
+- A federation of trusted **pods** holds up better than a global swarm of strangers.
+- Contribution should earn **access** through reciprocity.
 - A reliable floor for everyone beats an intermittent ceiling for a few.
 
-These are hypotheses, not conclusions.
+Treat these as open hypotheses.
 
 ---
 
@@ -72,7 +73,7 @@ These are hypotheses, not conclusions.
 
 This repository should become a research library, an engineering notebook, an
 architecture handbook, a prototype log, and a historical record of how the ideas
-evolve. Superseded ideas are marked, not deleted. Every paper should be
+evolve. Superseded ideas are marked as such and kept. Every paper should be
 summarized; every important decision should explain *why*.
 
 ---
@@ -127,7 +128,7 @@ framing is retired — see [Startup Concept (superseded)](./Startup_Concept.md).
 - Not a business, and not monetized.
 - Not a GPU rental marketplace.
 - Not a cryptocurrency, token, or tradable-credit project.
-- Not an attempt to serve frontier, dual-use capability — a floor, not the ceiling.
+- Not an attempt to serve frontier, dual-use capability.
 - Not dependent on any hub, registry, or provider that could be switched off.
 - Not a race to build frontier models.
 

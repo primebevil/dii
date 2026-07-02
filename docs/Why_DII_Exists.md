@@ -17,13 +17,12 @@ Department export-control directive issued that evening, following a June 2, 202
 executive order ("Promoting Advanced Artificial Intelligence Innovation and
 Security"). The directive barred access by any foreign national — outside the US,
 inside the US, and including Anthropic's own foreign-national employees. Because
-the company could not verify every requester's nationality in real time, it
-could not comply selectively, so it shut the models off for everyone. Access was
+the company could not verify every requester's nationality in real time, it could
+not comply selectively, so it shut the models off for everyone. Access was
 restored roughly two weeks later, around June 26–July 1, 2026.
 
-This is not a hypothetical about some future clampdown. A frontier model was
-switched off for the entire planet, by directive, in a matter of hours — and
-then switched back on.
+This already happened. A frontier model was switched off for the entire planet,
+by directive, in a matter of hours — and then switched back on.
 
 ---
 
@@ -34,53 +33,53 @@ That framing is emotionally true but strategically imprecise. The sharper, more
 useful lesson is this:
 
 > **A centralized model provider is a single point of control. Access to it can
-> be revoked — globally, in hours — by a party that is not you and not the
+> be revoked — globally, in hours — by a party that is neither the user nor the
 > provider.**
 
-The fact that access came *back* does not weaken this; it strengthens it. The
-episode demonstrated that frontier access is now **revocable at will**. What can
-be switched off in an afternoon and on again two weeks later is not something you
-*have* — it is something you are *permitted to use for now*. DII exists because
-"permitted for now" is not a foundation anyone should have to build their life,
-work, or country's capability on.
+The fact that access came *back* strengthens the point. The episode showed that
+frontier access is now **revocable at will**. Something that can be switched off
+in an afternoon and on again two weeks later is a permission granted for now,
+which is a shaky foundation to build a life, a business, or a country's
+capability on. DII exists because "permitted for now" should not be the only
+option.
 
 Weights running on hardware you own cannot be recalled by a directive. That is
-the entire thesis, and the Fable 5 episode is its founding case study.
+the whole thesis, and the Fable 5 episode is its founding case study.
 
 ---
 
 ## The concession we make honestly
 
-We do not pretend all control is illegitimate. The trigger in this case was
-real: a reported method to bypass Fable 5's safeguards in a way that could help
-identify vulnerabilities in critical infrastructure, alongside documented
-efforts by foreign labs to distill the models' capabilities. There are AI
-capabilities that genuinely resemble dangerous dual-use technology, and "give the
-most powerful possible system to absolutely everyone, no questions asked" is not
-a serious position. We will not stake our project on it.
+We accept that some control is legitimate. The trigger in this case was real: a
+reported method to bypass Fable 5's safeguards in a way that could help identify
+vulnerabilities in critical infrastructure, alongside documented efforts by
+foreign labs to distill the models' capabilities. Some AI capabilities genuinely
+resemble dangerous dual-use technology, and "give the most powerful possible
+system to absolutely everyone, no questions asked" is a poor position to defend.
+We will not stake our project on it.
 
-So DII is **not** a demand that frontier, weapons-relevant capability be
-distributed to all. That is the strongest objection to our value, and we concede
-it up front rather than fight on that ground.
+So DII makes no demand that frontier, weapons-relevant capability be distributed
+to all. That is the strongest objection to our value, and we concede it up front
+rather than fight on that ground.
 
 ---
 
 ## The concern that motivates us (stated as a hypothesis)
 
-*This is a pattern-based inference, not a proven trajectory. We label it as a
-hypothesis, per the project's principles.*
+*This is a pattern-based inference, and we label it as a hypothesis, per the
+project's principles.*
 
-The concern is not the first control. It is what tends to follow it. A
-restriction introduced for a specific, defensible reason ("this exploit is
-dangerous") establishes the *mechanism* and the *precedent* for control. Once the
-mechanism exists — a switch that one party can throw — the set of reasons for
-throwing it tends to widen over time: from acute safety, to strategic advantage,
-to controlling who may use the technology and for what, to shaping which uses and
+The worry is about what tends to follow the first control. A restriction
+introduced for a specific, defensible reason ("this exploit is dangerous")
+establishes the *mechanism* and the *precedent* for control. Once the mechanism
+exists — a switch that one party can throw — the set of reasons for throwing it
+tends to widen over time: from acute safety, to strategic advantage, to
+controlling who may use the technology and for what, to shaping which uses and
 narratives are permitted at all. History with other powerful, centrally-gated
 technologies suggests the ratchet more often tightens than loosens.
 
-We may be wrong about the trajectory. But a resilient design costs little if the
-concern is overblown, and matters enormously if it is not. That asymmetry is why
+We may be wrong about the trajectory. A resilient design costs little if the
+concern is overblown, and matters enormously if it holds. That asymmetry is why
 we build.
 
 ---
@@ -89,19 +88,19 @@ we build.
 
 The promise is deliberately modest, and that modesty is what makes it credible:
 
-> **DII will not necessarily give you the most advanced model in existence. It
-> aims to guarantee that you always retain access to an *advanced-enough* model
-> you can rely on — one that runs on hardware people own and cannot be switched
-> off from above.**
+> **DII does not promise the most advanced model in existence. It aims to
+> guarantee that you always retain access to an *advanced-enough* model you can
+> rely on — one that runs on hardware people own and stays beyond the reach of
+> any single off-switch.**
 
-A reliable *floor* of capability, permanently available, beats intermittent
-access to the ceiling. Open-weight models that are already broadly published —
-the kind the June 2026 episode did **not** target — are more than capable enough
-to keep individuals, businesses, researchers, and communities functioning. The
-goal is continuity of *useful* intelligence, not parity with the frontier.
+A reliable *floor* of capability, permanently available, serves people better
+than intermittent access to the ceiling. Open-weight models that are already
+broadly published — the kind the June 2026 episode did **not** target — are more
+than capable enough to keep individuals, businesses, researchers, and communities
+functioning. The goal is continuity of *useful* intelligence.
 
 This is "AI for everyone" in the one form that survives the strongest objection:
-not the bomb, but the electricity.
+everyday capability that stays switched on, like electricity.
 
 ---
 
@@ -119,20 +118,21 @@ intelligence available so that ordinary capability cannot be revoked from above.
 
 ## Why this shapes the architecture
 
-The positioning is not just rhetoric; it dictates the build order:
+The positioning dictates the build order:
 
-- **Local-first is the star, not a feature.** If the value is "can't be switched
+- **Local-first is the star of the system.** If the value is "can't be switched
   off," step one is that capable AI runs on hardware you control, offline if
-  needed. The distributed network is the *overflow and scaling* layer, not the
-  foundation.
+  needed. The distributed network sits above it as the *overflow and scaling*
+  layer.
 - **Open weights are the substrate.** The guarantee only holds for models that
   can be legally held and run by their users. That also keeps us clear of the
   proliferation objection above.
-- **Latency-tolerant, good-enough workloads are the target envelope** — which is
-  exactly what the physics of home hardware can actually serve (see
+- **Latency-tolerant, good-enough workloads are the target envelope** — the same
+  envelope the physics of home hardware can actually serve (see
   [The Case Against DII](../research/The-Case-Against-DII.md), Objection 1).
-- **Sovereignty and data-residency are first-class routing inputs**, not
-  afterthoughts — the demand that the evidence leaves standing.
+- **Sovereignty and data-residency are first-class routing inputs**, decided at
+  the start of the design rather than added later — the demand that the evidence
+  leaves standing.
 
 ---
 

@@ -75,7 +75,7 @@ inference, it is not.
 **Claim.** The project's founding image — "millions of machines sit idle, let's
 use them" — assumes the scarce resource is supply. In this market the scarce
 resource is *paying demand*. Aggregating more idle supply makes the real problem
-worse, not better.
+worse.
 
 **Evidence.** io.net registered ~327,000 GPUs, but in Q1 2025 the daily average
 of verified active GPUs was ~6,720 — about **2% utilization** of the registered

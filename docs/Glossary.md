@@ -1,11 +1,11 @@
 # Glossary
 
 **Reliable Floor** — the project's goal: a dependable baseline of capable AI that
-is always available, versus intermittent access to the most advanced ("ceiling")
-models.
+is always available, distinct from intermittent access to the most advanced
+("ceiling") models.
 
-**Local-First** — every node is fully functional offline; the network is an
-enhancement, never a dependency.
+**Local-First** — every node is fully functional offline; the network only adds
+to what a node can already do on its own.
 
 **Node** — a participant's machine running one or more open-weight models,
 exposing them as capabilities.
@@ -14,18 +14,19 @@ exposing them as capabilities.
 machines, a lab, an org, a community). The core unit of the system.
 
 **Federation** — trusted pods sharing overflow capacity under explicit policy,
-with no central hub. "The Fediverse for inference."
+with no central hub. Closer to the Fediverse than to a single cloud.
 
 **Capability Routing** — requesting intelligence as a capability (reasoning,
-coding, vision, retrieval) at a required tier, rather than requesting specific
-hardware or models; the router decides where work runs.
+coding, vision, retrieval) at a required tier; the router then selects the
+hardware and model.
 
 **Overflow Path** — the order work spills outward: local → pod → federation, only
 when needed and only within user policy.
 
 **Contribution-Earns-Access** — participation model where running a node grants
-priority access to the federation. Non-transferable, non-tradable, expiring —
-reciprocity, not currency. (Replaces the earlier "proof-of-contribution credits.")
+priority access to the federation. Non-transferable, non-tradable, and expiring —
+a reciprocity signal for fair use, cleared without money. (Replaces the earlier
+"proof-of-contribution credits.")
 
-**Sovereignty Constraint** — a first-class routing input, e.g. "data never leaves
-my machines" or "stays in-country."
+**Sovereignty Constraint** — a first-class routing input, e.g. "data stays on my
+machines" or "data stays in-country."

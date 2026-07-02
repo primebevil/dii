@@ -4,8 +4,10 @@ A free, open-source research initiative (RFC-style) exploring how to keep a
 dependable baseline of capable, open-weight AI available to everyone — running on
 hardware people own, and impossible to switch off from above.
 
-Not a company, not a token, not a race to the frontier. A **reliable floor** of
-intelligence, not the ceiling. See [docs/Why_DII_Exists.md](./docs/Why_DII_Exists.md).
+It is free and non-commercial, with no token or paid marketplace. The aim is a
+**reliable floor** of capable, everyday intelligence that stays available to
+everyone, while the frontier labs keep building the ceiling. See
+[docs/Why_DII_Exists.md](./docs/Why_DII_Exists.md).
 
 ## Core idea
 Local-first nodes that work offline, optionally federating into trusted **pods**,
@@ -17,7 +19,7 @@ See [architecture/Overview.md](./architecture/Overview.md).
 - Research before implementation
 - Credit prior work
 - Facts vs hypotheses
-- Local-first, no single point of control
+- Local-first, with no single point of control
 - Build small prototypes
 
 ## Start here

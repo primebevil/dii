@@ -1,8 +1,8 @@
 # Manifesto
 
 - People are the infrastructure.
-- Intelligence should be requested as a capability, not a specific machine.
-- The router is the core contribution — coordination, not a product to sell.
-- Contribution earns access, not credits or currency.
-- A reliable floor for everyone beats an intermittent ceiling for a few.
+- Intelligence is requested as a capability; the router decides which machine serves it.
+- The router is the core contribution: coordination across independent nodes.
+- Contribution earns access to the federation through reciprocity.
+- A reliable floor for everyone matters more than an intermittent ceiling for a few.
 - Local-first, always. No single point that can be switched off from above.
