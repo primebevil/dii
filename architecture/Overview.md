@@ -8,13 +8,14 @@ DII is now scoped as a free, open-source RFC project with no commercial model be
 
 ## The idea in one sentence
 
-Every participant runs a self-sufficient local node that serves capable open-weight AI offline. Nodes optionally federate into trusted pods. A capability router spills work outward, local first, then pod, then federation, only when needed and only within policy the user controls. The network is an enhancement layer: remove it entirely and every node still works. That property is the whole point of the project, so it sits at the top of every design choice below.
+Participants who can self-host run a self-sufficient local node that serves capable open-weight AI offline. Nodes optionally federate into trusted pods. People who cannot self-host join as consumers and reach the same capable models through a pod that chooses to serve them. A capability router places each request along the shortest viable path, local first where possible, then pod, then federation, within policy the user controls. For a node-runner the network is an enhancement, and removing it leaves the node still working; for a consumer the network is the delivery itself. Either way the guarantee is the same: access to a capable model that stays beyond the reach of any single off-switch. That guarantee sits at the top of every design choice below (see ADR-0002).
 
 ## Design principles
 
 These are the commitments the rest of the design has to satisfy:
 
 - Local-first, always. A node with zero connectivity still delivers useful AI, and the network only amplifies a node that already works on its own.
+- Access before contribution. Serving people who cannot self-host, and who may never contribute, is a first-class case rather than an afterthought (ADR-0002).
 - Graceful degradation, never to zero. Network down falls to local, pod down falls to the federation, and a peer failing mid-request reroutes. The floor is always "still works locally."
 - No single point of control. No global registry, no mandatory hub, and nothing a single directive could switch off. Discovery and identity are federated the way email or Matrix are.
 - Open weights only. The guarantee holds only for models users may legally hold and run, which also keeps DII clear of the frontier-proliferation objection.
@@ -31,6 +32,8 @@ The shape earns its keep in three ways. It defuses the trust tax, because most w
 
 The node runtime is the atom. It runs one or more open-weight models locally, exposes them as capabilities, and functions fully offline. This is the star of the whole system, since a person who only ever runs a single node has already received the core promise of DII, and everything else is optional scaling on top of it.
 
+The consumer client is the counterpart for people who cannot self-host. It is a lightweight role, a phone app or a browser, that requests capabilities without hosting a model of its own. A consumer owns no serving hardware and is sponsored by a pod that agrees to serve it, which is how the reliable floor reaches people who have no capable device.
+
 The capability abstraction lets requests target capabilities such as reasoning, coding, vision, speech, retrieval, or embedding, at a required quality and latency tier. The caller names the capability and tier, and the router selects the hardware and model. Each node publishes a capability manifest describing which models it serves, its context length, throughput, modalities, and current load, which is what lets a heterogeneous fleet look uniform to a caller.
 
 Discovery is federated. Within a pod it can be a simple local registry or LAN discovery. Across pods it uses signed, gossiped peer lists and a DNS-like federated directory, deliberately avoiding a single global index that would reintroduce the chokepoint the project exists to eliminate.
@@ -39,7 +42,7 @@ The router and scheduler are the coordination core. They decide where a request 
 
 Trust and reputation carry the weight that payment would carry elsewhere. With no money in the system, trust rests on identity through signed and persistent node identities, reputation through track record within and across pods, and policy covering who you accept work from, who you send work to, and where data may travel. Verification is tiered: negligible inside a trusted pod, optional for cross-pod work, and for the rare high-stakes cross-boundary case, borrowing an existing protocol in the TOPLOC or Verde family rather than inventing one. Work inside a trusted pod skips the redundant-execution tax.
 
-The participation model is reciprocity. Contribution earns access: run a node and contribute idle capacity, and you gain priority when you later need to spill work onto the federation. This access is deliberately non-transferable, non-tradable, and expiring, which makes it a fair-use signal rather than a currency and keeps DII clear of the crypto category. Pure voluntary contribution is welcome too; the reciprocity layer just makes sustained participation rational.
+The participation model is reciprocity. Contribution earns access: run a node and contribute idle capacity, and you gain priority when you later need to spill work onto the federation. This access is deliberately non-transferable, non-tradable, and expiring, which makes it a fair-use signal rather than a currency and keeps DII clear of the crypto category. Pure voluntary contribution is welcome too; the reciprocity layer just makes sustained participation rational. Because access does not require contribution (ADR-0002), a pod can also hold donated or sponsored capacity, a shared pool that contributors and institutions feed so consumers have something to draw on. Since contribution no longer guards that pool, fair-use quotas and a way to vouch for real people keep a single actor from posing as many consumers and draining it.
 
 Privacy-preserving execution follows from sovereignty being the reason to exist. The default keeps data inside the user's trust boundary, and cross-boundary execution is opt-in and policy-gated. Techniques for protecting data on semi-trusted hops, and whether to allow them at all, are an open design area flagged here for later.
 
@@ -79,6 +82,7 @@ The final step always returns the best the local node can do, which is the resil
 - Cross-boundary verification: when, if ever, redundant execution or a borrowed proof is worth its cost.
 - Data protection on untrusted hops: whether to allow it at all, and if so how.
 - Node identity: self-sovereign keys versus pod-issued identity.
+- Serving consumers: how pods decide whom to serve and at what fair-use limit, how donated capacity is accounted for without becoming a currency, and how vouching resists abuse without becoming an exclusionary gate.
 
 ## What this deliberately excludes
 

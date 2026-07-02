@@ -10,3 +10,4 @@
 - Core hypotheses established.
 - Adversarial teardown written (research/The-Case-Against-DII.md).
 - Founding rationale captured (docs/Why_DII_Exists.md): resilience and reliable-floor positioning.
+- Decided access is not gated on contribution; the network serves non-contributing consumers (docs/ADR/ADR-0002).
