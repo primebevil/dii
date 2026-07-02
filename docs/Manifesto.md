@@ -1,8 +1,8 @@
 # Manifesto
 
-## Working philosophy
-
 - People are the infrastructure.
-- Every idle GPU is unrealized intelligence.
-- Build an intelligence network, not merely a compute network.
-- Infrastructure should empower participants, not just providers.
+- Intelligence should be requested as a capability, not a specific machine.
+- The router is the core contribution — coordination, not a product to sell.
+- Contribution earns access, not credits or currency.
+- A reliable floor for everyone beats an intermittent ceiling for a few.
+- Local-first, always. No single point that can be switched off from above.

@@ -1,28 +1,27 @@
 # Distributed Intelligence Initiative
 
-## Purpose
+A free, open-source research initiative (RFC-style) exploring how to keep a
+dependable baseline of capable, open-weight AI available to everyone — running on
+hardware people own, and impossible to switch off from above.
 
-This repository is a long-term engineering research project exploring whether AI
-can evolve from centralized cloud infrastructure into a globally distributed
-intelligence network powered by participant-owned hardware.
+Not a company, not a token, not a race to the frontier. A **reliable floor** of
+intelligence, not the ceiling. See [docs/Why_DII_Exists.md](./docs/Why_DII_Exists.md).
 
-This is **not** a startup repository.
-
-It is a research repository.
+## Core idea
+Local-first nodes that work offline, optionally federating into trusted **pods**,
+with a capability router that spills work outward — local → pod → federation —
+only when needed and only within policy the user controls.
+See [architecture/Overview.md](./architecture/Overview.md).
 
 ## Principles
+- Research before implementation
+- Credit prior work
+- Facts vs hypotheses
+- Local-first, no single point of control
+- Build small prototypes
 
-- Research before implementation.
-- Credit all prior work.
-- Separate facts from hypotheses.
-- Record architectural decisions.
-- Build small prototypes to validate assumptions.
-- Let evidence change our minds.
-
-## Current Working Hypotheses
-
-- People are the infrastructure.
-- The scheduler is the product.
-- Intelligence should be requested as a capability.
-- Contribution should earn participation.
-- Local-first, network-capable AI is worth exploring.
+## Start here
+- [Why DII Exists](./docs/Why_DII_Exists.md) — the motivation and founding case study
+- [Architecture Overview](./architecture/Overview.md) — how the system works
+- [The Case Against DII](./research/The-Case-Against-DII.md) — the adversarial teardown
+- [Project Charter](./docs/Project_Charter.md) — full prospectus

@@ -1,11 +1,3 @@
-# Research
+# Research Index
 
-Collect summaries, notes, and links here.
-
-Suggested starting areas:
-- Distributed inference
-- Volunteer compute
-- GPU marketplaces
-- Scheduling
-- Distributed systems
-- Trust and reputation
+Summarize every paper and company in one page.

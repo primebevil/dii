@@ -1,15 +1,10 @@
-# Initial Reading List
+# Reading List
 
-Companies:
+- FusionAI
+- Parallax
+- DiStrO
+- Ray
 - Akash
 - io.net
 - Prime Intellect
-- NodeGo
-
-Research:
-- FusionAI
-- Parallax
-- Nous Research / DiStrO
-- Ray
-- Distributed AI surveys
-- IETF Distributed Inference Networks draft
+- IETF DIN draft
