@@ -6,6 +6,14 @@
 
 **Node**: a participant's machine running one or more open-weight models, exposing them as capabilities.
 
+**Node Runtime (the atom)**: the daemon on a node that serves local models, publishes a capability manifest, and routes requests. Self-sufficient offline; the smallest thing that delivers the core promise to a single user.
+
+**Consumer (Consumer Client)**: a participant with no serving hardware who only borrows, such as a phone or browser, sponsored by a pod that agrees to serve it. Architecturally a request that enters the overflow path at the pod stage, having no local stage of its own. See ADR-0002 and ADR-0004.
+
+**Ingress**: how a request enters the router. A local, trusted ingress serves the node's own user and starts at the local stage; a remote, authenticated ingress serves a sponsored consumer and starts at the pod stage. One router, two ingress types.
+
+**Capability Manifest**: what a node publishes about itself: which models it serves, context length, throughput, modalities, and current load. Lets a heterogeneous fleet look uniform to a caller.
+
 **Pod**: a small group of nodes that already trust each other, such as personal machines, a lab, an org, or a community. The core unit of the system.
 
 **Federation**: trusted pods sharing overflow capacity under explicit policy, with no central hub. Closer to the Fediverse than to a single cloud.

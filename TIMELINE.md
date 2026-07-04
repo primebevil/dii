@@ -11,3 +11,10 @@
 - Adversarial teardown written (research/The-Case-Against-DII.md).
 - Founding rationale captured (docs/Why_DII_Exists.md): resilience and reliable-floor positioning.
 - Decided access is not gated on contribution; the network serves non-contributing consumers (docs/ADR/ADR-0002).
+
+## 2026-07-03
+
+- Architecture working session, focused on the path to a Week-3 prototype (journal/2026-07-03-architecture-session.md).
+- Chose Go for the node prototype, Rust reversible at the production boundary (docs/ADR/ADR-0003).
+- Made the consumer a first-class ingress in the prototype: one router, two ingress types, consumer as a request past the local hop (docs/ADR/ADR-0004).
+- Folded the router ingress model and updated prototype topology into the Architecture Overview.

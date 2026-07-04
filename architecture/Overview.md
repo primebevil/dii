@@ -1,6 +1,6 @@
 # DII Architecture Overview: Local-First, Network-as-Overflow
 
-Status: RFC v0.1 (2026-07-02). Depends on Why DII Exists and The Case Against DII.
+Status: RFC v0.1 (2026-07-02), updated 2026-07-03 with the router ingress model and prototype scope from ADR-0003 and ADR-0004. Depends on Why DII Exists and The Case Against DII.
 
 ## What changed
 
@@ -32,13 +32,15 @@ The shape earns its keep in three ways. It defuses the trust tax, because most w
 
 The node runtime is the atom. It runs one or more open-weight models locally, exposes them as capabilities, and functions fully offline. This is the star of the whole system, since a person who only ever runs a single node has already received the core promise of DII, and everything else is optional scaling on top of it.
 
-The consumer client is the counterpart for people who cannot self-host. It is a lightweight role, a phone app or a browser, that requests capabilities without hosting a model of its own. A consumer owns no serving hardware and is sponsored by a pod that agrees to serve it, which is how the reliable floor reaches people who have no capable device.
+The consumer client is the counterpart for people who cannot self-host. It is a lightweight role, a phone app or a browser, that requests capabilities without hosting a model of its own. A consumer owns no serving hardware and is sponsored by a pod that agrees to serve it, which is how the reliable floor reaches people who have no capable device. Architecturally the consumer is not a separate system but a request that enters the overflow path past the local hop: a node-runner's request begins at the local stage, while a consumer, hosting no model, has no local stage and enters the router at the pod stage. Because a node exposes an OpenAI-compatible endpoint, any existing OpenAI-compatible application pointed at a serving node is already a consumer client, so the role needs no bespoke software. This is recorded in ADR-0004.
 
 The capability abstraction lets requests target capabilities such as reasoning, coding, vision, speech, retrieval, or embedding, at a required quality and latency tier. The caller names the capability and tier, and the router selects the hardware and model. Each node publishes a capability manifest describing which models it serves, its context length, throughput, modalities, and current load, which is what lets a heterogeneous fleet look uniform to a caller.
 
 Discovery is federated. Within a pod it can be a simple local registry or LAN discovery. Across pods it uses signed, gossiped peer lists and a DNS-like federated directory, deliberately avoiding a single global index that would reintroduce the chokepoint the project exists to eliminate.
 
 The router and scheduler are the coordination core. They decide where a request executes and enforce the overflow order of local, then pod, then federation. Routing weighs capability match, sovereignty and policy constraints, the trust level of candidate nodes, latency, availability, and load. Each hop outward passes a policy gate, so work only spills across a boundary the user has authorized.
+
+The router has two ingress types feeding the same logic. A local, trusted ingress serves the node's own user and starts each request at the local stage. A remote, authenticated ingress serves a sponsored consumer and starts the request at the pod stage, since a consumer has no local model to try first. There is one router, not two, and the consumer path is the ordinary overflow path entered one step in (ADR-0004). The remote ingress is authenticated because a consumer takes without giving and is a higher abuse surface than a trusted peer; the identity mechanism behind that authentication is still an open decision, stubbed in the prototype.
 
 Trust and reputation carry the weight that payment would carry elsewhere. With no money in the system, trust rests on identity through signed and persistent node identities, reputation through track record within and across pods, and policy covering who you accept work from, who you send work to, and where data may travel. Verification is tiered: negligible inside a trusted pod, optional for cross-pod work, and for the rare high-stakes cross-boundary case, borrowing an existing protocol in the TOPLOC or Verde family rather than inventing one. Work inside a trusted pod skips the redundant-execution tax.
 
@@ -66,12 +68,12 @@ Request for a capability
 Degrade gracefully: queue, use a smaller local model, or report honestly.
 ```
 
-The final step always returns the best the local node can do, which is the resilience guarantee made concrete.
+The final step always returns the best the local node can do, which is the resilience guarantee made concrete. A node-runner's request enters at [1]. A sponsored consumer, having no local model, enters at [2] instead; the rest of the path is identical.
 
 ## Build order
 
 - Phase 0, the atom. A solid local-first node runtime with a capable open model, offline capability, and a capability manifest. This alone delivers the core promise to a single user and is worth shipping on its own.
-- Phase 1, two nodes in one pod. The Week-3 proof of concept, where node A routes a capability request to node B and back. Measure the numbers the teardown demands, such as tokens per second over a residential link versus local, and overflow overhead.
+- Phase 1, two nodes and a consumer in one pod. The Week-3 proof of concept, written in Go (ADR-0003), where node A routes a capability request to node B and back, and a consumer C with no local model borrows from the pod through the remote ingress (ADR-0004). Each node exposes an OpenAI-compatible endpoint so existing clients work unchanged. Measure the numbers the teardown demands, such as tokens per second over a residential link versus local, time-to-first-token, and overflow overhead.
 - Phase 2, pod overflow and policy. The router honors sovereignty and trust policy, reciprocity accounting comes online, and graceful degradation paths are exercised.
 - Phase 3, federation. Signed discovery across pods, cross-pod trust with optional verification, and the "Fediverse for inference" topology.
 
