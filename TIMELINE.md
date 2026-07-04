@@ -18,3 +18,4 @@
 - Chose Go for the node prototype, Rust reversible at the production boundary (docs/ADR/ADR-0003).
 - Made the consumer a first-class ingress in the prototype: one router, two ingress types, consumer as a request past the local hop (docs/ADR/ADR-0004).
 - Folded the router ingress model and updated prototype topology into the Architecture Overview.
+- Settled the participation model: motivation is mission and community, not reciprocity or money; monetization retired, not paused; positioning made explicit as AI for All, in the spirit of Tor (docs/ADR/ADR-0005). Scrubbed remaining money-making hedges and reframed participation across the docs.

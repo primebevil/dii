@@ -22,6 +22,8 @@
 
 **Overflow Path**: the order work spills outward, local then pod then federation, only when needed and only within user policy.
 
-**Contribution-Earns-Access**: a participation model where running a node grants priority access to the federation. Non-transferable, non-tradable, and expiring, it is a reciprocity signal for fair use that is cleared without money. Replaces the earlier "proof-of-contribution credits."
+**Mission-Driven Participation**: the reason people run nodes, on the Tor model. You contribute because you want a reliable floor of intelligence to exist for your community and for those who cannot self-host, not to earn anything. Access is never gated on contribution (ADR-0002, ADR-0005).
+
+**Reciprocity Signal**: an optional, non-gating priority hint that may let a contributor be served first under congestion. If built at all it is illiquid: non-transferable, non-tradable, expiring, never a currency. A Phase-2 fairness detail, not the reason to participate, and not the earlier "proof-of-contribution credits," which are retired.
 
 **Sovereignty Constraint**: a first-class routing input, for example "data stays on my machines" or "data stays in-country."

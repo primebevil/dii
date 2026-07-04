@@ -16,7 +16,7 @@ Users request capabilities such as reasoning, coding, vision, speech, and retrie
 
 ## Working hypotheses
 
-Treat these as open hypotheses rather than settled conclusions. People are the infrastructure. Intelligence should be requested as a capability. Local-first with the network as overflow is the resilient shape. A federation of trusted pods holds up better than a global swarm of strangers. Contribution should earn access through reciprocity. And a reliable floor for everyone beats an intermittent ceiling for a few.
+Treat these as open hypotheses rather than settled conclusions. People are the infrastructure. Intelligence should be requested as a capability. Local-first with the network as overflow is the resilient shape. A federation of trusted pods holds up better than a global swarm of strangers. Participation is driven by mission and community rather than payment or self-interest, on the model of Tor (ADR-0005). And a reliable floor for everyone beats an intermittent ceiling for a few.
 
 ## Research principles
 
@@ -40,7 +40,7 @@ The architecture centers on capability routing, local-first execution, a federat
 
 ## On sustainability and the non-commercial stance
 
-DII is non-commercial. There is no business model, token, tradable credit, or paid marketplace in scope, and nothing in the architecture depends on one. If a sustainable funding path such as optional managed federation for organizations is ever worth revisiting, it will be evaluated separately, on its own merits, and never at the expense of the free reliable-floor mission. The earlier commercial framing is retired, and it is preserved for the record in the superseded Startup Concept note.
+DII is non-commercial by commitment, on the Tor model of a mission-driven volunteer effort rather than a company (ADR-0005). There is no business model, token, tradable credit, paid marketplace, or managed-federation funding path in scope, and nothing in the architecture depends on one. Monetization is retired rather than paused, and these documents deliberately do not hold the door open for it. The earlier commercial framing is preserved for the record in the superseded Startup Concept note. If a funding question ever genuinely arises, it will be opened fresh as its own decision rather than lingering as a standing hedge that quietly shapes the design.
 
 ## What this is not
 

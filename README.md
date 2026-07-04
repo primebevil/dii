@@ -2,7 +2,7 @@
 
 A free, open-source research initiative (RFC-style) exploring how to keep a dependable baseline of capable, open-weight AI available to everyone, running on hardware people own and impossible to switch off from above.
 
-It is free and non-commercial, with no token or paid marketplace. The aim is a reliable floor of capable, everyday intelligence that stays available to everyone, while the frontier labs keep building the ceiling. See [docs/Why_DII_Exists.md](./docs/Why_DII_Exists.md).
+Think of it as AI for All, in the spirit of Tor: where Tor is privacy for all, sustained by volunteers who run relays, DII is intelligence for all, sustained by volunteers who run nodes. It is free and non-commercial, with no business model, token, or marketplace. The aim is a reliable floor of capable, everyday intelligence that stays available to everyone, while the frontier labs keep building the ceiling. See [docs/Why_DII_Exists.md](./docs/Why_DII_Exists.md).
 
 ## Core idea
 
