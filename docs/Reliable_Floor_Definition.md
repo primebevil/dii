@@ -1,6 +1,6 @@
 # Reliable Floor Definition
 
-Status: Living reference, v0.1 (2026-07-03). The decision behind this is ADR-0006; this doc holds the concrete, rolling detail that will change as models do.
+Status: Living reference, v0.1 (2026-07-04). The decision behind this is ADR-0006; this doc holds the concrete, rolling detail that will change as models do.
 
 ## The definition, in one line
 

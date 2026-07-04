@@ -29,3 +29,9 @@
 **Reciprocity Signal**: an optional, non-gating priority hint that may let a contributor be served first under congestion. If built at all it is illiquid: non-transferable, non-tradable, expiring, never a currency. A Phase-2 fairness detail, not the reason to participate, and not the earlier "proof-of-contribution credits," which are retired.
 
 **Sovereignty Constraint**: a first-class routing input, for example "data stays on my machines" or "data stays in-country."
+
+**Target User (dependency-defined)**: not "everyone," but anyone for whom AI has become load-bearing for real cognitive work and who would be materially harmed by losing it. Defined by dependency, not demographic, and sharpened by exposure (cost, privacy or data-residency, continuity risk). See ADR-0007 and docs/Who_DII_Is_For.md.
+
+**Wedge**: the narrow, recruitable slice of the target used to build and demand-probe first: the independent professional and small business or research shop, where dependency meets a present-tense exposure. The individual and the small business are one target at two scales, not two audiences.
+
+**Pod-Zero**: the first pod, the owner and their network of capable, high-dependency, mission-aligned people reachable directly. How Tor and most infrastructure began.

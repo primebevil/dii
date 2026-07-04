@@ -1,6 +1,6 @@
 # ADR-0006: What the Reliable Floor Actually Is
 
-Status: Accepted, 2026-07-03. Makes concrete the "reliable floor" named in the Vision, Charter, and Why DII Exists. Depends on ADR-0002 and ADR-0004.
+Status: Accepted, 2026-07-04. Makes concrete the "reliable floor" named in the Vision, Charter, and Why DII Exists. Depends on ADR-0002 and ADR-0004.
 
 ## Context
 

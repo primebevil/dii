@@ -1,6 +1,6 @@
 # Architecture Session, 2026-07-03
 
-A working discussion about the path to a Week-3 prototype. No code was written. The output is decisions and their reasoning, captured as ADR-0003 and ADR-0004 and folded into the Architecture Overview and Glossary.
+Day one of a two-part working discussion (continued 2026-07-04, see that day's journal). About the path to a Week-3 prototype, then the start of tidying the Week-1 proposition in order. No code was written. The output is decisions and their reasoning, captured as ADR-0003, ADR-0004, and ADR-0005.
 
 ## Starting point
 
@@ -36,17 +36,6 @@ Adopting the Tor framing also weakens the teardown's Objection 2. That objection
 
 The owner decided to make "AI for All, in the spirit of Tor" explicit positioning and to scrub the money-making ideas that kept leaking in, since monetization is not a viable route at this time. Monetization is now retired rather than paused. The Tor framing was added to the Vision, Manifesto, README, and FAQ; the funding hedges were removed from the Charter and Overview; participation language was moved from reciprocity-primary to mission-primary across the repository; and the Glossary replaced "Contribution-Earns-Access" with mission-driven participation plus a demoted reciprocity signal.
 
-## Return to Week 1: item 2, the reliable floor
+## End of day one
 
-The second Week-1 loose thread was that the floor was defined only qualitatively. Grounding it in current mid-2026 data and the owner's own hardware pinned it concretely. The decision is ADR-0006, with the rolling detail in docs/Reliable_Floor_Definition.md.
-
-The key move was defining the floor by a capability cliff rather than by what technically loads. Below roughly the 14B class a model can chat but cannot reliably reason across steps, use tools, handle longer context, or code, which the owner confirmed from running a 7B. Usefulness sets the line. The floor became a band of three numbers: node-entry at ~14B on a 12 to 16GB gaming GPU, the promise at ~30B on committed hardware such as the owner's EVO-X2 with 64GB unified memory, and a guaranteed floor at the ~14B useful line, below which the network queues or reports honestly rather than serving a toy. 30B is the realistic ceiling on consumer-class hardware; 70B needs prosumer machines and runs latency-tolerant only. The floor is a bundle, a general model plus a coder plus an embedding model, since the router speaks in capabilities.
-
-Two consequences worth keeping. Setting node-entry at the useful line trades node quantity for floor quality, another divergence from Tor, where any spare bandwidth helps but sub-useful inference does not. And because 30B-capable nodes are a committed minority with intermittent presence, the floor is what a pod can reliably keep available, which makes honest degradation a first-class part of the guarantee rather than an error path. This also made the prototype fully concrete: the reference node runs a 30B general model and the kill criteria measure it against centralized serving.
-
-## Follow-ups
-
-- Continue the Week-1 tidy in order: sharpen the target user beyond "everyone" (item 3).
-- Write the node-runtime component spec and the two-node-plus-consumer workflow, including the failure and reroute paths.
-- Run the demand probe from the teardown's kill criteria, now framed as "will anyone use this," and study the Tor Project as prior art for sustaining volunteer infrastructure.
-- Finish the Week-2 write-ups on why prior projects won or stalled.
+Parked here with items 2 and 3 of the Week-1 tidy still open: a concrete reliable-floor definition, and sharpening the target user beyond "everyone." Continued the next morning; see journal/2026-07-04-week1-definition.md.

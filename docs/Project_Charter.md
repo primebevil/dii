@@ -12,7 +12,7 @@ Access to the most capable AI is centralized, and therefore revocable. In June 2
 
 ## Vision
 
-Users request capabilities such as reasoning, coding, vision, speech, and retrieval, and the router places each request on suitable hardware, always preferring the user's own machine first. Routing weighs capability, trust, sovereignty and privacy, latency, and availability. Success is measured by continuity of access.
+Users request capabilities such as reasoning, coding, vision, speech, and retrieval, and the router places each request on suitable hardware, always preferring the user's own machine first. Routing weighs capability, trust, sovereignty and privacy, latency, and availability. Success is measured by continuity of access. The users in view are not "everyone" in the abstract but those for whom AI has become load-bearing for real work and who would be harmed by losing it, defined by dependency rather than demographic, with the independent professional and small business as the recruitable wedge (ADR-0007).
 
 ## Working hypotheses
 

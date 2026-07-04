@@ -24,7 +24,7 @@ This next part is a pattern-based inference, and we label it as a hypothesis in 
 
 ## What DII actually guarantees
 
-The promise is deliberately modest, and that modesty is what makes it credible. DII does not promise the most advanced model in existence. It aims to guarantee that you always retain access to an advanced-enough model you can rely on, one that runs on hardware people own and stays beyond the reach of any single off-switch.
+The promise is deliberately modest, and that modesty is what makes it credible. DII does not promise the most advanced model in existence. It aims to guarantee that you always retain access to an advanced-enough model you can rely on, one that runs on hardware people own and stays beyond the reach of any single off-switch. The people it guarantees this for are those who depend on capable AI for real work, defined by dependency rather than demographic, with the independent professional and small business as the wedge where that dependency is sharpest (ADR-0007).
 
 A reliable floor of capability, permanently available, serves people better than intermittent access to the ceiling. Open-weight models that are already broadly published, the kind the June 2026 episode did not target, are more than capable enough to keep individuals, businesses, researchers, and communities functioning. The goal is continuity of useful intelligence. This is "AI for everyone" in the one form that survives the strongest objection: everyday capability that stays switched on, like electricity.
 
