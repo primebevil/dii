@@ -26,7 +26,7 @@ Consumer as first-class ingress. Recorded in ADR-0004, building on ADR-0002. The
 
 Working through the prototype felt like jumping to Week 3 before Week 2's research was finished, but the session's output was architecture and decisions with reasons, which is current-phase work. Designing a prototype is a research act; it reveals which questions the research still has to answer. The trap to avoid is letting prototype-thinking substitute for the demand probe, which the teardown names as the objection most likely to kill the project. The highest-leverage next moves are code-free: capture these decisions, which this session did, and run the demand probe to find people who would use this for sovereignty or privacy reasons, which has the longest lead time and can validate or kill the rest before any Go is written.
 
-## Return to Week 1: the participation model
+## Return to Week 1: item 1, the participation model
 
 After parking the prototype work, the session went back to Week 1 to tighten the proposition in order. Reviewing it surfaced that the participation model was inconsistent: the Manifesto and FAQ presented reciprocity ("contribution earns priority") as the reason to take part, while the Overview listed it as an open decision and the teardown's Objection 4 showed reciprocity-as-motivation stalls once a contributor's own demand is met.
 
@@ -36,9 +36,17 @@ Adopting the Tor framing also weakens the teardown's Objection 2. That objection
 
 The owner decided to make "AI for All, in the spirit of Tor" explicit positioning and to scrub the money-making ideas that kept leaking in, since monetization is not a viable route at this time. Monetization is now retired rather than paused. The Tor framing was added to the Vision, Manifesto, README, and FAQ; the funding hedges were removed from the Charter and Overview; participation language was moved from reciprocity-primary to mission-primary across the repository; and the Glossary replaced "Contribution-Earns-Access" with mission-driven participation plus a demoted reciprocity signal.
 
+## Return to Week 1: item 2, the reliable floor
+
+The second Week-1 loose thread was that the floor was defined only qualitatively. Grounding it in current mid-2026 data and the owner's own hardware pinned it concretely. The decision is ADR-0006, with the rolling detail in docs/Reliable_Floor_Definition.md.
+
+The key move was defining the floor by a capability cliff rather than by what technically loads. Below roughly the 14B class a model can chat but cannot reliably reason across steps, use tools, handle longer context, or code, which the owner confirmed from running a 7B. Usefulness sets the line. The floor became a band of three numbers: node-entry at ~14B on a 12 to 16GB gaming GPU, the promise at ~30B on committed hardware such as the owner's EVO-X2 with 64GB unified memory, and a guaranteed floor at the ~14B useful line, below which the network queues or reports honestly rather than serving a toy. 30B is the realistic ceiling on consumer-class hardware; 70B needs prosumer machines and runs latency-tolerant only. The floor is a bundle, a general model plus a coder plus an embedding model, since the router speaks in capabilities.
+
+Two consequences worth keeping. Setting node-entry at the useful line trades node quantity for floor quality, another divergence from Tor, where any spare bandwidth helps but sub-useful inference does not. And because 30B-capable nodes are a committed minority with intermittent presence, the floor is what a pod can reliably keep available, which makes honest degradation a first-class part of the guarantee rather than an error path. This also made the prototype fully concrete: the reference node runs a 30B general model and the kill criteria measure it against centralized serving.
+
 ## Follow-ups
 
-- Continue the Week-1 tidy in order: pin a concrete definition of the reliable floor (model class and hardware target), and sharpen the target user beyond "everyone."
+- Continue the Week-1 tidy in order: sharpen the target user beyond "everyone" (item 3).
 - Write the node-runtime component spec and the two-node-plus-consumer workflow, including the failure and reroute paths.
 - Run the demand probe from the teardown's kill criteria, now framed as "will anyone use this," and study the Tor Project as prior art for sustaining volunteer infrastructure.
 - Finish the Week-2 write-ups on why prior projects won or stalled.

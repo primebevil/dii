@@ -1,6 +1,8 @@
 # Glossary
 
-**Reliable Floor**: the project's goal, a dependable baseline of capable AI that is always available, distinct from intermittent access to the most advanced ("ceiling") models.
+**Reliable Floor**: the project's goal, a dependable baseline of capable AI that is always available, distinct from intermittent access to the most advanced ("ceiling") models. Concretely, the 14B-to-30B class of open-weight models at Q4, delivered as a capability bundle: node-entry at ~14B on a gaming GPU, promise at ~30B on committed hardware, degrading to honest queuing below the useful line rather than to a toy. Defined in ADR-0006 and docs/Reliable_Floor_Definition.md.
+
+**Useful Line**: the capability cliff, around the 14B class, below which a model can chat but cannot reliably reason across steps, use tools, handle longer context, or code. The floor is set by usefulness, not by what technically loads; the network degrades toward this line and then queues honestly rather than serving sub-useful output.
 
 **Local-First**: every node is fully functional offline; the network only adds to what a node can already do on its own.
 
