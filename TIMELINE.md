@@ -27,3 +27,13 @@
 - Sharpened the target user from "everyone" to a dependency-defined target: broad mission (the individual, AI for All), narrow recruiting wedge (independent professional and small business where dependency meets present-tense exposure), personal pod-zero (docs/ADR/ADR-0007, docs/Who_DII_Is_For.md).
 - Recorded influences, with Tor as the foundational one (INFLUENCES.md).
 - Week 1, "define the proposition," complete.
+- Began Week 2, research (journal/2026-07-04-week2-research.md). Wrote the first prior-art batch, the six projects closest to DII's substrate: Petals, Parallax, FusionAI, Prime Intellect, Gensyn/Verde, and DisTrO (research/Prior-Art). Each leads with what it does and how it compares to DII.
+- Added a validation checklist mapping every load-bearing claim to its source, then ran an independent verification pass. Roughly thirty claims confirmed; two were corrected as unverifiable (the Gensyn token price and the Parallax node count).
+- Added latency bound and DHT discovery to the Glossary. Pushed the batch to a review branch. No code written.
+- Wrote a synthesis of batch 1 (research/Prior-Art/Synthesis.md): the prior art splits into split-inference and distributed-training, both complex; DII does neither and is a different bet, not a simpler one. Added glossary terms DePIN, TOPLOC, OpenDiLoCo, H100.
+
+## 2026-07-05
+
+- Wrote Week-2 prior-art batch 2, the volunteer-infrastructure sustainability question: SETI@home, BOINC, Folding@home, Tor (research/Prior-Art, files 7-10, journal/2026-07-05-week2-funding.md). Ran a second independent verification pass; corrected several unverifiable figures.
+- Finding: mission-driven volunteer infrastructure can be durable, but every sustained case ran on cheap, non-rivalrous donation; DII's expensive, rivalrous GPU ask is the variable none overcame.
+- Accepted ADR-0008, funding the stewards. The network stays non-commercial (ADR-0005 holds), but funding a nonprofit steward and offsetting operators' bare-minimum costs to break-even is permitted as distinct from monetization. Reconciled the Architecture Overview and ADR-0005 wording accordingly.

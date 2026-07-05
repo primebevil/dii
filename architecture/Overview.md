@@ -4,7 +4,7 @@ Status: RFC v0.1 (2026-07-02), updated 2026-07-03 with the router ingress model 
 
 ## What changed
 
-DII is now scoped as a free, open-source RFC project with no commercial model behind it. Its goal is a dependable baseline of open-model intelligence that anyone can run and that stays beyond the reach of any single off-switch. It is a mission-driven volunteer effort on the model of Tor, non-commercial by commitment: monetization is retired, not paused, and no part of this architecture assumes or requires a funding path (ADR-0005). This reframing removes a whole problem class, since there is no token, tradable credit, marketplace to clear, or compute to price. The old slogan "the scheduler is the product" now means only that the router and scheduler are the core engineering contribution.
+DII is now scoped as a free, open-source RFC project with no commercial model behind it. Its goal is a dependable baseline of open-model intelligence that anyone can run and that stays beyond the reach of any single off-switch. It is a mission-driven volunteer effort on the model of Tor, non-commercial by commitment: monetization is retired, not paused, and the network itself assumes no funding path, since there is nothing to price (ADR-0005). Sustaining the nonprofit steward and offsetting operators' bare-minimum costs to break-even does assume a funding path, held strictly distinct from monetizing the network (ADR-0008). This reframing removes a whole problem class, since there is no token, tradable credit, marketplace to clear, or compute to price. The old slogan "the scheduler is the product" now means only that the router and scheduler are the core engineering contribution.
 
 ## The idea in one sentence
 
