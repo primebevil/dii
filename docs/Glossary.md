@@ -4,6 +4,8 @@
 
 **Useful Line**: the capability cliff, around the 14B class, below which a model can chat but cannot reliably reason across steps, use tools, handle longer context, or code. The floor is set by usefulness, not by what technically loads; the network degrades toward this line and then queues honestly rather than serving sub-useful output.
 
+**Latency Bound**: a workload whose speed is limited by waiting, not by compute. In distributed inference the wait is the round trip across the network between machines, so adding faster GPUs does not help; the wall is the link. LLM token generation is also memory-bandwidth bound on a single machine, since each token requires reading the whole model from memory. Both are why DII targets latency-tolerant, node-local work that fits on one node rather than splitting a model mid-inference across the internet. See research/The-Case-Against-DII.md, Objection 1.
+
 **Local-First**: every node is fully functional offline; the network only adds to what a node can already do on its own.
 
 **Node**: a participant's machine running one or more open-weight models, exposing them as capabilities.
@@ -15,6 +17,8 @@
 **Ingress**: how a request enters the router. A local, trusted ingress serves the node's own user and starts at the local stage; a remote, authenticated ingress serves a sponsored consumer and starts at the pod stage. One router, two ingress types.
 
 **Capability Manifest**: what a node publishes about itself: which models it serves, context length, throughput, modalities, and current load. Lets a heterogeneous fleet look uniform to a caller.
+
+**DHT Discovery**: finding who serves what without a central index. A distributed hash table spreads the who-has-what map across the participating nodes themselves, so a caller can look up a capability or peer without a single directory that could become a chokepoint or an off-switch. The mechanism Petals uses to map model layers to peers, and the kind of decentralized, no-central-hub discovery DII favors for cross-pod federation.
 
 **Pod**: a small group of nodes that already trust each other, such as personal machines, a lab, an org, or a community. The core unit of the system.
 
