@@ -28,6 +28,6 @@ Because the engineering is mundane, DII's contribution is not a systems breakthr
 
 ## References
 
-- The six one-pagers: [1-Petals](1-Petals.md), [2-Parallax](2-Parallax.md), [3-FusionAI](3-FusionAI.md), [4-Prime-Intellect](4-Prime-Intellect.md), [5-Gensyn-Verde](5-Gensyn-Verde.md), [6-DisTrO](6-DisTrO.md).
+- The six one-pagers: [01-Petals](01-Petals.md), [02-Parallax](02-Parallax.md), [03-FusionAI](03-FusionAI.md), [04-Prime-Intellect](04-Prime-Intellect.md), [05-Gensyn-Verde](05-Gensyn-Verde.md), [06-DisTrO](06-DisTrO.md).
 - [The Case Against DII](../The-Case-Against-DII.md), especially Objection 5.
 - ADR-0002 (access before contribution), ADR-0005 (mission, not monetization), ADR-0006 (the reliable floor), and the Architecture Overview.
