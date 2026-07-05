@@ -39,3 +39,11 @@
 **Wedge**: the narrow, recruitable slice of the target used to build and demand-probe first: the independent professional and small business or research shop, where dependency meets a present-tense exposure. The individual and the small business are one target at two scales, not two audiences.
 
 **Pod-Zero**: the first pod, the owner and their network of capable, high-dependency, mission-aligned people reachable directly. How Tor and most infrastructure began.
+
+**DePIN Project**: Decentralized Physical Infrastructure Network. A project that uses a token to crowdsource physical hardware, here GPUs, from many owners into a paid market. Akash, io.net, Gensyn, and Prime Intellect's marketplace are examples. DII is deliberately not a DePIN: it has no token and nothing for sale, so the supply comes from mission rather than payment and access is never bought. See research/Prior-Art.
+
+**TOPLOC**: Prime Intellect's method for verifying that an untrusted node ran the inference it claimed. Locality-sensitive hashing over a model's activations detects a swapped model, prompt, or precision, cheaply (258 bytes per 32 tokens) and quickly (up to 100x faster than the original inference). The kind of borrowed check DII would reserve for the rare high-stakes cross-boundary case rather than run inside a trusted pod. See research/Prior-Art/4-Prime-Intellect.md.
+
+**OpenDiLoCo**: Prime Intellect's open implementation of DeepMind's DiLoCo (Distributed Low-Communication) training. Workers take many local optimizer steps and only sync periodically, cutting inter-node communication by roughly 500x so training can run over ordinary internet links. A training technique; DII serves existing open weights and does not train, so this is reference context, not a DII component. See research/Prior-Art/4-Prime-Intellect.md.
+
+**H100**: NVIDIA's datacenter GPU, the reference point for frontier-scale training and serving, with about 3.35 TB/s of memory bandwidth. It is the centralized baseline the distributed projects measure against, and the contrast that defines DII's envelope: DII targets consumer cards (roughly a 4090 or 5090, at a quarter to a third of that bandwidth) and a reliable floor that fits on them, not H100-class frontier inference.

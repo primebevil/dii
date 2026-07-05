@@ -28,6 +28,6 @@ The files are numbered. The first two are decentralized inference, DII's actual 
 | 5 | [Gensyn / Verde](5-Gensyn-Verde.md) | Trustless decentralized-training market with on-chain verification | Stalled on thesis (pivoted to prediction markets) | A live purpose today, serving people, without a token-first market; pod trust instead of trustless proofs |
 | 6 | [DisTrO](6-DisTrO.md) | Low-communication optimizers for training over the internet | Partial win (bandwidth solved, competitiveness unproven) | A different goal entirely: serving a reliable floor now, not training a frontier model later |
 
-The [Validation-Checklist](Validation-Checklist.md) is a companion, not part of the sequence: keep it open while reading to confirm each load-bearing figure against its source.
+The [Validation-Checklist](Validation-Checklist.md) is a companion, not part of the sequence: keep it open while reading to confirm each load-bearing figure against its source. [Synthesis](Synthesis.md) is the "so what" to read after the six: why the prior art clusters into split-inference and distributed-training, why those are complex, and why DII, which does neither, is a different bet rather than a simpler one.
 
 The through-line: the physics and verification research is real and improving, but every project that tried to build a market on it is either stalled, pivoted, or unproven on demand. DII's divergence is to drop the market and the token and borrow Tor's motivation model instead, which is the one axis the evidence leaves standing.
