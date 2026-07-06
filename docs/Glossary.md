@@ -22,7 +22,13 @@
 
 **Pod**: a small group of nodes that already trust each other, such as personal machines, a lab, an org, or a community. The core unit of the system.
 
-**Federation**: trusted pods sharing overflow capacity under explicit policy, with no central hub. Closer to the Fediverse than to a single cloud.
+**Federation**: trusted pods sharing overflow capacity under explicit policy, with no central hub. Closer to the Fediverse than to a single cloud. Bilateral and opt-in: a pod federates with pods that reciprocate, so a pod that gives nothing gets no overflow, which is how freeloading is handled without a rule.
+
+**Public-Serving Pod**: a pod that chooses to serve unaffiliated consumers, strangers with no pod of their own, as an act of mission. The DII analog of a Tor exit relay: the hardest role to recruit and the one that makes "AI for All" real. The unaffiliated are matched across many public-serving pods by jurisdiction and capacity, so no single one becomes a center. Funding priority, since it carries cost for people who give nothing back. See ADR-0009.
+
+**Private Pod**: a pod that serves only its own trusted members, such as a lab, a firm, or a family sharing models and capacity in a trusted zone. Fully legitimate and self-funded, because its members already get their return as mutual benefit; not subsidized from shared funds, and it cannot draw on the commons without reciprocal federation. Closed is allowed (pod autonomy). See ADR-0009.
+
+**Public-Interest Pod**: a pod that may not offer general public access but whose work is itself a public good, such as a research institute, library, or nonprofit. Eligible for funding case by case even when closed, because funding follows mission and public access is the main path to qualify but not the only one. See ADR-0009.
 
 **Capability Routing**: requesting intelligence as a capability (reasoning, coding, vision, retrieval) at a required tier; the router then selects the hardware and model.
 
@@ -30,7 +36,9 @@
 
 **Mission-Driven Participation**: the reason people run nodes, on the Tor model. You contribute because you want a reliable floor of intelligence to exist for your community and for those who cannot self-host, not to earn anything. Access is never gated on contribution (ADR-0002, ADR-0005).
 
-**Reciprocity Signal**: an optional, non-gating priority hint that may let a contributor be served first under congestion. If built at all it is illiquid: non-transferable, non-tradable, expiring, never a currency. A Phase-2 fairness detail, not the reason to participate, and not the earlier "proof-of-contribution credits," which are retired.
+**Mutual Benefit**: the value a node operator gets simply by being in a pod, beyond what their own machine gives: continuity, since the pod serves them when their node is busy, asleep, or offline; and capability amplification, since a pod can run several models of varied use and each node reaches the union of what the pod runs. Emergent, unledgered, non-gameable, and free. It is the self-interested half of why anyone contributes, alongside mission. Distinct from the Reciprocity Signal, and likely makes that built signal unnecessary. See ADR-0009.
+
+**Reciprocity Signal**: an optional, non-gating priority hint that may let a contributor be served first under congestion. If built at all it is illiquid: non-transferable, non-tradable, expiring, never a currency. A Phase-2 fairness detail, not the reason to participate, and not the earlier "proof-of-contribution credits," which are retired. Distinct from Mutual Benefit, which is emergent and unledgered; because mutual benefit already does the "what do I get" work, this built signal is probably unnecessary.
 
 **Sovereignty Constraint**: a first-class routing input, for example "data stays on my machines" or "data stays in-country."
 

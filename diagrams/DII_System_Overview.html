@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distributed Intelligence Initiative — System Overview</title>
+<style>
+  :root{
+    --ink:#1b2432; --muted:#5c6b7e; --faint:#8a97a7;
+    --bg:#eaeef3; --panel:#ffffff; --line:#cdd6e0;
+    --federation:#6c5ce7; --pod:#1f9e8f; --node:#e08a24; --consumer:#d55f8a;
+    --node-bg:#fff6ea; --pod-bg:#eefaf7; --consumer-bg:#fdeef4;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--bg);
+    line-height:1.5; padding:32px 20px 60px;
+  }
+  .wrap{max-width:1080px; margin:0 auto}
+  .sheet{background:var(--panel); border:1px solid var(--line); border-radius:18px;
+    box-shadow:0 12px 40px rgba(27,36,50,.10); padding:34px 38px 40px}
+  header .kicker{font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--federation); font-weight:700}
+  header h1{font-size:30px; margin:6px 0 6px; letter-spacing:-.01em}
+  header p.tag{font-size:18px; color:var(--muted); margin:0 0 4px; max-width:760px}
+  .chips{margin-top:14px; display:flex; gap:8px; flex-wrap:wrap}
+  .chip{font-size:12px; padding:4px 11px; border-radius:999px; border:1px solid var(--line);
+    color:var(--muted); background:#fbfcfe}
+  .chip b{color:var(--ink)}
+
+  .figure{margin:26px 0 6px; border:1px solid var(--line); border-radius:14px;
+    background:linear-gradient(180deg,#fcfdff, #f6f8fb); padding:10px}
+  svg{display:block; width:100%; height:auto}
+  .layer{transition:opacity .18s ease, filter .18s ease}
+  svg.focusing .layer:not(.on){opacity:.16}
+  svg.focusing .layer.on{filter:drop-shadow(0 3px 8px rgba(27,36,50,.18))}
+
+  .flow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:18px 2px 4px;
+    font-size:14.5px}
+  .flow .step{display:flex; align-items:center; gap:8px; background:#f7f9fc;
+    border:1px solid var(--line); border-radius:10px; padding:8px 12px}
+  .flow .num{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+    font-size:12px;font-weight:700;color:#fff;background:var(--node)}
+  .flow .step.pod .num{background:var(--pod)} .flow .step.fed .num{background:var(--federation)}
+  .flow .arrow{color:var(--faint); font-weight:700}
+  .flow .end{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;
+    background:#fff6ea;border:1px solid #f0d9b6;color:#8a5a12;font-weight:600}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr)); gap:14px; margin-top:22px}
+  .card{border:1px solid var(--line); border-radius:12px; padding:14px 15px; background:#fff;
+    cursor:default; transition:border-color .15s, transform .15s, box-shadow .15s}
+  .card:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(27,36,50,.10)}
+  .card .dot{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:middle}
+  .card h3{font-size:15px; margin:0 0 6px; display:flex; align-items:center}
+  .card p{margin:0; font-size:13.2px; color:var(--muted)}
+  .card.node{border-top:3px solid var(--node)} .card.node .dot{background:var(--node)}
+  .card.pod{border-top:3px solid var(--pod)} .card.pod .dot{background:var(--pod)}
+  .card.fed{border-top:3px solid var(--federation)} .card.fed .dot{background:var(--federation)}
+  .card.over{border-top:3px solid var(--ink)} .card.over .dot{background:var(--ink)}
+  .card.consumer{border-top:3px solid var(--consumer)} .card.consumer .dot{background:var(--consumer)}
+
+  footer{margin-top:24px; padding-top:18px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    font-size:12.5px; color:var(--faint)}
+  footer .mission{color:var(--muted); max-width:640px}
+  footer .mission b{color:var(--ink)}
+  @media (max-width:820px){ .cards{grid-template-columns:repeat(2,1fr)} .sheet{padding:24px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sheet">
+    <header>
+      <div class="kicker">Distributed Intelligence Initiative</div>
+      <h1>A reliable floor of AI that can&rsquo;t be switched off</h1>
+      <p class="tag">Capable open-weight AI running on hardware people own &mdash; local-first, pooled into trusted pods, federated with no central hub.</p>
+      <div class="chips">
+        <span class="chip"><b>Local-first</b> &middot; works offline</span>
+        <span class="chip"><b>No single off-switch</b></span>
+        <span class="chip"><b>AI for All</b>, in the spirit of Tor</span>
+        <span class="chip">Conceptual overview &middot; early-stage, subject to change</span>
+      </div>
+    </header>
+
+    <div class="figure">
+      <svg id="diagram" viewBox="0 0 1000 685" role="img"
+           aria-label="Layered diagram: a node inside a pod inside a federation, with the overflow path, and a consumer outside any pod that reaches in to be served.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#33404f"/>
+          </marker>
+          <marker id="arrowRose" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#d55f8a"/>
+          </marker>
+        </defs>
+
+        <!-- ===================== FEDERATION ===================== -->
+        <g class="layer" id="g-federation" data-key="fed">
+          <rect x="20" y="84" width="960" height="496" rx="18" fill="#f7f6ff"
+                stroke="#6c5ce7" stroke-width="2" stroke-dasharray="7 6"/>
+          <rect x="34" y="70" width="322" height="28" rx="14" fill="#ffffff" stroke="#6c5ce7"/>
+          <text x="48" y="88" font-size="12.5" font-weight="700" fill="#6c5ce7">FEDERATION</text>
+          <text x="142" y="88" font-size="12" fill="#5c6b7e">independent pods &middot; no central hub</text>
+
+          <!-- satellite pod B -->
+          <rect x="600" y="128" width="356" height="176" rx="13" fill="#eefaf7" stroke="#1f9e8f" stroke-width="1.6"/>
+          <text x="618" y="152" font-size="12.5" font-weight="700" fill="#1f9e8f">POD</text>
+          <rect x="620" y="166" width="150" height="60" rx="8" fill="#ffffff" stroke="#1f9e8f" stroke-width="1.2"/>
+          <text x="632" y="192" font-size="12" fill="#1b2432">node</text><text x="632" y="208" font-size="10.5" fill="#8a97a7">GPU host</text>
+          <rect x="786" y="166" width="150" height="60" rx="8" fill="#ffffff" stroke="#1f9e8f" stroke-width="1.2"/>
+          <text x="798" y="192" font-size="12" fill="#1b2432">node</text><text x="798" y="208" font-size="10.5" fill="#8a97a7">GPU host</text>
+          <text x="620" y="258" font-size="11.5" fill="#5c6b7e">a university, a hackerspace,</text>
+          <text x="620" y="274" font-size="11.5" fill="#5c6b7e">another town&rsquo;s co-op&hellip;</text>
+
+          <!-- satellite pod C -->
+          <rect x="600" y="360" width="356" height="192" rx="13" fill="#eefaf7" stroke="#1f9e8f" stroke-width="1.6"/>
+          <text x="618" y="384" font-size="12.5" font-weight="700" fill="#1f9e8f">POD</text>
+          <rect x="620" y="398" width="150" height="60" rx="8" fill="#ffffff" stroke="#1f9e8f" stroke-width="1.2"/>
+          <text x="632" y="424" font-size="12" fill="#1b2432">node</text><text x="632" y="440" font-size="10.5" fill="#8a97a7">GPU host</text>
+          <rect x="786" y="398" width="150" height="60" rx="8" fill="#ffffff" stroke="#1f9e8f" stroke-width="1.2"/>
+          <text x="798" y="424" font-size="12" fill="#1b2432">node</text><text x="798" y="440" font-size="10.5" fill="#8a97a7">GPU host</text>
+          <text x="620" y="502" font-size="11.5" fill="#5c6b7e">kill any one pod and</text>
+          <text x="620" y="518" font-size="11.5" fill="#5c6b7e">the rest keep running.</text>
+
+          <!-- peering (gossip) lines -->
+          <g stroke="#6c5ce7" stroke-width="1.4" stroke-dasharray="4 5" fill="none" opacity=".85">
+            <path d="M540 250 C 575 220, 580 210, 600 200"/>
+            <path d="M540 430 C 575 445, 580 450, 600 452"/>
+            <path d="M778 304 L 778 360"/>
+          </g>
+          <text x="548" y="188" font-size="10.5" fill="#6c5ce7" font-weight="600">signed, gossiped peering</text>
+        </g>
+
+        <!-- ===================== POD (focal) ===================== -->
+        <g class="layer" id="g-pod" data-key="pod">
+          <rect x="48" y="128" width="492" height="424" rx="15" fill="#eefaf7" stroke="#1f9e8f" stroke-width="2.2"/>
+          <rect x="62" y="116" width="256" height="26" rx="13" fill="#ffffff" stroke="#1f9e8f"/>
+          <text x="76" y="133" font-size="12.5" font-weight="700" fill="#1f9e8f">POD</text>
+          <text x="116" y="133" font-size="11.5" fill="#5c6b7e">&middot; a trust boundary you control</text>
+
+          <!-- peer node -->
+          <rect x="330" y="196" width="192" height="132" rx="11" fill="#ffffff" stroke="#1f9e8f" stroke-width="1.6"/>
+          <text x="346" y="222" font-size="13.5" font-weight="700" fill="#1b2432">Peer node</text>
+          <text x="346" y="242" font-size="11.5" fill="#5c6b7e">a friend, a colleague,</text>
+          <text x="346" y="258" font-size="11.5" fill="#5c6b7e">the library&rsquo;s machine</text>
+          <text x="346" y="300" font-size="11.5" fill="#1f9e8f" font-weight="600">shares spare capacity</text>
+
+          <!-- public-serving door: this pod opts to serve outside consumers -->
+          <rect x="86" y="452" width="410" height="80" rx="11" fill="#fdeef4" stroke="#d55f8a" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="104" y="480" font-size="13" font-weight="700" fill="#1b2432">A public-serving pod opens its door</text>
+          <text x="104" y="500" font-size="11.8" fill="#5c6b7e">Some pods choose to serve consumers who belong to no pod.</text>
+          <text x="104" y="516" font-size="11.8" fill="#5c6b7e">Access is never gated on contributing (ADR-0002, ADR-0009).</text>
+        </g>
+
+        <!-- ===================== YOUR NODE ===================== -->
+        <g class="layer" id="g-node" data-key="node">
+          <rect x="76" y="176" width="212" height="240" rx="12" fill="#fff6ea" stroke="#e08a24" stroke-width="2.4"/>
+          <text x="92" y="204" font-size="15" font-weight="800" fill="#1b2432">YOUR NODE</text>
+          <text x="92" y="222" font-size="11.5" fill="#e08a24" font-weight="600">the atom &middot; runs fully offline</text>
+          <g font-size="12" fill="#1b2432">
+            <text x="92" y="252">&#9670; Open model &middot; 14&ndash;30B</text>
+            <text x="92" y="278">&#9670; Capability manifest</text>
+            <text x="92" y="304">&#9670; Local router</text>
+          </g>
+          <line x1="92" y1="320" x2="272" y2="320" stroke="#cdd6e0"/>
+          <text x="92" y="344" font-size="11.5" fill="#5c6b7e">Works on its own. The network</text>
+          <text x="92" y="360" font-size="11.5" fill="#5c6b7e">only <tspan font-weight="700" fill="#1b2432">adds</tspan> to what it already does.</text>
+          <text x="92" y="392" font-size="11" fill="#8a97a7">If all is busy &rarr; smaller local</text>
+          <text x="92" y="406" font-size="11" fill="#8a97a7">model, or an honest wait.</text>
+
+          <!-- request entering -->
+          <circle cx="34" cy="238" r="15" fill="#ffffff" stroke="#1b2432" stroke-width="1.4"/>
+          <text x="34" y="242" font-size="11" text-anchor="middle" fill="#1b2432">you</text>
+          <path d="M50 238 L 74 238" stroke="#1b2432" stroke-width="1.6" marker-end="url(#arrow)"/>
+        </g>
+
+        <!-- ===================== OVERFLOW PATH ===================== -->
+        <g class="layer" id="g-overflow" data-key="over">
+          <!-- 1 local badge -->
+          <circle cx="264" cy="196" r="13" fill="#e08a24"/>
+          <text x="264" y="200" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">1</text>
+          <!-- 2 node -> peer -->
+          <path d="M288 250 L 328 250" stroke="#33404f" stroke-width="2" marker-end="url(#arrow)"/>
+          <circle cx="309" cy="250" r="13" fill="#1f9e8f"/>
+          <text x="309" y="254" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">2</text>
+          <!-- 3 pod -> federation -->
+          <path d="M524 262 L 598 214" stroke="#33404f" stroke-width="2" marker-end="url(#arrow)"/>
+          <circle cx="561" cy="238" r="13" fill="#6c5ce7"/>
+          <text x="561" y="242" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">3</text>
+        </g>
+
+        <!-- ===================== CONSUMER (outside every pod) ===================== -->
+        <g class="layer" id="g-consumer" data-key="consumer">
+          <rect x="96" y="602" width="452" height="66" rx="11" fill="#fdeef4" stroke="#d55f8a" stroke-width="1.8"/>
+          <rect x="114" y="614" width="30" height="42" rx="6" fill="#ffffff" stroke="#d55f8a" stroke-width="1.6"/>
+          <rect x="120" y="620" width="18" height="26" rx="2" fill="#fdeef4"/>
+          <text x="162" y="628" font-size="13" font-weight="700" fill="#1b2432">Consumer &mdash; a phone, no model and no pod of its own</text>
+          <text x="162" y="647" font-size="11.6" fill="#5c6b7e">Jerry belongs to no pod. He reaches whichever available</text>
+          <text x="162" y="662" font-size="11.6" fill="#5c6b7e">public-serving pod can take him.</text>
+          <!-- access: from outside, crossing up into a pod's open door -->
+          <path d="M300 602 C 300 570, 300 548, 300 534" stroke="#d55f8a" stroke-width="1.8"
+                fill="none" stroke-dasharray="5 4" marker-end="url(#arrowRose)"/>
+          <text x="312" y="566" font-size="10.8" fill="#d55f8a" font-weight="600">reaches in to be served</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="flow" aria-label="How a request flows">
+      <span class="step"><span class="num">1</span> Your machine serves it</span>
+      <span class="arrow">&rarr;</span>
+      <span class="step pod"><span class="num">2</span> else a trusted pod peer</span>
+      <span class="arrow">&rarr;</span>
+      <span class="step fed"><span class="num">3</span> else a federated pod</span>
+      <span class="arrow">&rarr;</span>
+      <span class="end">&#10022; degrade gracefully &mdash; never to zero</span>
+    </div>
+
+    <div class="cards">
+      <div class="card node" data-target="g-node">
+        <h3><span class="dot"></span>The Node</h3>
+        <p>One person&rsquo;s machine running a capable open model (14&ndash;30B). Fully useful offline &mdash; the smallest thing that delivers the whole promise to a single user.</p>
+      </div>
+      <div class="card pod" data-target="g-pod">
+        <h3><span class="dot"></span>The Pod</h3>
+        <p>A few nodes that already trust each other &mdash; your machines, a lab, a library, a town. A pod may open its door to serve consumers who belong to no pod.</p>
+      </div>
+      <div class="card consumer" data-target="g-consumer">
+        <h3><span class="dot"></span>The Consumer</h3>
+        <p>A phone or browser with no model &mdash; and no pod. It reaches whichever public-serving pod can take it. The many are served by the few.</p>
+      </div>
+      <div class="card fed" data-target="g-federation">
+        <h3><span class="dot"></span>The Federation</h3>
+        <p>Pods peer with other pods through signed, gossiped discovery. No central hub, no registry, nothing a single directive can switch off.</p>
+      </div>
+      <div class="card over" data-target="g-overflow">
+        <h3><span class="dot"></span>The Overflow Path</h3>
+        <p>Work stays local, and only spills outward when needed: local, then pod, then federation &mdash; each hop within policy you control.</p>
+      </div>
+    </div>
+
+    <footer>
+      <div class="mission">
+        <b>The idea, in one line:</b> where Tor is privacy for all, DII is intelligence for all &mdash;
+        volunteer-run, resilient by design, free to use whether or not you contribute.
+      </div>
+      <div>Distributed Intelligence Initiative &middot; conceptual overview &middot; July 2026</div>
+    </footer>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var svg = document.getElementById('diagram');
+    var layers = Array.prototype.slice.call(svg.querySelectorAll('.layer'));
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+    function focusLayer(id){
+      svg.classList.add('focusing');
+      layers.forEach(function(l){ l.classList.toggle('on', l.id === id); });
+    }
+    function clear(){ svg.classList.remove('focusing'); layers.forEach(function(l){ l.classList.remove('on'); }); }
+    cards.forEach(function(c){
+      var id = c.getAttribute('data-target');
+      c.addEventListener('mouseenter', function(){ focusLayer(id); });
+      c.addEventListener('mouseleave', clear);
+    });
+    layers.forEach(function(l){
+      l.addEventListener('mouseenter', function(){ focusLayer(l.id); });
+      l.addEventListener('mouseleave', clear);
+    });
+  })();
+</script>
+</body>
+</html>

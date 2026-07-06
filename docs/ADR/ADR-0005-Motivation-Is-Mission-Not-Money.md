@@ -34,4 +34,4 @@ The analogy is bounded. Tor is the model for motivation and legitimacy, not for 
 
 ## Open questions
 
-Whether a reciprocity fairness knob is worth building at all, and if so its exact illiquid form, remains a Phase-2 decision. How pods sustain themselves in practice, following the Tor Project's nonprofit-and-institutional model, is a research and governance question for later. The consumer abuse-surface, identity, and fair-use questions remain open under ADR-0002.
+Whether a reciprocity fairness knob is worth building at all, and if so its exact illiquid form, remains a Phase-2 decision. The batch-4 design review leans toward not building it: the pod's structural mutual benefit (see Glossary and ADR-0009) already answers "what do I get for contributing" without a ledger, so the reciprocity signal is probably unnecessary. How pods sustain themselves in practice, following the Tor Project's nonprofit-and-institutional model, is a research and governance question for later. The consumer abuse-surface, identity, and fair-use questions remain open under ADR-0002.

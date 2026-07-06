@@ -4,6 +4,8 @@ Week-2 research deliverable: for each prior project in distributed and decentral
 
 Batch 1 covers the six projects closest to DII's substrate, decentralized LLM inference and training. Batch 2 covers the volunteer-computing precedent, the projects that test whether mission-driven volunteer infrastructure can sustain. Batch 3 covers the DePIN compute markets, the market DII rejected, which test the demand objection and whether a scheduler is a defensible product. Batch 4 covers the coordination and topology influences, read for what DII's architecture should borrow rather than as competitors. With batch 4 the Week-2 prior-art research is complete.
 
+For the conclusion across all eighteen without reading each page, start with the [Final Report](Final-Report.md): a synthesis of each batch plus the overall finding, mapped to the teardown's objections and the ADRs.
+
 ## Template
 
 Every page follows the same structure so they stay comparable:
