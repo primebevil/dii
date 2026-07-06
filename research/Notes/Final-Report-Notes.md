@@ -95,3 +95,15 @@ Reconciliation: the Overview's "router and scheduler are the core engineering co
 Honest residual: this positioning closes Objection 5 (defensibility) but hands the weight to Objection 2 (demand). Uncopyable is worthless if unwanted, so item 4 and the demand probe are linked, and the strong defensibility answer must not paper over the open demand question.
 
 Plain-language version for outward messaging: the clever routing is table stakes; keeping data in-country is a checkbox anyone can add; the only thing no company can copy is that DII is a free volunteer network, because being that means giving up being a business. Candidate one-liner, draft only: "DII is sovereign, resilient AI access for the people the cloud won't or can't serve, a federation you can run yourself, not a compute marketplace."
+
+## Open question: sponsorship from private pods to fund public access
+
+Raised at the end of the 07-05 session; resolved 07-06 in favor of voluntary donation (ADR-0010). A private pod (a law firm, a medical-research group, a corporate team) gets real value from the software and network DII built, even though it shares only within itself. Could DII ask such pods for money, structured so it funds the public open resources rather than becoming a business? The network stays free and ungated either way, because a private pod runs its own hardware in its own closed zone and consumes no public capacity, so any charge is for the software and support, not for access to the public floor. That distinction is what keeps this from contradicting ADR-0002 and ADR-0005.
+
+Two versions, very different:
+
+1. Voluntary sponsorship (clean, and already basically permitted). Invite well-resourced private pods to sponsor the steward or fund public-serving pods, framed as private beneficiaries funding public access, a cross-subsidy for the mission. This is the Tor, Mozilla, and Wikipedia corporate-sponsor model, and it is just an explicit application of what ADR-0008 (institutional sponsors) and ADR-0009 (private pods self-fund) already allow. Could be normed as a "suggested sustaining contribution" for commercial private pods, expected socially but not enforced. Probably captures most of the money with no cost on principle.
+
+2. Required fee or license for private or commercial use (a real departure). Does not violate "the network is free," since it charges for the software, not public access, but it introduces three costs: paying customers exert pull and pull drifts a project off mission (the batch-2 and batch-3 lesson); enforcement requires either trust or a non-commercial / source-available license, which turns "free software for all" into "free for some"; and it complicates the clean non-commercial story.
+
+Recommendation to pick up later: start with the voluntary, normed sponsorship, keep the required-license option in reserve if voluntary funding does not sustain, and do not commit to the hard version yet. Candidate to become an ADR (extending ADR-0008 and ADR-0009) once decided.

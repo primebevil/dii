@@ -1,4 +1,4 @@
-# Batch Review and Design Decisions, 2026-07-06
+# Batch Review and Design Decisions, 2026-07-05
 
 After the Week-2 prior-art research was complete, we talked the batches through one at a time, with me recapping each to trigger the owner's thinking. The discussions did what they were supposed to: they turned research findings into design decisions, and several are worth more than the reading that produced them. The running record is research/Notes/Final-Report-Notes.md; the durable decisions landed in the glossary, an ADR, the Overview, and the system diagram.
 

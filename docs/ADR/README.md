@@ -11,3 +11,4 @@ One file per significant decision.
 - ADR-0007: Who DII is for; dependency-defined, not "everyone"; broad mission, narrow recruiting wedge, personal pod-zero.
 - ADR-0008: Funding the stewards; the network stays non-commercial, but funding into a nonprofit steward and cost-offset for operators to break-even is accepted as distinct from monetization.
 - ADR-0009: Public and private pods, and funding eligibility; rivalrous cost caps pod size, the unaffiliated are served by many public-serving pods (Tor exit-relay model), and funding follows mission (public-serving first, public-interest case-by-case, private self-funded).
+- ADR-0010: Voluntary sponsorship, not paid private use; private pods are invited (not required) to sponsor public access, and a required fee or license for private/commercial use is reserved, not adopted.

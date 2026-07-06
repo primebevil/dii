@@ -1,6 +1,6 @@
 # ADR-0009: Public and Private Pods, and Funding Eligibility
 
-Status: Accepted, 2026-07-06, from the Week-2 batch-4 design review. Builds on ADR-0002, ADR-0005, and ADR-0008. May be refined on the owner's fresh-eyes review of the prior-art Final Report.
+Status: Accepted, 2026-07-05, from the Week-2 batch-4 design review. Builds on ADR-0002, ADR-0005, and ADR-0008. May be refined on the owner's fresh-eyes review of the prior-art Final Report.
 
 ## Context
 

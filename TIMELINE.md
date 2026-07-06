@@ -40,11 +40,12 @@
 - Wrote prior-art batch 3, the DePIN compute markets: io.net, Aethir, Render, Akash (files 11-14). Finding: supply is abundant and demand is the scarce side; where demand is real it attaches to enterprise hardware or price competition DII avoids, so DII needs a non-price thesis. Render validates the latency-tolerant workload choice; Akash confirms Objection 5.
 - Wrote prior-art batch 4, the coordination and topology influences: BitTorrent, the Fediverse and Matrix, Ray, the IETF DIN work (files 15-18). Finding: DII's federated topology is proven and its differentiation (the trust and sovereignty layer, not the scheduler) is defensible; the incentive problem and the funded steward are DII's own to solve.
 - Ran independent verification passes on both batches (journal/2026-07-05-week2-research-complete.md). Week-2 prior-art research complete: eighteen one-pagers across four batches. Noted authorship transparency in CONTRIBUTING; zero-padded the one-pager filenames.
-
-## 2026-07-06
-
-- Talked the four batches through and turned findings into decisions (journal/2026-07-06-batch-review-design.md; working notes in research/Notes/Final-Report-Notes.md).
+- Talked the four batches through and turned findings into decisions (journal/2026-07-05-batch-review-design.md; working notes in research/Notes/Final-Report-Notes.md).
 - Contribution incentive resolved as mission plus mutual benefit plus cost-offset; named "mutual benefit" to keep it distinct from the Reciprocity Signal, which is now likely unnecessary. Added the term to the Glossary and a note to ADR-0005.
 - Accepted ADR-0009, public and private pods and funding eligibility: rivalrous cost caps pod size, the unaffiliated are served by many public-serving pods (Tor exit-relay model) via a decentralized directory rather than a central pod, and funding follows mission (public-serving first, public-interest case-by-case, private self-funded). Added the pod terms to the Glossary and the model to the Architecture Overview.
 - Settled the Objection-5 positioning: the moat is the untrusted-volunteer-pod substrate, not the sovereignty-routing feature; deferred the identity-standards choice to Week 3.
 - Updated the system diagram to place the consumer outside every pod, reaching in through a public-serving pod's door. Rewrote the prior-art Final Report to integrate all of the above. Week-2 research and its review are complete, nearly a week early.
+
+## 2026-07-06
+
+- Accepted ADR-0010, voluntary sponsorship not paid private use: private pods are invited (not required) to sponsor public access, and a required fee or license for private or commercial use is reserved, not adopted.
