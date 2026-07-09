@@ -27,3 +27,25 @@
 - Sharpened the target user from "everyone" to a dependency-defined target: broad mission (the individual, AI for All), narrow recruiting wedge (independent professional and small business where dependency meets present-tense exposure), personal pod-zero (docs/ADR/ADR-0007, docs/Who_DII_Is_For.md).
 - Recorded influences, with Tor as the foundational one (INFLUENCES.md).
 - Week 1, "define the proposition," complete.
+- Began Week 2, research (journal/2026-07-04-week2-research.md). Wrote the first prior-art batch, the six projects closest to DII's substrate: Petals, Parallax, FusionAI, Prime Intellect, Gensyn/Verde, and DisTrO (research/Prior-Art). Each leads with what it does and how it compares to DII.
+- Added a validation checklist mapping every load-bearing claim to its source, then ran an independent verification pass. Roughly thirty claims confirmed; two were corrected as unverifiable (the Gensyn token price and the Parallax node count).
+- Added latency bound and DHT discovery to the Glossary. Pushed the batch to a review branch. No code written.
+- Wrote a synthesis of batch 1 (research/Prior-Art/Synthesis.md): the prior art splits into split-inference and distributed-training, both complex; DII does neither and is a different bet, not a simpler one. Added glossary terms DePIN, TOPLOC, OpenDiLoCo, H100.
+
+## 2026-07-05
+
+- Wrote Week-2 prior-art batch 2, the volunteer-infrastructure sustainability question: SETI@home, BOINC, Folding@home, Tor (research/Prior-Art, files 7-10, journal/2026-07-05-week2-funding.md). Ran a second independent verification pass; corrected several unverifiable figures.
+- Finding: mission-driven volunteer infrastructure can be durable, but every sustained case ran on cheap, non-rivalrous donation; DII's expensive, rivalrous GPU ask is the variable none overcame.
+- Accepted ADR-0008, funding the stewards. The network stays non-commercial (ADR-0005 holds), but funding a nonprofit steward and offsetting operators' bare-minimum costs to break-even is permitted as distinct from monetization. Reconciled the Architecture Overview and ADR-0005 wording accordingly.
+- Wrote prior-art batch 3, the DePIN compute markets: io.net, Aethir, Render, Akash (files 11-14). Finding: supply is abundant and demand is the scarce side; where demand is real it attaches to enterprise hardware or price competition DII avoids, so DII needs a non-price thesis. Render validates the latency-tolerant workload choice; Akash confirms Objection 5.
+- Wrote prior-art batch 4, the coordination and topology influences: BitTorrent, the Fediverse and Matrix, Ray, the IETF DIN work (files 15-18). Finding: DII's federated topology is proven and its differentiation (the trust and sovereignty layer, not the scheduler) is defensible; the incentive problem and the funded steward are DII's own to solve.
+- Ran independent verification passes on both batches (journal/2026-07-05-week2-research-complete.md). Week-2 prior-art research complete: eighteen one-pagers across four batches. Noted authorship transparency in CONTRIBUTING; zero-padded the one-pager filenames.
+- Talked the four batches through and turned findings into decisions (journal/2026-07-05-batch-review-design.md; working notes in research/Notes/Final-Report-Notes.md).
+- Contribution incentive resolved as mission plus mutual benefit plus cost-offset; named "mutual benefit" to keep it distinct from the Reciprocity Signal, which is now likely unnecessary. Added the term to the Glossary and a note to ADR-0005.
+- Accepted ADR-0009, public and private pods and funding eligibility: rivalrous cost caps pod size, the unaffiliated are served by many public-serving pods (Tor exit-relay model) via a decentralized directory rather than a central pod, and funding follows mission (public-serving first, public-interest case-by-case, private self-funded). Added the pod terms to the Glossary and the model to the Architecture Overview.
+- Settled the Objection-5 positioning: the moat is the untrusted-volunteer-pod substrate, not the sovereignty-routing feature; deferred the identity-standards choice to Week 3.
+- Updated the system diagram to place the consumer outside every pod, reaching in through a public-serving pod's door. Rewrote the prior-art Final Report to integrate all of the above. Week-2 research and its review are complete, nearly a week early.
+
+## 2026-07-06
+
+- Accepted ADR-0010, voluntary sponsorship not paid private use: private pods are invited (not required) to sponsor public access, and a required fee or license for private or commercial use is reserved, not adopted.

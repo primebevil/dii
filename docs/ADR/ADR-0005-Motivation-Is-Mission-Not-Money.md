@@ -2,6 +2,8 @@
 
 Status: Accepted, 2026-07-03. Builds on ADR-0002. Resolves the participation-model open decision in the Architecture Overview and answers Objection 4 of The Case Against DII.
 
+Update (2026-07-05): the funding question deferred in this record's open questions was opened and accepted in ADR-0008. Funding a nonprofit steward and offsetting operators' bare-minimum costs to break-even are permitted as distinct from monetization; the network commitments below, no business model, token, tradable credit, or paid marketplace, stand unchanged. The "managed-federation funding path" retired below referred to a commercial revenue path taken from the network, which remains retired; ADR-0008 permits only funding flowing into the non-commercial steward.
+
 ## Context
 
 Two related things were left unsettled. The participation model was described as reciprocity in the Manifesto, FAQ, Charter, and Architecture Overview, where "contribution earns priority" read as the reason people take part. At the same time the Overview listed "reciprocity versus pure-voluntary" as an open decision, and the teardown's Objection 4 showed that reciprocity-as-motivation has a known failure mode: a non-transferable credit is worth only the compute the holder will personally consume, so once a contributor's own demand is met the incentive to keep contributing falls to zero, and making the credit transferable to fix that re-creates the currency the project rejected.
@@ -32,4 +34,4 @@ The analogy is bounded. Tor is the model for motivation and legitimacy, not for 
 
 ## Open questions
 
-Whether a reciprocity fairness knob is worth building at all, and if so its exact illiquid form, remains a Phase-2 decision. How pods sustain themselves in practice, following the Tor Project's nonprofit-and-institutional model, is a research and governance question for later. The consumer abuse-surface, identity, and fair-use questions remain open under ADR-0002.
+Whether a reciprocity fairness knob is worth building at all, and if so its exact illiquid form, remains a Phase-2 decision. The batch-4 design review leans toward not building it: the pod's structural mutual benefit (see Glossary and ADR-0009) already answers "what do I get for contributing" without a ledger, so the reciprocity signal is probably unnecessary. How pods sustain themselves in practice, following the Tor Project's nonprofit-and-institutional model, is a research and governance question for later. The consumer abuse-surface, identity, and fair-use questions remain open under ADR-0002.
