@@ -108,7 +108,7 @@ Read it as: request enters a door, router picks where it runs, it goes to an Oll
 
 ## The manifest, and the whole workflow
 
-The manifest is how the router answers "who can serve this?" Each node publishes a small self-description, built by asking its own Ollama what models it runs:
+The manifest is how the router answers "who can serve this?" Each node publishes a small self-description, built by asking its model server for its model list (the OpenAI-standard /v1/models call, not an Ollama-specific one, so the backend stays swappable):
 
 ```
 node_id: A
@@ -153,6 +153,34 @@ sequenceDiagram
 ```
 
 Jerry's path is the overflow shape entered at the consumer door: same manifest lookup, node A serves him from whatever pod node has the model (its own Ollama or B). If no node can serve, the router returns an honest "no capacity" rather than hanging.
+
+## Backend portability: any inference server
+
+Ollama is the POC's backend because it's the easiest to run, not because it's special. Decision: build and test against Ollama, but the node must long-term read from any LLM inference system.
+
+The node talks to its backend through a thin model-server interface, essentially two methods, list models and stream a completion, using the OpenAI-standard API (/v1/models, /v1/chat/completions) rather than any server's native calls. Anything that speaks that API drops in by config: llama.cpp server, vLLM, LM Studio, LocalAI, and others. The interface is the seam: an OpenAI-compatible backend needs only a URL, and a backend that speaks something else gets a small adapter behind the same interface, so the node core never learns about any specific server.
+
+Rule for the POC: use only the common OpenAI subset (chat completions, streaming, model list). Leaning on one server's proprietary extras is exactly what would weld us to a single backend.
+
+## Go package layout (for the build)
+
+One binary is a node. Two nodes is the same binary run twice with different config. The packages map one-to-one onto the six node jobs, which keeps each piece small and reviewable.
+
+```
+prototype/
+  go.mod
+  cmd/node/main.go        - load config, wire packages, start the node
+  internal/
+    config/               - parse config (listen addr, node_id, model_server URL, consumer_token, peers)
+    ingress/              - OpenAI-compatible HTTP server; the two doors; token check selects the door
+    router/               - decide where a request runs: local-first, else a peer, else honest fail
+    modelserver/          - Backend interface (ListModels, ChatCompletionStream) + OpenAI-compatible client (Ollama is just a base URL)
+    manifest/             - build own manifest from modelserver; serve /manifest; fetch + cache peers'
+    peer/                 - call another node's OpenAI endpoint (inter-node transport = reuse the OpenAI HTTP call)
+  config.example.yaml
+```
+
+The seam that keeps us backend-portable is modelserver.Backend: the rest of the node depends on the interface, never on Ollama directly. The build brief in prototype/BUILD_BRIEF.md turns this into a starting task for Claude Code.
 
 ## Parking lot (not now, but don't lose them)
 

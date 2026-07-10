@@ -49,3 +49,9 @@
 ## 2026-07-06
 
 - Accepted ADR-0010, voluntary sponsorship not paid private use: private pods are invited (not required) to sponsor public access, and a required fee or license for private or commercial use is reserved, not adopted.
+
+## 2026-07-08
+
+- Pivoted from Week 2 (research complete) to Week 3, the prototype (journal/2026-07-08-week3-kickoff.md). Wrote the Week-3 prototype plan (docs/Week_3_Prototype_Plan.md): a two-node, one-pod proof of concept in Go where node A routes a capability request to node B and back, and consumer C borrows through the remote ingress, each node exposing an OpenAI-compatible endpoint.
+- Scoping calls: this session produces the plan only, no code yet; node identity stays stubbed with a pre-shared token, and the DIDs-versus-DNSSEC-versus-pod-issued-keys decision is driven by what the prototype's ingress actually needs rather than a paper comparison.
+- Plan sets four milestones (walking skeleton, real local inference plus manifest, overflow routing and consumer ingress, residential-link measurement), flags the inter-node transport as the one real design question (start with the OpenAI HTTP shape, keep an internal RPC as a candidate), and proposes kill-criteria thresholds for sign-off before the measurement run. No code written.
