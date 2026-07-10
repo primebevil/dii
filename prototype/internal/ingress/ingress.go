@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"dii/internal/config"
+	"dii/internal/manifest"
 	"dii/internal/modelserver"
 	"dii/internal/router"
 )
@@ -23,15 +24,18 @@ var errUnauthorized = errors.New("unauthorized")
 type Server struct {
 	cfg    *config.Config
 	router *router.Router
+	store  *manifest.Store
 }
 
-func New(cfg *config.Config, rt *router.Router) *Server {
-	return &Server{cfg: cfg, router: rt}
+func New(cfg *config.Config, rt *router.Router, store *manifest.Store) *Server {
+	return &Server{cfg: cfg, router: rt, store: store}
 }
 
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /v1/chat/completions", s.handleChat)
+	mux.HandleFunc("GET /v1/models", s.handleModels)
+	mux.HandleFunc("GET /manifest", s.handleManifest)
 	mux.HandleFunc("GET /healthz", s.handleHealth)
 	return mux
 }
@@ -67,6 +71,30 @@ func (s *Server) handleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	streamSSE(w, stream)
+}
+
+// handleManifest publishes this node's self-description for peers to fetch.
+func (s *Server) handleManifest(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(s.store.Own())
+}
+
+// handleModels exposes the node's own models in the OpenAI /v1/models shape,
+// served straight from the cached manifest.
+func (s *Server) handleModels(w http.ResponseWriter, r *http.Request) {
+	type model struct {
+		ID     string `json:"id"`
+		Object string `json:"object"`
+	}
+	out := struct {
+		Object string  `json:"object"`
+		Data   []model `json:"data"`
+	}{Object: "list"}
+	for _, id := range s.store.Own().Models {
+		out.Data = append(out.Data, model{ID: id, Object: "model"})
+	}
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(out)
 }
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {

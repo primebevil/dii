@@ -2,4 +2,5 @@ listen: ":8081"
 node_id: "B"
 model_server: "http://localhost:11434/v1"
 consumer_token: "dev-secret"
-peers: []                                    # node B has no peers in M1; it serves locally
+advertise: "http://localhost:8081"           # this node's URL, published in its manifest
+peers: []                                    # node B has no peers; it serves locally

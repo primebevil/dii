@@ -12,8 +12,9 @@ import (
 type Config struct {
 	Listen        string   `yaml:"listen"`         // OpenAI endpoint listen addr, e.g. ":8080"
 	NodeID        string   `yaml:"node_id"`        // label for this node, e.g. "A"
-	ModelServer   string   `yaml:"model_server"`   // OpenAI backend base URL (Ollama). Unused in M1 (mock backend).
+	ModelServer   string   `yaml:"model_server"`   // OpenAI backend base URL (Ollama's /v1)
 	ConsumerToken string   `yaml:"consumer_token"` // stub bearer token that selects the consumer door
+	Advertise     string   `yaml:"advertise"`      // this node's own URL for its manifest, e.g. http://host:8080 (optional)
 	Peers         []string `yaml:"peers"`          // peer node endpoints, e.g. http://host:8080
 }
 

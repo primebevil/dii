@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 
+	"dii/internal/manifest"
 	"dii/internal/modelserver"
 )
 
@@ -31,6 +32,30 @@ func NewClient(endpoint string) *Client {
 		// rides on the request context instead.
 		http: &http.Client{},
 	}
+}
+
+// Endpoint returns the peer's normalized base URL.
+func (c *Client) Endpoint() string { return c.endpoint }
+
+// FetchManifest reads the peer's self-description from its /manifest route.
+func (c *Client) FetchManifest(ctx context.Context) (manifest.Manifest, error) {
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodGet, c.endpoint+"/manifest", nil)
+	if err != nil {
+		return manifest.Manifest{}, err
+	}
+	resp, err := c.http.Do(httpReq)
+	if err != nil {
+		return manifest.Manifest{}, fmt.Errorf("peer %s: %w", c.endpoint, err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return manifest.Manifest{}, fmt.Errorf("peer %s: /manifest status %d", c.endpoint, resp.StatusCode)
+	}
+	var m manifest.Manifest
+	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
+		return manifest.Manifest{}, err
+	}
+	return m, nil
 }
 
 func (c *Client) ChatCompletionStream(ctx context.Context, req modelserver.ChatRequest) (io.ReadCloser, error) {
