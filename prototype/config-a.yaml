@@ -1,0 +1,6 @@
+listen: ":8080"
+node_id: "A"
+model_server: "http://localhost:11434/v1"
+consumer_token: "dev-secret"
+peers:
+  - "http://localhost:8081"                  # node B on the same machine (M1 local test)

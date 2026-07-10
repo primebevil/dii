@@ -1,0 +1,6 @@
+listen: ":8080"                              # this node's OpenAI endpoint listen addr
+node_id: "A"                                 # label for this node
+model_server: "http://localhost:11434/v1"    # Ollama's OpenAI-compatible base URL (unused in M1)
+consumer_token: "dev-secret"                 # stub auth for the consumer door
+peers:
+  - "http://192.168.1.50:8080"               # peer node endpoints (node B, etc.)
