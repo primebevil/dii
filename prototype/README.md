@@ -6,7 +6,7 @@ routes each request to whichever node in the pod can serve the model. See
 `../architecture/Sketchbook.md` and `BUILD_BRIEF.md` for the design, and
 `DEPLOY.md` to run a pod across multiple machines.
 
-## Status: M1–M3 complete
+## Status: Week 3 nearing completion — M1–M4 done
 
 - **M1 — walking skeleton.** Two nodes, SSE streaming end to end, the two doors,
   A→B forwarding over the reused OpenAI HTTP call.
@@ -17,9 +17,16 @@ routes each request to whichever node in the pod can serve the model. See
   manifests: local-first, then overflow to a peer that has the model, else an
   honest 503. The two doors differ — local door is local-first; consumer door
   (stub token) prefers peers.
+- **M4 — measurement.** A live 3-node pod (laptop hub + Atlas over Tailscale +
+  sirius over LAN); `cmd/harness` collects the kill-criteria numbers.
 
-Verified live on a 3-node pod spanning two networks (LAN + Tailscale). Next up is
-M4: measurement against the plan's kill-criteria.
+**All four kill-criteria passed:** overflow throughput ~100% of the peer's own
+local, TTFT overhead +20–43 ms (well under the ~200 ms budget), consumer within
+the overflow envelope, honest immediate 503 on no-capacity. See
+`../journal/2026-07-12-week3-m4-findings.md` for the numbers and
+`../docs/Identity_Note_From_Prototype.md` for what the ingress needed from
+identity. The overflow thesis is proven technically; durability remains a
+separate market question.
 
 ## Layout
 

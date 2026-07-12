@@ -2,6 +2,8 @@
 
 Status: Scratch space, started 2026-07-08. Informal working notes from the slow walkthrough, not an official design. Things here are provisional and get promoted into architecture/Prototype.md once they settle. KISS is the rule for the POC.
 
+Update 2026-07-12: the design in these notes has been built as the Week-3 prototype (M1–M4) and validated on a live three-node pod; see prototype/ and journal/2026-07-12-week3-m4-findings.md.
+
 ## The pieces so far
 
 Model server. This is the inference engine, Ollama today. Its only job is take a prompt, return tokens. It already speaks the OpenAI-compatible HTTP API. Commodity and swappable. In the ffmpeg analogy, this is ffmpeg. We do not build this.

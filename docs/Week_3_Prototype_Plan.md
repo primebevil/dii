@@ -1,6 +1,6 @@
 # Week 3 Prototype Plan
 
-Status: Draft, 2026-07-08. Depends on the Architecture Overview, ADR-0003 (Go for the node prototype), ADR-0004 (consumer as a first-class ingress), and ADR-0006 (the reliable floor). Weeks 1 and 2 are complete; this is the Phase-1 build from the Architecture Overview build order.
+Status: Nearing completion, updated 2026-07-12 (drafted 2026-07-08). All four milestones (M1–M4) are built and verified on a live 3-node pod; the kill-criteria passed — see journal/2026-07-12-week3-m4-findings.md and docs/Identity_Note_From_Prototype.md. Depends on the Architecture Overview, ADR-0003 (Go for the node prototype), ADR-0004 (consumer as a first-class ingress), and ADR-0006 (the reliable floor). Weeks 1 and 2 are complete; this is the Phase-1 build from the Architecture Overview build order.
 
 ## Goal
 

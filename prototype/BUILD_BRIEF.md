@@ -2,6 +2,8 @@
 
 Handoff doc for building the Week-3 prototype in Go. Read this first, then build in your editor with a tight run-test loop against a real Ollama.
 
+**Status (2026-07-12):** M1–M4 are all built and verified — see prototype/README.md, prototype/DEPLOY.md, and journal/2026-07-12-week3-m4-findings.md. This brief is retained as the original handoff.
+
 ## Read these first (sources of truth)
 
 - architecture/Sketchbook.md, the settled mental model: model server vs. node, the router, two doors, the manifest, the full workflow, the Go package layout, and backend portability.
