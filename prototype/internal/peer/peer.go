@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"dii/internal/manifest"
 	"dii/internal/modelserver"
@@ -25,12 +26,16 @@ type Client struct {
 
 var _ modelserver.Backend = (*Client)(nil)
 
-func NewClient(endpoint string) *Client {
+// NewClient builds a client to a peer node's OpenAI endpoint.
+// responseHeaderTimeout bounds the wait for the first response byte (0 = no
+// limit); there is deliberately no overall client timeout, since chat streams
+// are long-lived and cancellation rides on the request context.
+func NewClient(endpoint string, responseHeaderTimeout time.Duration) *Client {
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.ResponseHeaderTimeout = responseHeaderTimeout
 	return &Client{
 		endpoint: strings.TrimRight(endpoint, "/"),
-		// No client-level timeout: chat streams are long-lived; cancellation
-		// rides on the request context instead.
-		http: &http.Client{},
+		http:     &http.Client{Transport: transport},
 	}
 }
 

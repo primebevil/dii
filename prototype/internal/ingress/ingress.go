@@ -15,8 +15,6 @@ import (
 	"dii/internal/router"
 )
 
-const maxBodyBytes = 1 << 20 // 1 MiB cap on request bodies
-
 var errUnauthorized = errors.New("unauthorized")
 
 // Server is the node's OpenAI-compatible front door. The token check turns each
@@ -47,7 +45,7 @@ func (s *Server) handleChat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := io.ReadAll(io.LimitReader(r.Body, maxBodyBytes))
+	body, err := io.ReadAll(io.LimitReader(r.Body, s.cfg.MaxBodyBytes))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "could not read request body")
 		return

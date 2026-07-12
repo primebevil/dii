@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // Client is the real backend: an OpenAI-compatible HTTP client to a model
@@ -22,12 +23,16 @@ type Client struct {
 
 var _ Backend = (*Client)(nil)
 
-func NewClient(baseURL string) *Client {
+// NewClient builds a client to an OpenAI-compatible model server.
+// responseHeaderTimeout bounds the wait for the first response byte (0 = no
+// limit); there is deliberately no overall client timeout, since chat streams
+// are long-lived and cancellation rides on the request context.
+func NewClient(baseURL string, responseHeaderTimeout time.Duration) *Client {
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.ResponseHeaderTimeout = responseHeaderTimeout
 	return &Client{
 		baseURL: strings.TrimRight(baseURL, "/"),
-		// No client-level timeout: chat streams are long-lived; cancellation
-		// rides on the request context.
-		http: &http.Client{},
+		http:    &http.Client{Transport: transport},
 	}
 }
 

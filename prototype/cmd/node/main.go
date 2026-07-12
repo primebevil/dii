@@ -5,7 +5,6 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"time"
 
 	"dii/internal/config"
 	"dii/internal/ingress"
@@ -27,12 +26,12 @@ func main() {
 	// M2: real inference. The local backend is an OpenAI-compatible client to
 	// the model server (Ollama). The seam is modelserver.Backend, unchanged
 	// above this line since M1.
-	var backend modelserver.Backend = modelserver.NewClient(cfg.ModelServer)
+	var backend modelserver.Backend = modelserver.NewClient(cfg.ModelServer, cfg.ResponseHeaderTimeout)
 
 	// Build our own manifest by asking the model server what it can serve. If
 	// the model server is down we still start (empty model list) so the node
 	// and manifest exchange stay up; local serving returns 503 until it's back.
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), cfg.StartupTimeout)
 	models, err := backend.ListModels(ctx)
 	cancel()
 	if err != nil {
@@ -51,10 +50,10 @@ func main() {
 	// endpoint so the router can map a manifest hit back to the client to call.
 	var peers []router.Peer
 	for _, endpoint := range cfg.Peers {
-		pc := peer.NewClient(endpoint)
+		pc := peer.NewClient(endpoint, cfg.ResponseHeaderTimeout)
 		peers = append(peers, router.Peer{Endpoint: pc.Endpoint(), Backend: pc})
 
-		pctx, pcancel := context.WithTimeout(context.Background(), 5*time.Second)
+		pctx, pcancel := context.WithTimeout(context.Background(), cfg.StartupTimeout)
 		m, err := pc.FetchManifest(pctx)
 		pcancel()
 		if err != nil {
