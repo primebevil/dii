@@ -58,6 +58,24 @@ func (s *Store) LocalCanServe(model string) bool {
 	return contains(s.own.Models, model)
 }
 
+// PeersForModel returns the endpoints of peers whose cached manifest lists the
+// model and that aren't marked busy. This is the capability lookup the router
+// uses to pick an overflow target (M3).
+func (s *Store) PeersForModel(model string) []string {
+	if model == "" {
+		return nil
+	}
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	var out []string
+	for endpoint, m := range s.peers {
+		if !m.Busy && contains(m.Models, model) {
+			out = append(out, endpoint)
+		}
+	}
+	return out
+}
+
 func contains(models []string, model string) bool {
 	for _, m := range models {
 		if m == model {

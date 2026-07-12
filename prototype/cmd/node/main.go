@@ -47,11 +47,12 @@ func main() {
 	log.Printf("node %s: local models %v", cfg.NodeID, models)
 
 	// A peer is just another OpenAI-compatible backend for serving, plus a
-	// /manifest endpoint we fetch once at startup.
-	var peerBackends []modelserver.Backend
+	// /manifest endpoint we fetch once at startup. We pair each peer with its
+	// endpoint so the router can map a manifest hit back to the client to call.
+	var peers []router.Peer
 	for _, endpoint := range cfg.Peers {
 		pc := peer.NewClient(endpoint)
-		peerBackends = append(peerBackends, pc)
+		peers = append(peers, router.Peer{Endpoint: pc.Endpoint(), Backend: pc})
 
 		pctx, pcancel := context.WithTimeout(context.Background(), 5*time.Second)
 		m, err := pc.FetchManifest(pctx)
@@ -64,7 +65,7 @@ func main() {
 		log.Printf("node %s: peer %s serves %v", cfg.NodeID, pc.Endpoint(), m.Models)
 	}
 
-	rt := router.New(backend, peerBackends, store)
+	rt := router.New(backend, peers, store)
 	srv := ingress.New(cfg, rt, store)
 
 	log.Printf("node %s listening on %s (peers: %v)", cfg.NodeID, cfg.Listen, cfg.Peers)
