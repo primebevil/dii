@@ -1,6 +1,6 @@
 # Prototype Architecture Sketchbook
 
-Status: Scratch space, started 2026-07-08. Informal working notes from the slow walkthrough, not an official design. Things here are provisional and get promoted into architecture/Prototype.md once they settle. KISS is the rule for the POC.
+Status: Realized, updated 2026-07-12 (started 2026-07-08). Informal working notes from the slow walkthrough. The model sketched here was built as the Week-3 prototype (prototype/, prototype/BUILD_BRIEF.md) and validated in M4 (journal/2026-07-12-week3-m4-findings.md), so this file is kept as the design record that fed the build rather than a scratch space. KISS was the rule for the POC.
 
 Update 2026-07-12: the design in these notes has been built as the Week-3 prototype (M1–M4) and validated on a live three-node pod; see prototype/ and journal/2026-07-12-week3-m4-findings.md.
 
@@ -186,9 +186,9 @@ The seam that keeps us backend-portable is modelserver.Backend: the rest of the 
 
 ## Parking lot (not now, but don't lose them)
 
-- How the consumer door is authenticated. Stubbed as a pre-shared token for the POC; the real identity mechanism is deferred (see the identity ADR and docs/Governance_And_Abuse_Resistance.md).
+- How the consumer door is authenticated. Built as a shared consumer token (string-equality check). The build's identity note records what that stub lacked, node admission, per-consumer credentials, caller attribution across hops (docs/Identity_Note_From_Prototype.md); the real mechanism is the next ADR. See docs/Governance_And_Abuse_Resistance.md.
 - Capability manifest: basic shape sketched above (model-name match, /manifest endpoint, static peer list). Still open: a real load/busy signal, and capability tags beyond raw model name.
-- Inter-node transport: how node A actually asks node B to serve. Candidate is reusing the OpenAI-compatible HTTP call between nodes. Not settled.
+- Inter-node transport: how node A actually asks node B to serve. Settled: the reused OpenAI-compatible HTTP call, validated in M4 as effectively free (ADR-0011). A thin internal RPC stays the candidate if a later phase needs to carry identity or policy the OpenAI shape has no field for.
 - Load balancing / "next available" selection: kept dumb on purpose for the POC.
-- Graceful degradation: what the node returns when nobody can serve.
+- Graceful degradation: built. When no node has the model, the router returns an honest, immediate HTTP 503 before any upstream call, rather than hanging.
 - All governance, abuse, and fair-use questions live in the separate track (docs/Governance_And_Abuse_Resistance.md), not here.

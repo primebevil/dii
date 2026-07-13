@@ -75,7 +75,7 @@ The final step always returns the best the local node can do, which is the resil
 ## Build order
 
 - Phase 0, the atom. A solid local-first node runtime with a capable open model, offline capability, and a capability manifest. This alone delivers the core promise to a single user and is worth shipping on its own.
-- Phase 1, two nodes and a consumer in one pod. The Week-3 proof of concept, written in Go (ADR-0003), where node A routes a capability request to node B and back, and a consumer C with no local model borrows from the pod through the remote ingress (ADR-0004). Each node exposes an OpenAI-compatible endpoint so existing clients work unchanged. Measure the numbers the teardown demands, such as tokens per second over a residential link versus local, time-to-first-token, and overflow overhead.
+- Phase 1, two nodes and a consumer in one pod. The Week-3 proof of concept, written in Go (ADR-0003), where node A routes a capability request to node B and back, and a consumer C with no local model borrows from the pod through the remote ingress (ADR-0004). Each node exposes an OpenAI-compatible endpoint so existing clients work unchanged. Built and validated (prototype/, extended to a live three-node pod): all four kill-criteria passed, with overflow throughput about 100 percent of the peer's own local and only 20 to 43 milliseconds of added time-to-first-token, so borrowing a peer's capability is effectively free, and the overhead is transport-bound and model-independent so it carries to the 30B floor (journal/2026-07-12-week3-m4-findings.md). The inter-node transport is the reused OpenAI-compatible HTTP call (ADR-0011). What remains unsettled is durability, not feasibility (docs/Pod_Aggregation_Red_Team.md).
 - Phase 2, pod overflow and policy. The router honors sovereignty and trust policy, reciprocity accounting comes online, and graceful degradation paths are exercised.
 - Phase 3, federation. Signed discovery across pods, cross-pod trust with optional verification, and the "Fediverse for inference" topology.
 
@@ -85,7 +85,7 @@ The final step always returns the best the local node can do, which is the resil
 - Discovery protocol: gossip, DNS-like federation, or Matrix-style servers.
 - Cross-boundary verification: when, if ever, redundant execution or a borrowed proof is worth its cost.
 - Data protection on untrusted hops: whether to allow it at all, and if so how.
-- Node identity: self-sovereign keys versus pod-issued identity.
+- Node identity: self-sovereign keys versus pod-issued identity. The Week-3 prototype stubbed this and produced a requirements note (docs/Identity_Note_From_Prototype.md) surfacing three concrete needs the ingress exposed, node admission, per-consumer credentials, and caller attribution across hops, to drive the identity ADR from observed behavior rather than a paper comparison.
 - Serving consumers: how pods decide whom to serve and at what fair-use limit, how donated capacity is accounted for without becoming a currency, and how vouching resists abuse without becoming an exclusionary gate.
 
 ## What this deliberately excludes
