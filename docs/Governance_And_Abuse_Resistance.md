@@ -48,3 +48,5 @@ Every mechanism above, banning Fred, isolating a bad pod, per-consumer fair-use,
 - Blocklist and reputation feeds: their exact form, who curates them, and how a pod appeals a listing.
 - Data minimization: concrete retention and logging defaults for public-serving pods.
 - Whether any of this warrants its own ADRs (candidates: pod as accountability boundary, consumer work as preemptible best-effort) once identity is settled enough to anchor them.
+
+A visual of the two proposed admission paths, member node versus consumer, is in diagrams/Pod_Admission.svg.

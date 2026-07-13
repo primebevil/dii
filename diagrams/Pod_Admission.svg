@@ -1,0 +1,79 @@
+<svg viewBox="0 0 860 600" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Pod admission: member node path versus consumer path (proposed)</title>
+  <desc>Two parallel flows. A machine becomes a member node only after the pod operator approves and issues a membership key. A device becomes a consumer only after the pod sponsors it and issues a per-person token. Knowing the pod id is not enough for either. Membership is revocable.</desc>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="600" fill="#ffffff"/>
+
+  <!-- header -->
+  <text x="430" y="30" text-anchor="middle" font-size="19" font-weight="700" fill="#1a1f2b">Joining a pod — proposed design (not yet built)</text>
+  <text x="430" y="52" text-anchor="middle" font-size="13" fill="#4a5160">Knowing the pod id lets you knock. Admission decides who gets in.</text>
+  <text x="430" y="72" text-anchor="middle" font-size="11" fill="#6b7280">dashed = the admission gate · blue = you're in</text>
+
+  <!-- column headers -->
+  <text x="210" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1f2b">Member node (contributor)</text>
+  <text x="650" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1f2b">Consumer (borrow-only)</text>
+
+  <!-- ===== LEFT COLUMN: MEMBER NODE ===== -->
+  <rect x="60" y="112" width="300" height="46" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="210" y="133" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Machine asks to join</text>
+  <text x="210" y="150" text-anchor="middle" font-size="11" fill="#6b7280">knows the pod's address</text>
+  <line x1="210" y1="158" x2="210" y2="180" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="60" y="182" width="300" height="52" rx="26" fill="#eef2fb" stroke="#3b6ef5" stroke-dasharray="5 4"/>
+  <text x="210" y="204" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Pod operator approves?</text>
+  <text x="210" y="222" text-anchor="middle" font-size="11" fill="#6b7280">no → turned away</text>
+  <line x1="210" y1="234" x2="210" y2="256" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="60" y="258" width="300" height="46" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="210" y="279" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Pod issues a membership key</text>
+  <text x="210" y="296" text-anchor="middle" font-size="11" fill="#6b7280">signed credential / invite</text>
+  <line x1="210" y1="304" x2="210" y2="326" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="60" y="328" width="300" height="46" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="210" y="349" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Added to the member list</text>
+  <text x="210" y="366" text-anchor="middle" font-size="11" fill="#6b7280">gets the peer list</text>
+  <line x1="210" y1="374" x2="210" y2="396" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="60" y="398" width="300" height="50" rx="8" fill="#e9f0ff" stroke="#3b6ef5" stroke-width="2"/>
+  <text x="210" y="420" text-anchor="middle" font-size="14" font-weight="700" fill="#2b5fe0">Full member</text>
+  <text x="210" y="437" text-anchor="middle" font-size="11" fill="#4a5160">serves + borrows, trusted peer</text>
+
+  <!-- ===== RIGHT COLUMN: CONSUMER ===== -->
+  <rect x="500" y="112" width="300" height="46" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="650" y="133" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Device asks for access</text>
+  <text x="650" y="150" text-anchor="middle" font-size="11" fill="#6b7280">a consumer, e.g. a laptop</text>
+  <line x1="650" y1="158" x2="650" y2="180" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="500" y="182" width="300" height="52" rx="26" fill="#eef2fb" stroke="#3b6ef5" stroke-dasharray="5 4"/>
+  <text x="650" y="204" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Pod operator sponsors?</text>
+  <text x="650" y="222" text-anchor="middle" font-size="11" fill="#6b7280">no → no access</text>
+  <line x1="650" y1="234" x2="650" y2="256" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="500" y="258" width="300" height="46" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="650" y="279" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Pod issues a consumer token</text>
+  <text x="650" y="296" text-anchor="middle" font-size="11" fill="#6b7280">per-person credential</text>
+  <line x1="650" y1="304" x2="650" y2="326" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="500" y="328" width="300" height="46" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="650" y="349" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Presents token at the door</text>
+  <text x="650" y="366" text-anchor="middle" font-size="11" fill="#6b7280">on every request</text>
+  <line x1="650" y1="374" x2="650" y2="396" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <rect x="500" y="398" width="300" height="50" rx="8" fill="#e9f0ff" stroke="#3b6ef5" stroke-width="2"/>
+  <text x="650" y="420" text-anchor="middle" font-size="14" font-weight="700" fill="#2b5fe0">Guest</text>
+  <text x="650" y="437" text-anchor="middle" font-size="11" fill="#4a5160">borrow-only, rate-limited</text>
+
+  <!-- revoke strip -->
+  <rect x="60" y="488" width="740" height="78" rx="8" fill="#f6f7f9" stroke="#d6dae1"/>
+  <text x="430" y="512" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1f2b">Getting in is gated — staying in is conditional (revoke anytime)</text>
+  <text x="210" y="536" text-anchor="middle" font-size="11" fill="#4a5160">Member: drop from the member list,</text>
+  <text x="210" y="551" text-anchor="middle" font-size="11" fill="#4a5160">peers stop routing to it</text>
+  <text x="650" y="536" text-anchor="middle" font-size="11" fill="#4a5160">Consumer: revoke that one token,</text>
+  <text x="650" y="551" text-anchor="middle" font-size="11" fill="#4a5160">others unaffected</text>
+</svg>
