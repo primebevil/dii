@@ -1,0 +1,44 @@
+<svg viewBox="0 0 820 560" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Public-serving pod admitting many consumers via delegated identity</title>
+  <desc>The pod operator approves one policy and trusts the library login. A patron signs in with their library account; the library verifies them; the pod auto-issues a scoped per-person token; their client uses it at the consumer door to reach the models. No human approves each person.</desc>
+
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="820" height="560" fill="#ffffff"/>
+
+  <text x="410" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1a1f2b">Admitting many consumers without a human per person</text>
+  <text x="410" y="52" text-anchor="middle" font-size="13" fill="#4a5160">Delegate to an identity source the pod already trusts</text>
+
+  <rect x="110" y="70" width="600" height="48" rx="8" fill="#eef2fb" stroke="#3b6ef5"/>
+  <text x="410" y="91" text-anchor="middle" font-size="13" font-weight="700" fill="#2b5fe0">One-time: operator approves a policy + trusts the library login</text>
+  <text x="410" y="108" text-anchor="middle" font-size="11" fill="#4a5160">"valid library patrons may use the pod" — a rule, not each person</text>
+  <line x1="410" y1="118" x2="410" y2="140" stroke="#6b7280" marker-end="url(#a3)"/>
+
+  <rect x="180" y="142" width="460" height="50" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="410" y="163" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">A patron signs in with a library account</text>
+  <text x="410" y="180" text-anchor="middle" font-size="11" fill="#6b7280">at vpldii.fvrl.com, on a library computer</text>
+  <line x1="410" y1="192" x2="410" y2="212" stroke="#6b7280" marker-end="url(#a3)"/>
+
+  <rect x="180" y="214" width="460" height="50" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="410" y="235" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">The library verifies them</text>
+  <text x="410" y="252" text-anchor="middle" font-size="11" fill="#6b7280">the library's identity system, not the pod</text>
+  <line x1="410" y1="264" x2="410" y2="284" stroke="#6b7280" marker-end="url(#a3)"/>
+
+  <rect x="180" y="286" width="460" height="50" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="410" y="307" text-anchor="middle" font-size="14" font-weight="600" fill="#1a1f2b">Pod auto-issues a scoped token</text>
+  <text x="410" y="324" text-anchor="middle" font-size="11" fill="#6b7280">policy matches — no human in the loop</text>
+  <line x1="410" y1="336" x2="410" y2="356" stroke="#6b7280" marker-end="url(#a3)"/>
+
+  <rect x="180" y="358" width="460" height="52" rx="8" fill="#eef2fb" stroke="#3b6ef5" stroke-width="2"/>
+  <text x="410" y="380" text-anchor="middle" font-size="14" font-weight="700" fill="#2b5fe0">Client uses token → consumer door → models</text>
+  <text x="410" y="397" text-anchor="middle" font-size="11" fill="#4a5160">per-person token: rate-limited, revocable</text>
+
+  <rect x="110" y="452" width="600" height="66" rx="8" fill="#f6f7f9" stroke="#d6dae1"/>
+  <text x="410" y="476" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1f2b">Session-scoped: issued at login, expires at logout</text>
+  <text x="410" y="497" text-anchor="middle" font-size="11" fill="#4a5160">The library card is the Sybil resistance. Manual approval stays for</text>
+  <text x="410" y="511" text-anchor="middle" font-size="11" fill="#4a5160">member nodes and the rare named exception.</text>
+</svg>

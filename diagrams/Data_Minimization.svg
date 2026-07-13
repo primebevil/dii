@@ -1,0 +1,55 @@
+<svg viewBox="0 0 820 470" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Where each data stream lives under the middle-path identity design</title>
+  <desc>Real PII lives only at the external provider. The identity broker is stateless. A pod holds only a token, an opaque handle, and usage counters, ephemerally, and never joins content to identity. The only shared durable store is a severe-only, multi-publisher denylist that is checkable but not browsable. Nowhere is there a behavioral history of ordinary users.</desc>
+
+  <rect x="0" y="0" width="820" height="470" fill="#ffffff"/>
+
+  <text x="410" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1a1f2b">Where each data stream lives — minimize at every layer</text>
+  <text x="410" y="49" text-anchor="middle" font-size="12" fill="#6b7280">blue = the sensitive bits, kept as small as possible</text>
+
+  <!-- col 1: external provider (the only PII) -->
+  <rect x="20" y="68" width="182" height="250" rx="8" fill="#eef2fb" stroke="#3b6ef5" stroke-width="2"/>
+  <text x="111" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1f2b">External provider</text>
+  <text x="111" y="110" text-anchor="middle" font-size="11" fill="#6b7280">Google / phone / email</text>
+  <line x1="36" y1="122" x2="186" y2="122" stroke="#d6dae1"/>
+  <text x="111" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="#2b5fe0">holds: your real</text>
+  <text x="111" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#2b5fe0">identity (PII)</text>
+  <text x="111" y="196" text-anchor="middle" font-size="11" fill="#4a5160">the PII lives ONLY</text>
+  <text x="111" y="211" text-anchor="middle" font-size="11" fill="#4a5160">here, never in DII</text>
+
+  <!-- col 2: broker -->
+  <rect x="214" y="68" width="182" height="250" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="305" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1f2b">Identity broker</text>
+  <text x="305" y="110" text-anchor="middle" font-size="11" fill="#6b7280">optional, stateless</text>
+  <line x1="230" y1="122" x2="380" y2="122" stroke="#d6dae1"/>
+  <text x="305" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1f2b">holds: nothing</text>
+  <text x="305" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1f2b">durable</text>
+  <text x="305" y="196" text-anchor="middle" font-size="11" fill="#4a5160">login → opaque</text>
+  <text x="305" y="211" text-anchor="middle" font-size="11" fill="#4a5160">handle, then forgets</text>
+
+  <!-- col 3: pod -->
+  <rect x="408" y="68" width="182" height="250" rx="8" fill="#f6f7f9" stroke="#b8beca"/>
+  <text x="499" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1f2b">Pod</text>
+  <text x="499" y="110" text-anchor="middle" font-size="11" fill="#6b7280">serves you</text>
+  <line x1="424" y1="122" x2="574" y2="122" stroke="#d6dae1"/>
+  <text x="499" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1f2b">holds: token →</text>
+  <text x="499" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#1a1f2b">handle → counters</text>
+  <text x="499" y="185" text-anchor="middle" font-size="11" fill="#4a5160">ephemeral</text>
+  <text x="499" y="208" text-anchor="middle" font-size="11" fill="#4a5160">content never joined</text>
+  <text x="499" y="223" text-anchor="middle" font-size="11" fill="#4a5160">to identity</text>
+
+  <!-- col 4: denylist -->
+  <rect x="602" y="68" width="182" height="250" rx="8" fill="#eef2fb" stroke="#3b6ef5" stroke-width="2"/>
+  <text x="693" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1f2b">Shared denylist</text>
+  <text x="693" y="110" text-anchor="middle" font-size="11" fill="#6b7280">multi-publisher, opt-in</text>
+  <line x1="618" y1="122" x2="768" y2="122" stroke="#d6dae1"/>
+  <text x="693" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="#2b5fe0">holds: severe bad</text>
+  <text x="693" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#2b5fe0">actors only</text>
+  <text x="693" y="196" text-anchor="middle" font-size="11" fill="#4a5160">checkable, not</text>
+  <text x="693" y="211" text-anchor="middle" font-size="11" fill="#4a5160">a browsable list</text>
+
+  <rect x="20" y="336" width="764" height="70" rx="8" fill="#f6f7f9" stroke="#3b6ef5"/>
+  <text x="402" y="364" text-anchor="middle" font-size="14" font-weight="700" fill="#2b5fe0">Nowhere: a behavioral history of ordinary users</text>
+  <text x="402" y="386" text-anchor="middle" font-size="12" fill="#4a5160">Refused by design. Only the guilty get a durable cross-pod identity; everyone else</text>
+  <text x="402" y="401" text-anchor="middle" font-size="12" fill="#4a5160">is checked once, found clean, and leaves no cross-pod footprint.</text>
+</svg>
