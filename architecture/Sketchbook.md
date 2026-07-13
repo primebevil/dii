@@ -191,4 +191,6 @@ The seam that keeps us backend-portable is modelserver.Backend: the rest of the 
 - Inter-node transport: how node A actually asks node B to serve. Settled: the reused OpenAI-compatible HTTP call, validated in M4 as effectively free (ADR-0011). A thin internal RPC stays the candidate if a later phase needs to carry identity or policy the OpenAI shape has no field for.
 - Load balancing / "next available" selection: kept dumb on purpose for the POC.
 - Graceful degradation: built. When no node has the model, the router returns an honest, immediate HTTP 503 before any upstream call, rather than hanging.
+- Operator UI and admin API (Phase 2+): the node grows an admin API (approve, deny, list, revoke) and any dashboard, whether a bundled local page or a separate app, is just a client of it, so the node stays operable headless. Rides on top of admission, which rides on identity. Discussion only, nothing built.
+- Consumer client tooling: a consumer needs only a pod base URL plus a token; any OpenAI-compatible client (Open WebUI, a custom app, curl, an IDE or agent) works unchanged. See diagrams/Consumer_Access.svg.
 - All governance, abuse, and fair-use questions live in the separate track (docs/Governance_And_Abuse_Resistance.md), not here.
