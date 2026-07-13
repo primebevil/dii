@@ -1,0 +1,15 @@
+# Week 3 Kickoff: Pivot to the Prototype, 2026-07-08
+
+Week 2 closed with the prior-art research and its review complete, nearly a week early, so we are turning to Week 3, the prototype, with time in hand. This session set the plan rather than writing code (docs/Week_3_Prototype_Plan.md).
+
+The target is the Phase-1 build from the Architecture Overview: a two-node, one-pod proof of concept where node A routes a capability request to node B and back, and consumer C with no local model borrows from the pod through the remote ingress. Each node exposes an OpenAI-compatible endpoint, so any existing OpenAI-compatible client is already a consumer. Go for the node prototype (ADR-0003), Rust reversible at the production boundary. The prototype is disposable; it exists to produce the kill-criteria numbers the teardown demands and to give us something real to recruit a pod with.
+
+Two scoping calls made today. First, this week produces the written plan only, not code or scaffolding yet. Second, node identity stays stubbed. The remote ingress authenticates with a pre-shared token standing in for the real mechanism, exactly as ADR-0004 anticipated, and we decide DIDs versus DNSSEC versus pod-issued keys after the prototype, driven by what the ingress actually needed rather than a paper comparison. As we build, we capture what identity had to verify and persist, and that note becomes the input to the identity ADR.
+
+The plan lays out four milestones: a walking skeleton that proves the loop and the streaming with mocked inference, real local inference plus the capability manifest with local-first working, overflow routing and the consumer ingress with the honest-degradation paths, and finally the measurement run over a real residential link. M1 and M2 are the bulk of the work; M3 is small because ADR-0004 already made the consumer a router branch rather than a subsystem; M4 is setup and measurement.
+
+The one real design question for the week is the inter-node transport: reuse the OpenAI HTTP shape for the node-to-node hop, which is fastest to stand up, or a thin internal RPC that separates the public API from the internal transport more cleanly. The recommendation is to start simple, get the numbers, and record whether the conflation bites, rather than spending the week building the RPC.
+
+On the kill criteria, the plan notes that token streaming is cheap in bandwidth terms, so the binding risks are time to first token, residential reachability between two home machines behind NAT, and per-request overhead on short interactive prompts. Proposed pass thresholds are written down for sign-off before the measurement run: overflow throughput within about 90 percent of the peer's local throughput, a small bounded time-to-first-token penalty over the residential link, the consumer path inside the same envelope, and honest bounded degradation. If overflow collapses over a real link, that is a finding against the thesis and gets recorded as one, not smoothed over.
+
+Next session starts M1, the walking skeleton.
