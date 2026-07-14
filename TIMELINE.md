@@ -63,3 +63,10 @@
 - The overflow thesis is proven technically; durability as local models improve stays a separate market question (docs/Pod_Aggregation_Red_Team.md).
 - Identity note captured from the build (docs/Identity_Note_From_Prototype.md): the ingress surfaced three concrete needs — node admission, per-consumer credentials, and caller attribution across hops — to drive the identity ADR from observed requirements rather than a paper comparison.
 - Remaining to close the week: record the inter-node transport decision (reused OpenAI HTTP) as an ADR; the identity ADR is the next phase.
+
+## 2026-07-14
+
+- Week 3 marked complete. All five definition-of-done items met and every kill-criterion passed; set docs/Week_3_Prototype_Plan.md to Complete.
+- Recorded the build and design decisions as ADRs: ADR-0011 (inter-node transport is the reused OpenAI HTTP call), ADR-0012 (backend is any OpenAI-compatible model server behind a thin interface), ADR-0013 (the pod is the accountability boundary), ADR-0014 (consumer work is preemptible best-effort, floor-access not unlimited).
+- Worked the consumer-access and identity-at-scale thread and captured it in docs/Governance_And_Abuse_Resistance.md with four diagrams (diagrams/Pod_Admission, Consumer_Access, Delegated_Admission, Data_Minimization): delegated admission for affiliated consumers, the passport-versus-decentralized fork and preferred middle path, and the data-minimization model (cross-pod revocation equals a stable pseudonym plus a shared denylist; keep the linkage only for the guilty; refuse any behavioral reputation store). Added glossary terms model server, member node, pod operator, admission, and consumer sponsorship, and pinned canonical role terminology.
+- Week 4 (pressure test) is underway rather than untouched: the kill criteria were run in M4 and the Architecture Overview was revised to mark Phase 1 validated. What remains in Week 4 is the identity ADR, now fed by the identity note and the governance section, and the durability question of pod aggregation as local models improve (docs/Pod_Aggregation_Red_Team.md).

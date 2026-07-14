@@ -1,6 +1,6 @@
 # Week 3 Prototype Plan
 
-Status: Nearing completion, updated 2026-07-12 (drafted 2026-07-08). All four milestones (M1–M4) are built and verified on a live 3-node pod; the kill-criteria passed — see journal/2026-07-12-week3-m4-findings.md and docs/Identity_Note_From_Prototype.md. Depends on the Architecture Overview, ADR-0003 (Go for the node prototype), ADR-0004 (consumer as a first-class ingress), and ADR-0006 (the reliable floor). Weeks 1 and 2 are complete; this is the Phase-1 build from the Architecture Overview build order.
+Status: Complete, updated 2026-07-14 (drafted 2026-07-08). All four milestones (M1–M4) were built and verified on a live 3-node pod and every kill-criterion passed (journal/2026-07-12-week3-m4-findings.md and docs/Identity_Note_From_Prototype.md); all five definition-of-done items below are met. The decisions from the build and the design discussions are recorded as ADR-0011 (inter-node transport) through ADR-0014, and the identity note seeds the next-phase identity ADR. Depends on the Architecture Overview, ADR-0003 (Go for the node prototype), ADR-0004 (consumer as a first-class ingress), and ADR-0006 (the reliable floor). Weeks 1 and 2 are complete; this is the Phase-1 build from the Architecture Overview build order.
 
 ## Goal
 
