@@ -26,6 +26,7 @@ For due diligence, the repository is organized so each layer stands on its own:
 
 - [docs/](./docs), the proposition: the [Project Charter](./docs/Project_Charter.md) (full prospectus), [Project Vision](./docs/Project_Vision.md), [Who DII Is For](./docs/Who_DII_Is_For.md), the [Reliable Floor Definition](./docs/Reliable_Floor_Definition.md), the [FAQ](./docs/FAQ.md), and the [Glossary](./docs/Glossary.md).
 - [architecture/](./architecture), how it works, starting with the [Overview](./architecture/Overview.md).
+- [prototype/](./prototype), the Week-3 proof of concept: a Go pod that routes each request to whichever node can serve it and overflows to a peer when it can't. See the [build brief](./prototype/BUILD_BRIEF.md), the [deploy guide](./prototype/DEPLOY.md), and the [M4 findings](./journal/2026-07-12-week3-m4-findings.md) where all four kill-criteria passed on a live three-node pod.
 - [research/](./research), the evidence: the [teardown](./research/The-Case-Against-DII.md), the [prior-art one-pagers](./research/Prior-Art) and their [Final Report](./research/Prior-Art/Final-Report.md), and the [Validation Checklist](./research/Prior-Art/Validation-Checklist.md) that maps every load-bearing figure to a source.
 - [docs/ADR/](./docs/ADR), the decisions and their reasoning, ADR-0001 through ADR-0010.
 - [TIMELINE.md](./TIMELINE.md), [INFLUENCES.md](./INFLUENCES.md), and [journal/](./journal), how the project got here.

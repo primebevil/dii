@@ -1,0 +1,5 @@
+# Compiled node binary from `go build` in this dir
+/node
+
+# Local logs
+*.log

@@ -49,3 +49,24 @@
 ## 2026-07-06
 
 - Accepted ADR-0010, voluntary sponsorship not paid private use: private pods are invited (not required) to sponsor public access, and a required fee or license for private or commercial use is reserved, not adopted.
+
+## 2026-07-08
+
+- Pivoted from Week 2 (research complete) to Week 3, the prototype (journal/2026-07-08-week3-kickoff.md). Wrote the Week-3 prototype plan (docs/Week_3_Prototype_Plan.md): a two-node, one-pod proof of concept in Go where node A routes a capability request to node B and back, and consumer C borrows through the remote ingress, each node exposing an OpenAI-compatible endpoint.
+- Scoping calls: this session produces the plan only, no code yet; node identity stays stubbed with a pre-shared token, and the DIDs-versus-DNSSEC-versus-pod-issued-keys decision is driven by what the prototype's ingress actually needs rather than a paper comparison.
+- Plan sets four milestones (walking skeleton, real local inference plus manifest, overflow routing and consumer ingress, residential-link measurement), flags the inter-node transport as the one real design question (start with the OpenAI HTTP shape, keep an internal RPC as a candidate), and proposes kill-criteria thresholds for sign-off before the measurement run. No code written.
+
+## 2026-07-12
+
+- Week 3 prototype nearing completion. Built and validated the concept on the week-3-prototype branch: M1 walking skeleton, M2 real Ollama inference plus manifest build/exchange, M3 local-then-peer overflow with honest degradation, and M4 measurement. Extended the two-node plan to a live three-node pod — laptop hub, atlas over Tailscale, sirius over the LAN.
+- M4 kill-criteria all pass (journal/2026-07-12-week3-m4-findings.md): overflow throughput ~100% of the peer's own local, time-to-first-token overhead +20-43ms against a ~200ms budget, consumer path within the overflow envelope, and an honest immediate 503 when no node can serve. The overhead is transport-bound and model-independent, so it generalizes to the 30B reliable floor. Residential reachability, the plan's top risk, was dissolved by Tailscale.
+- The overflow thesis is proven technically; durability as local models improve stays a separate market question (docs/Pod_Aggregation_Red_Team.md).
+- Identity note captured from the build (docs/Identity_Note_From_Prototype.md): the ingress surfaced three concrete needs — node admission, per-consumer credentials, and caller attribution across hops — to drive the identity ADR from observed requirements rather than a paper comparison.
+- Remaining to close the week: record the inter-node transport decision (reused OpenAI HTTP) as an ADR; the identity ADR is the next phase.
+
+## 2026-07-14
+
+- Week 3 marked complete. All five definition-of-done items met and every kill-criterion passed; set docs/Week_3_Prototype_Plan.md to Complete.
+- Recorded the build and design decisions as ADRs: ADR-0011 (inter-node transport is the reused OpenAI HTTP call), ADR-0012 (backend is any OpenAI-compatible model server behind a thin interface), ADR-0013 (the pod is the accountability boundary), ADR-0014 (consumer work is preemptible best-effort, floor-access not unlimited).
+- Worked the consumer-access and identity-at-scale thread and captured it in docs/Governance_And_Abuse_Resistance.md with four diagrams (diagrams/Pod_Admission, Consumer_Access, Delegated_Admission, Data_Minimization): delegated admission for affiliated consumers, the passport-versus-decentralized fork and preferred middle path, and the data-minimization model (cross-pod revocation equals a stable pseudonym plus a shared denylist; keep the linkage only for the guilty; refuse any behavioral reputation store). Added glossary terms model server, member node, pod operator, admission, and consumer sponsorship, and pinned canonical role terminology.
+- Week 4 (pressure test) is underway rather than untouched: the kill criteria were run in M4 and the Architecture Overview was revised to mark Phase 1 validated. What remains in Week 4 is the identity ADR, now fed by the identity note and the governance section, and the durability question of pod aggregation as local models improve (docs/Pod_Aggregation_Red_Team.md).

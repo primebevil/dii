@@ -1,0 +1,1 @@
+Write a detailed, multi-paragraph explanation of how the internet moves data from one computer to another. Cover packets, IP addresses, routers, DNS, and TCP, and explain how they fit together. Be thorough and specific.

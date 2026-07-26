@@ -12,7 +12,9 @@
 
 **Node Runtime (the atom)**: the daemon on a node that serves local models, publishes a capability manifest, and routes requests. Self-sufficient offline; the smallest thing that delivers the core promise to a single user.
 
-**Consumer (Consumer Client)**: a participant with no serving hardware who only borrows, such as a phone or browser, sponsored by a pod that agrees to serve it. Architecturally a request that enters the overflow path at the pod stage, having no local stage of its own. See ADR-0002 and ADR-0004.
+**Model Server (Backend)**: the inference engine a node runs in front of, such as Ollama, llama.cpp's server, or vLLM. It loads the open-weight model and generates tokens over an OpenAI-compatible API. The node never infers itself; it brokers to the model server through a thin interface, so the backend is swappable. Distinct from a node: the node is the control-plane broker, the model server is the engine behind it. See architecture/Sketchbook.md and ADR-0011.
+
+**Consumer (Consumer Client)**: a participant with no serving hardware who only borrows, such as a phone or browser, sponsored by a pod that agrees to serve it. Architecturally a request that enters the overflow path at the pod stage, having no local stage of its own. Not a node: there is no "consumer node," because a consumer hosts no model. See ADR-0002 and ADR-0004.
 
 **Ingress**: how a request enters the router. A local, trusted ingress serves the node's own user and starts at the local stage; a remote, authenticated ingress serves a sponsored consumer and starts at the pod stage. One router, two ingress types.
 
@@ -21,6 +23,14 @@
 **DHT Discovery**: finding who serves what without a central index. A distributed hash table spreads the who-has-what map across the participating nodes themselves, so a caller can look up a capability or peer without a single directory that could become a chokepoint or an off-switch. The mechanism Petals uses to map model layers to peers, and the kind of decentralized, no-central-hub discovery DII favors for cross-pod federation.
 
 **Pod**: a small group of nodes that already trust each other, such as personal machines, a lab, an org, or a community. The core unit of the system.
+
+**Member Node (Pod Member, Peer)**: a node that has been admitted to a pod. It both serves its own user and shares overflow with the pod, as a trusted peer of the other members. This is the precise term for a node in a pod; a consumer is not a member node, since a consumer is not a node at all.
+
+**Pod Operator**: the person or group that runs a pod and is its admission authority, deciding which nodes and consumers it accepts and can revoke. Local to a single pod and distinct from the Steward, the network-level nonprofit that funds and governs but never sits in the data path.
+
+**Admission** (proposed, not yet built): a pod approving who is allowed in, as opposed to any global registration. Two kinds: node admission, where a machine becomes a member node, and consumer sponsorship, where a device becomes a sponsored consumer. Knowing a pod's identifier is not enough to join; admission is a separate, revocable step. The prototype stubs this by treating network reachability as membership; the real mechanism is the subject of the forthcoming identity ADR. See docs/Identity_Note_From_Prototype.md.
+
+**Consumer Sponsorship** (proposed, not yet built): the admission path for a consumer, where a pod agrees to serve a specific borrow-only participant and issues it a per-consumer credential presented at the remote ingress. The lower-trust tier of admission, distinct from node admission: a sponsored consumer only borrows and never serves. See ADR-0002 and ADR-0004.
 
 **Federation**: trusted pods sharing overflow capacity under explicit policy, with no central hub. Closer to the Fediverse than to a single cloud. Bilateral and opt-in: a pod federates with pods that reciprocate, so a pod that gives nothing gets no overflow, which is how freeloading is handled without a rule.
 
