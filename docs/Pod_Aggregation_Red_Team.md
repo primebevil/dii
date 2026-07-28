@@ -1,6 +1,6 @@
 # Pod Aggregation: A Red Team Against the Thesis
 
-Status: Working notes, 2026-07-10. An adversarial pass, not an ADR. Depends on ADR-0006 (reliable floor), ADR-0009 (public and private pods), ADR-0002 (access not gated on contribution), and the Governance_And_Abuse_Resistance notes. The job here is to argue, as hard as possible, that pod aggregation is redundant within roughly eighteen months, and then say what survives the argument and what would actually break. Written because the worry is real: if everyone has a capable model, a project whose pitch is "help people run a model" has no reason to exist.
+Status: Working notes, 2026-07-10; updated 2026-07-27, open question 1 resolved (see below and ADR-0015). An adversarial pass, not an ADR. Depends on ADR-0006 (reliable floor), ADR-0009 (public and private pods), ADR-0002 (access not gated on contribution), and the Governance_And_Abuse_Resistance notes. The job here is to argue, as hard as possible, that pod aggregation is redundant within roughly eighteen months, and then say what survives the argument and what would actually break. Written because the worry is real: if everyone has a capable model, a project whose pitch is "help people run a model" has no reason to exist.
 
 ## What is actually under test
 
@@ -56,7 +56,7 @@ The kill tests are lagging. These are the early signals that tell you which way 
 
 ## Open questions
 
-- Whether the variety advantage is real and measurable on DII's target workloads, or an intuition. This is the load-bearing empirical claim now and it has no evidence behind it yet; it deserves a small experiment before it is leaned on in outward messaging.
+- RESOLVED (2026-07-27): whether the variety advantage is real and measurable was the load-bearing empirical claim, so it was tested in the Week-4 experiment (docs/Variety_Experiment_Findings.md). The full run came back inconclusive-to-null on this roster: two of four instruments were not measuring (the judge tied every open-ended answer, reasoning was saturated), the one clean signal on long-context reads as specialization rather than diversity, and equal compute on a single model did not pay. The claim is settled enough to act on: variety is demoted from thesis to a feature and the outward messaging does not lean on it (ADR-0015). Further empirical refinement is optional, not blocking.
 - Where size aggregation should sit once demoted: cut from the pitch entirely, or kept as an explicitly best-effort tail feature under ADR-0006's ceiling.
 - How much of the access-under-conditions leg depends on the Sybil-resistant identity problem staying tractable, since coordination overhead is one of the kill tests and identity is its largest component (see Governance_And_Abuse_Resistance).
 - Whether any of this changes the outward messaging priority, given that the argument consistently holds on independence and diversity and consistently loses on capability.
