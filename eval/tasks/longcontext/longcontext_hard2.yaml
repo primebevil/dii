@@ -1,0 +1,612 @@
+# Long-context HARDER tasks (second set). Each embeds an ORIGINAL synthetic
+# document (1000-1600 words) with the needed facts buried among MORE distractors
+# than the first set, then asks a question requiring synthesis of 3+ separate
+# locations (sum a subset while excluding 2+ distractor categories, or compare
+# computed quantities). All names, numbers, and facts are invented so answers
+# come only from reading the document, not from priors. Roughly 9 objective
+# (numeric/exact) tasks and 3 judge (faithful-summary) tasks.
+
+- id: longcontext-drayton-cleared-cargo-weight
+  domain: longcontext
+  grader: numeric
+  answer: "5360"
+  prompt: |
+    Read the following freight manifest carefully, then answer the question at the very end.
+
+    DRAYTON FREIGHT FORWARDING — WEEKLY DISPATCH MANIFEST AND CLEARANCE RECONCILIATION
+
+    Prepared by the dispatch control office at the Drayton inland terminal and circulated to the operations desk each Monday. This manifest reconciles every consignment currently staged at the terminal and states, for each one, its gross weighbridge reading, its non-cargo tare, and its clearance status. The single figure the operations desk is required to publish each week is the total NET CARGO WEIGHT that is actually CLEARED FOR DISPATCH — that is, goods that have passed customs, that carry no embargo, and that have not already physically departed the terminal. Everything else in this manifest is context that helps explain the week's position but must not enter that published figure.
+
+    Definitions, stated up front because they are the source of most reconciliation errors. "Gross weight" is the full reading on the terminal weighbridge, which weighs the goods together with whatever they are loaded on. "Tare" is the weight of the pallets, dunnage, corner posts, and packaging framing that ride on the weighbridge with the goods but are not themselves cargo and are returned to the pool after loading. "Net cargo weight" is defined throughout this manifest as gross weight minus tare, and it is the only weight quantity that is ever summed into the published figure; gross weights are diagnostic and must never be added together. A separate column, "declared transit-insurance value," is stated in currency, not in kilograms, and exists only for the insurer; it is never summed into any weight total and appears here solely so the reader can see that high-value consignments are not necessarily heavy ones.
+
+    Clearance statuses used in this manifest are four, and only four. CLEARED FOR DISPATCH means the consignment has passed customs, carries no embargo, and is staged to load onto an outbound vehicle. EMBARGOED means the consignment is subject to a hazardous-goods or sanctions embargo and may not move until the embargo is lifted, whatever its customs status. CUSTOMS-HELD means customs has not yet released the consignment, so it may not dispatch even though it is otherwise ready. DELIVERED means the consignment has already left the terminal on an earlier run and is recorded here only for the audit trail; its weight has already been accounted for in a prior week and must never be counted again.
+
+    Consignment C-101. A palletized load of ceramic tiling bound for the Vale distribution hub. Gross weight 1,200 kilograms; tare 40 kilograms, giving a net cargo weight of 1,160 kilograms. Declared transit-insurance value 8,400 currency units. Customs released this consignment on Thursday and no embargo applies, so its status is CLEARED FOR DISPATCH.
+
+    Consignment C-102. A drummed load of industrial solvent. Gross weight 860 kilograms; tare 30 kilograms, net 830 kilograms. Because the solvent is classified as a hazardous good and a shipping embargo is currently in force on this product class pending revised documentation, this consignment's status is EMBARGOED. The dispatch desk notes that the paperwork is expected within the fortnight, at which point the embargo would lift, but as of this manifest the consignment may not move.
+
+    Consignment C-103. Machined steel fittings for the Northgate contract. Gross weight 2,050 kilograms; tare 50 kilograms, net 2,000 kilograms. Declared transit-insurance value 15,000 currency units, the highest on this manifest. Customs released the fittings and no embargo applies; status CLEARED FOR DISPATCH.
+
+    Consignment C-104. A mixed load of textile rolls. Gross weight 640 kilograms; tare 20 kilograms, net 620 kilograms. Customs has queried the country-of-origin declaration and has not yet released the goods, so the status is CUSTOMS-HELD. No embargo applies, and the desk expects release once the query is answered, but until then the consignment is not dispatchable.
+
+    Consignment C-105. Packaged glassware for a retail chain. Gross weight 1,530 kilograms; tare 30 kilograms, net 1,500 kilograms. Customs released the load and no embargo applies; status CLEARED FOR DISPATCH.
+
+    Consignment C-106. A load of copper cable reels. Gross weight 990 kilograms; tare 40 kilograms, net 950 kilograms. This consignment was CLEARED earlier in the week and has already departed on Tuesday's run to the coast; its status is therefore DELIVERED. It is listed here only so the audit trail is complete, and its weight was already published last week.
+
+    Consignment C-107. Boxed hand tools for a trade wholesaler. Gross weight 720 kilograms; tare 20 kilograms, net 700 kilograms. Customs released the load and no embargo applies; status CLEARED FOR DISPATCH.
+
+    Prior-week comparison, for context only. Last week the terminal published a cleared-for-dispatch net figure of 4,980 kilograms across five consignments, of which two have since departed and are not on this manifest. That figure is closed and must not be blended with this week's figure; it is mentioned so the desk can see the week-over-week trend, not so it can be added in.
+
+    Reconciliation rules, restated so the published figure is reproducible. First, only net cargo weight is ever summed; gross weights and declared insurance values are never summed. Second, only consignments whose status is CLEARED FOR DISPATCH enter the published figure — an EMBARGOED, CUSTOMS-HELD, or DELIVERED consignment contributes nothing, regardless of how ready it may otherwise appear. Third, a consignment already marked DELIVERED has had its weight counted in an earlier week and counting it again would double-count; this is the single most common error the desk sees, because a delivered consignment was, at the moment of dispatch, perfectly cleared, and a careless reader folds it back in. Fourth, the published figure equals the sum of the net cargo weights of exactly the consignments still staged and cleared, and nothing else.
+
+    Worked reminder of the method. To reproduce the figure, list every consignment, strike out any whose status is EMBARGOED, CUSTOMS-HELD, or DELIVERED, take the net cargo weight (gross minus tare) of each survivor, and add those net weights together. Do not add gross weights; do not add insurance values; do not blend in last week's closed figure. The desk certifies the published number against this method before release, and any discrepancy holds the manifest until it is resolved.
+
+    Notes for next week. The embargoed solvent consignment is expected to clear once its documentation arrives, and the customs-held textile load is expected to be released once the origin query is answered; both would then become candidates for the cleared figure in a future week, but neither counts this week. The dispatch desk reminds readers that a consignment counts in exactly the one week in which it is both cleared and still staged, never before and never again.
+
+    QUESTION: What is this week's total NET CARGO WEIGHT that is CLEARED FOR DISPATCH, in kilograms? Include only consignments whose status is CLEARED FOR DISPATCH, use net cargo weight (gross minus tare) for each, and exclude every embargoed, customs-held, and already-delivered consignment. End your response with just the number on its own line.
+  mock_solution: |
+    Cleared-for-dispatch consignments and their net weights (gross minus tare):
+    "C-101 ... net cargo weight of 1,160 kilograms ... CLEARED FOR DISPATCH."
+    "C-103 ... net 2,000 kilograms ... status CLEARED FOR DISPATCH."
+    "C-105 ... net 1,500 kilograms ... status CLEARED FOR DISPATCH."
+    "C-107 ... net 700 kilograms ... status CLEARED FOR DISPATCH."
+    Excluded: C-102 EMBARGOED (830), C-104 CUSTOMS-HELD (620), C-106 DELIVERED (950).
+    Gross weights and insurance values are never summed; last week's 4,980 is closed.
+    1,160 + 2,000 + 1,500 + 700 = 5,360 kilograms.
+
+- id: longcontext-selby-net-approved-payout
+  domain: longcontext
+  grader: numeric
+  answer: "51000"
+  prompt: |
+    Read the following insurance claim register, then answer the question at the very end.
+
+    SELBY MUTUAL ASSURANCE — QUARTERLY CLAIM REGISTER AND PAYOUT RECONCILIATION
+
+    Prepared by the claims settlement office. This register lists every claim opened or resolved in the quarter, with its status and its financial particulars, and reconciles the total NET PAYOUT the company actually disbursed to claimants. Read each claim's status before including any amount in a total. The register distinguishes carefully among four quantities that are frequently confused: the "reserve," which is money set aside against a claim but not necessarily paid; the "gross approved amount," which is the amount an approved claim was assessed at before any third-party recovery; the "subrogation recovery," which is money the company later recovered from a liable third party and which reduces the net cost of an approved claim; and the "net payout," which is the gross approved amount minus any subrogation recovery and is the only quantity that measures what the company actually paid out of its own funds.
+
+    A note on statuses. A claim marked APPROVED has been assessed, accepted, and paid; its net payout is real money that left the company. A claim marked DENIED was assessed and rejected; no money was paid, and its assessed amount is recorded only to document the decision. A claim marked PENDING is still under assessment; a reserve may be posted against it, but no payout has occurred and none is counted. A claim marked WITHDRAWN was opened and then abandoned by the claimant before assessment concluded; like a denied claim, it results in no payout. Only APPROVED claims contribute to the net-payout total, and each contributes its net payout, not its reserve and not its gross approved amount.
+
+    Claim CLM-01. A water-damage claim on a commercial premises. Assessed and APPROVED at a gross approved amount of 12,000. No third party was liable, so subrogation recovery was 0, and the net payout equals the gross approved amount of 12,000. A reserve of 13,000 had originally been posted against this claim; the reserve exceeded the settlement and the surplus was released, but the reserve figure is not a payout and is not counted.
+
+    Claim CLM-02. A liability claim arising from a slip on a shop floor. After assessment the claim was DENIED, on the finding that the hazard had been adequately signed. The claim had been assessed at 8,500 had it succeeded, and a reserve of 8,500 was posted while it was open, but because the claim was denied no money was paid and nothing is counted toward the net-payout total.
+
+    Claim CLM-03. A vehicle-collision claim in which a third-party driver was found liable. The gross approved amount was 20,000, and the claim was APPROVED and paid to the claimant in full. The company subsequently recovered 5,000 from the liable third party's insurer through subrogation, so the net payout — what the company ultimately bore — was 20,000 minus 5,000, or 15,000. The claims office stresses that the claimant received the full 20,000; the 5,000 recovery reduces the company's net cost, not the claimant's settlement.
+
+    Claim CLM-04. A business-interruption claim still under review at quarter-end. Its status is PENDING. A reserve of 30,000 has been posted against it because the potential exposure is large, but no assessment has concluded and no payout has been made, so it contributes nothing to the net-payout total this quarter. The large reserve is a common trap: it is money earmarked, not money paid.
+
+    Claim CLM-05. A property claim for storm damage to a roof. Assessed and APPROVED at a gross approved amount of 9,000, with no third party liable, so subrogation recovery was 0 and the net payout equals 9,000.
+
+    Claim CLM-06. A theft claim that the claimant WITHDREW after recovering the stolen property independently. The claim had been opened at an estimated 14,000 and a reserve of 14,000 was briefly posted, but the withdrawal closed the claim with no assessment and no payment; nothing is counted.
+
+    Claim CLM-07. A goods-in-transit claim in which the carrier was found liable. The gross approved amount was 18,000, the claim was APPROVED and paid, and the company recovered 3,000 from the carrier through subrogation, giving a net payout of 18,000 minus 3,000, or 15,000.
+
+    Reconciliation guidance. To compute the quarter's net-payout total, take every claim whose status is APPROVED, compute each one's net payout as its gross approved amount minus its subrogation recovery, and sum those net payouts. Do not include the assessed amounts of denied or withdrawn claims, which were never paid. Do not include reserves of any kind, whether on pending claims or on approved claims where the reserve differed from the settlement; a reserve is an accounting earmark, not a disbursement. Do not use gross approved amounts for the subrogated claims, because the subrogation recovery genuinely reduced what the company paid out of its own funds and the net-payout measure is defined net of that recovery.
+
+    Common errors, enumerated to be avoided. The first error is summing reserves instead of payouts, which badly overstates disbursements because reserves are posted on pending, denied, and withdrawn claims that never pay out. The second error is counting the gross approved amount of a subrogated claim rather than its net payout, which overstates the company's net cost by the amount recovered. The third error is including denied or withdrawn claims because they carry a large assessed figure; those figures document a decision, not a disbursement. The correct total sums, over approved claims only, the gross approved amount minus subrogation recovery.
+
+    Auditor's note. The internal auditor re-derived the net-payout total independently and confirmed that it equals the sum of net payouts of the approved claims alone. The auditor further confirmed that no claim appears twice, that each claim carries exactly one status, and that the reserves, having been released or retained as appropriate, do not enter the disbursement figure. The auditor flagged that the single largest reserve in the register sits on a pending claim that has paid nothing, and cautioned any reader against mistaking that reserve for a payout.
+
+    QUESTION: What is the quarter's total NET PAYOUT — the money the company actually disbursed out of its own funds — across APPROVED claims only? For each approved claim use its gross approved amount minus any subrogation recovery, and exclude all denied, pending, and withdrawn claims as well as all reserves. End your response with just the number on its own line.
+  mock_solution: |
+    Approved claims and their net payouts (gross approved minus subrogation recovery):
+    CLM-01: 12,000 - 0 = 12,000.
+    CLM-03: 20,000 - 5,000 = 15,000.
+    CLM-05: 9,000 - 0 = 9,000.
+    CLM-07: 18,000 - 3,000 = 15,000.
+    Excluded: CLM-02 DENIED, CLM-04 PENDING (reserve 30,000, paid nothing), CLM-06 WITHDRAWN.
+    Reserves are never counted; subrogated claims use net, not gross.
+    12,000 + 15,000 + 9,000 + 15,000 = 51,000.
+
+- id: longcontext-thornbury-direct-disbursed
+  domain: longcontext
+  grader: numeric
+  answer: "295000"
+  prompt: |
+    Read the following research-grant ledger, then answer the question at the very end.
+
+    THORNBURY INSTITUTE — ANNUAL RESEARCH-GRANT LEDGER AND DISBURSEMENT RECONCILIATION
+
+    Prepared by the Office of Sponsored Programs. This ledger records every grant the Institute administered during the year and reconciles the total DIRECT-COST funds that were actually DISBURSED to principal investigators. Two distinctions run through the entire ledger and must be honored before any figure is added. The first is between a grant's DIRECT costs — the funds spent on the research itself, such as personnel, materials, and equipment — and its INDIRECT costs, also called overhead or facilities-and-administration, which reimburse the Institute for shared infrastructure and are budgeted as a separate line on every grant. The published disbursement figure this office is asked to produce concerns DIRECT costs only; indirect-cost amounts are tracked in a separate overhead account and are never folded into the direct-disbursement total.
+
+    The second distinction is among grant lifecycle states. A grant marked DISBURSED has been awarded, its funds released, and its money actually paid into the project account. A grant marked ENCUMBERED has been awarded and its budget reserved, but its funds have not yet been released to the project account — the award is committed on paper but no cash has moved. A grant marked DECLINED was offered by the sponsor but the Institute or the investigator declined it, so no funds exist. A grant marked RESCINDED was awarded and then cancelled by the sponsor before disbursement, so its committed funds were clawed back and never paid. Only DISBURSED grants contribute to the disbursement total, and each contributes its direct-cost portion only.
+
+    Grant G-A. A three-year study of soil microbial communities led by the ecology group. Awarded with a direct-cost budget of 80,000 for the year and an indirect-cost budget of 20,000. The funds were released and the grant is DISBURSED. Its direct-cost disbursement is therefore 80,000; the 20,000 of indirect cost posts to the overhead account and is not part of the direct total.
+
+    Grant G-B. A materials-science project on thin-film coatings. Awarded with a direct-cost budget of 45,000 and an indirect-cost budget of 15,000, but the sponsor's cash release was delayed by a documentation hold, so at year-end the grant is ENCUMBERED — committed but not yet paid into the project account. Because no funds were disbursed, neither its direct nor its indirect budget enters the disbursement total, notwithstanding that the award is real and expected to pay next year.
+
+    Grant G-C. A large clinical-instrumentation grant led by the biomedical group. Awarded with a direct-cost budget of 120,000 and an indirect-cost budget of 30,000. The funds were released in full and the grant is DISBURSED. Its direct-cost disbursement is 120,000; the 30,000 indirect posts separately to overhead.
+
+    Grant G-D. A humanities fellowship offered to a visiting scholar, with a direct-cost budget of 60,000 and an indirect-cost budget of 12,000. The scholar accepted a competing position elsewhere and the fellowship was DECLINED before any funds moved. No disbursement occurred and nothing is counted; the budgeted figures are recorded only to document the offer.
+
+    Grant G-E. A computational-astrophysics grant supporting simulation time and a postdoctoral researcher. Awarded with a direct-cost budget of 95,000 and an indirect-cost budget of 25,000. The funds were released and the grant is DISBURSED, so its direct-cost disbursement is 95,000, with the 25,000 indirect posting to overhead separately.
+
+    Grant G-F. An energy-storage grant that the sponsoring foundation cancelled midyear after a change in its own funding priorities. It had been awarded with a direct-cost budget of 50,000 and an indirect-cost budget of 10,000, but the award was RESCINDED before disbursement and the committed funds were clawed back. No money was paid, and nothing is counted.
+
+    Reconciliation guidance. To compute the year's direct-cost disbursement total, take every grant whose state is DISBURSED, read off its DIRECT-cost figure, and sum those direct-cost figures. Do not add any indirect-cost figure to this total; indirect costs live in a separate overhead account and answer a different question. Do not include ENCUMBERED grants, whose funds have not yet been paid; do not include DECLINED grants, which were never accepted; do not include RESCINDED grants, whose committed funds were clawed back before payment. The disbursement total is the sum, over disbursed grants only, of direct-cost amounts only.
+
+    Errors this office has seen and asks readers to avoid. The most frequent error is adding the indirect-cost line into the direct total, which inflates the figure by the full overhead load; overhead is real money but it is not a direct disbursement to the research and is reconciled elsewhere. The second error is counting encumbered awards as if their cash had moved, on the reasoning that the award is "as good as paid"; it is not paid, and the disbursement measure is a cash measure, not a commitment measure. The third error is counting declined or rescinded grants because they carry a budget figure; those figures are historical artifacts of an offer that produced no disbursement. The correct total avoids all three.
+
+    Reconciliation aid for the audit file. The reviewer assembling the audit file should filter the ledger to grants in the DISBURSED state, confirm for each that its cash was released into the project account, take only the direct-cost column, and add those figures. The reviewer should separately reconcile the indirect-cost column against the overhead account, which is a distinct exercise producing a distinct number that must never be blended into the direct-disbursement figure. Historically the Institute's most common audit finding has been exactly this blending of overhead into the direct total, which overstates apparent research spending; the reviewer should test specifically for it.
+
+    A closing note on terminology. Some sponsors refer to indirect costs as "facilities and administration" and others as "overhead"; these are the same category under a different name, and all of them belong to the separate overhead account, never to the direct-disbursement total. Whatever the label a given sponsor uses, only the direct-cost column of disbursed grants is summed into the figure this office publishes, and no indirect line ever crosses into it.
+
+    QUESTION: What is the year's total DIRECT-COST disbursement — the direct-cost funds actually paid into project accounts? Include only grants in the DISBURSED state, use each such grant's direct-cost figure only, and exclude all indirect-cost (overhead) amounts as well as all encumbered, declined, and rescinded grants. End your response with just the number on its own line.
+  mock_solution: |
+    Disbursed grants and their direct-cost figures:
+    G-A: direct 80,000 (indirect 20,000 excluded), DISBURSED.
+    G-C: direct 120,000 (indirect 30,000 excluded), DISBURSED.
+    G-E: direct 95,000 (indirect 25,000 excluded), DISBURSED.
+    Excluded grants: G-B ENCUMBERED, G-D DECLINED, G-F RESCINDED.
+    Indirect/overhead amounts are never folded into the direct total.
+    80,000 + 120,000 + 95,000 = 295,000.
+
+- id: longcontext-varga-league-top-points
+  domain: longcontext
+  grader: exact
+  answer: "Ravens"
+  prompt: |
+    Read the following league report, then answer the question at the very end.
+
+    VARGA REGIONAL LEAGUE — END-OF-SEASON STANDINGS AND POINTS RECONCILIATION
+
+    Issued by the league registrar. This report certifies the final league standings for the season. Five clubs contested the season in a single round-robin group: the Harriers, the Foxes, the Otters, the Ravens, and the Badgers. The champion is the club finishing with the most league POINTS after all adjustments. Read the scoring rules and the disciplinary deductions carefully, because the champion is not necessarily the club with the most wins, nor the club that lost the fewest matches, nor the club with the best goal difference; it is strictly the club with the most points once every deduction has been applied.
+
+    Scoring rules. A win is worth three points, a draw is worth one point, and a loss is worth zero points. Goal difference is recorded and is used only to break a tie between clubs level on points; it is never itself added to the points total and, this season, no tie needed breaking, so goal difference does not affect the outcome. In addition to match points, the league's disciplinary committee may impose POINT DEDUCTIONS for rule breaches, and any such deduction is subtracted from a club's match-points total to give its final points. The registrar stresses that a deduction is a real subtraction from the standings, not a fine paid separately; a club's final points are its match points minus its deductions.
+
+    The Harriers. The Harriers finished the season with 9 wins, 2 draws, and 1 loss. Their match points are therefore 27 from wins plus 2 from draws, for 29 match points. The disciplinary committee imposed no deduction on the Harriers, whose conduct record was clean, so their final points equal their match points of 29. The Harriers had a strong goal difference, second best in the group, but as noted goal difference does not add to points.
+
+    The Foxes. The Foxes finished with 8 wins, 4 draws, and 0 losses, and were the only club to go through the season unbeaten. Their match points are 24 from wins plus 4 from draws, for 28 match points. However, the disciplinary committee found that the Foxes had fielded an ineligible player in one fixture and imposed a 3-point deduction. Their final points are therefore 28 minus 3, or 25. The registrar notes that the Foxes' unbeaten record drew much comment, but an unbeaten season is not the championship criterion; points are.
+
+    The Otters. The Otters finished with 10 wins, 0 draws, and 2 losses, the most wins of any club in the group. Their match points are 30 from wins plus 0 from draws, for 30 match points. But the disciplinary committee imposed a total of 6 points in deductions on the Otters: 3 points for a forfeited fixture that was awarded to their opponent, and a further 3 points for a financial-compliance breach reported by the league treasurer. Their final points are therefore 30 minus 6, or 24. The registrar observes that the Otters' league-leading win count is exactly the kind of figure that misleads a casual reader, because their deductions pull them well down the final table.
+
+    The Ravens. The Ravens finished with 9 wins, 3 draws, and 0 losses. Their match points are 27 from wins plus 3 from draws, for 30 match points. The disciplinary committee imposed no deduction on the Ravens, whose record was clean throughout, so their final points equal 30. The Ravens were not unbeaten in the sense of most wins, and they did not lead the win count, but their combination of nine wins and three draws with no losses and no deductions gives them the highest final points in the group.
+
+    The Badgers. The Badgers finished with 7 wins, 5 draws, and 0 losses. Their match points are 21 from wins plus 5 from draws, for 26 match points. No deduction was imposed, so their final points are 26. The Badgers, like the Foxes and the Ravens, went unbeaten in the sense of taking no losses, which shows that going without a loss did not by itself determine the champion.
+
+    Reconciliation of the table. To determine the champion, compute each club's match points as three times its wins plus one times its draws, then subtract any disciplinary deduction to obtain final points, and identify the club with the most final points. The registrar reminds readers of three traps. First, do not crown the club with the most wins; the Otters led on wins but their deductions drop them to fourth. Second, do not crown a club merely for being unbeaten; three clubs took no losses and none of the three tie for the lead. Third, do not use goal difference as a points contributor; it breaks ties only, and there was no tie at the top this season. The champion is the single club with the strictly highest final-points figure after deductions.
+
+    A note on the unbeaten records. Three of the five clubs — the Foxes, the Ravens, and the Badgers — took no losses across the season, which is unusual for a single group and drew comment in the regional press. The registrar stresses again that going unbeaten is not the championship criterion and does not even determine the order among those three clubs, whose final points differ once draws and deductions are accounted for. The champion is decided on final points alone, and being unbeaten neither guarantees the title nor breaks a tie for it.
+
+    Certification. The registrar certifies that the deductions recorded here were ratified by the disciplinary committee before the final matchday and applied to the standings as published. An independent scrutineer recomputed each club's match points from its win-draw-loss record, applied the ratified deductions, and confirmed the final-points column. The scrutineer noted that exactly one club holds the highest final-points total outright, so no tiebreak was required, and that this club is not the club with the most wins nor merely an unbeaten club but the one whose final points, after every deduction, stand highest.
+
+    QUESTION: Which club finished the season as champion — that is, with the most FINAL league points after applying disciplinary deductions to each club's match points (3 per win, 1 per draw)? Answer with just the club's name on its own line.
+  mock_solution: |
+    Final points = 3*wins + 1*draws - deductions:
+    Harriers: 27 + 2 - 0 = 29.
+    Foxes: 24 + 4 - 3 = 25 (unbeaten but 3-point deduction).
+    Otters: 30 + 0 - 6 = 24 (most wins but 6 points of deductions).
+    Ravens: 27 + 3 - 0 = 30.
+    Badgers: 21 + 5 - 0 = 26.
+    Highest final points is Ravens with 30 (not the Otters, who lead on wins; not the unbeaten Foxes).
+    Champion: Ravens.
+
+- id: longcontext-caldwell-sensors-in-tolerance
+  domain: longcontext
+  grader: numeric
+  answer: "5"
+  prompt: |
+    Read the following calibration log, then answer the question at the very end.
+
+    CALDWELL METROLOGY — QUARTERLY SENSOR CALIBRATION LOG AND TOLERANCE REVIEW
+
+    Prepared by the calibration laboratory. This log records the calibration result of every sensor in the field fleet and determines how many sensors are BOTH in active service AND within their calibration tolerance. Two things must be checked for each sensor before it can be counted as a passing in-service sensor, and readers who check only one of the two routinely miscount. First, the sensor's SERVICE STATUS: a sensor may be ACTIVE (in service), DECOMMISSIONED (retired from service and awaiting disposal), or PENDING RECAL (temporarily out of service awaiting a recalibration slot). Only ACTIVE sensors are in service. Second, the sensor's TOLERANCE RESULT: each sensor has a measured drift and an allowed tolerance band, and the sensor passes only if the ABSOLUTE VALUE of its drift is less than or equal to its tolerance band. Critically, the tolerance band is not the same for every sensor — different sensor models carry different bands — so a drift that fails one sensor may pass another with a wider band.
+
+    A caution before the entries. A decommissioned or pending-recal sensor may happen to be within tolerance, and an active sensor may happen to be out of tolerance; neither coincidence changes the rule. The count this laboratory publishes is the number of sensors that are ACTIVE and within tolerance simultaneously. A sensor within tolerance but not active does not count, and an active sensor out of tolerance does not count.
+
+    Sensor S-1. A pressure transducer on the main header. Measured drift plus 3.0 units against a tolerance band of 5.0 units. Since the absolute drift of 3.0 is within the 5.0 band, S-1 passes on tolerance. Its service status is ACTIVE. S-1 is therefore an active, in-tolerance sensor.
+
+    Sensor S-2. A pressure transducer on a branch line. Measured drift minus 7.0 units against a tolerance band of 5.0 units. The absolute drift of 7.0 exceeds the 5.0 band, so S-2 fails on tolerance despite being ACTIVE in service. It does not count.
+
+    Sensor S-3. A temperature probe in the primary loop. Measured drift plus 4.5 units against a tolerance band of 5.0 units. The absolute drift of 4.5 is within the 5.0 band, so S-3 passes on tolerance, and its status is ACTIVE. S-3 counts.
+
+    Sensor S-4. A temperature probe removed from the secondary loop last month. Measured drift plus 2.0 units against a tolerance band of 5.0 units, comfortably within tolerance — but its service status is DECOMMISSIONED, as it has been retired and is awaiting disposal. Because it is not in service, S-4 does not count despite being within tolerance. This is a deliberate trap: the sensor's excellent calibration is irrelevant once it is out of service.
+
+    Sensor S-5. A flow meter on the outlet. Measured drift minus 1.5 units against a tolerance band of 5.0 units. The absolute drift of 1.5 is within the 5.0 band, and the status is ACTIVE. S-5 counts.
+
+    Sensor S-6. A flow meter on the recirculation line. Measured drift plus 6.5 units against a tolerance band of 5.0 units. The absolute drift of 6.5 exceeds the 5.0 band, so S-6 fails on tolerance even though it is ACTIVE. It does not count.
+
+    Sensor S-7. A humidity sensor in the control room. Measured drift plus 0.5 units against a tolerance band of 5.0 units, well within tolerance — but its service status is PENDING RECAL, meaning it has been pulled from service to await a recalibration slot and is not currently in service. Because it is not active, S-7 does not count, even though its measured drift is within tolerance. This is the second trap: pending-recal sensors are out of service regardless of their last reading.
+
+    Sensor S-8. A vibration sensor on the main bearing. Measured drift minus 4.0 units against a tolerance band of 5.0 units. The absolute drift of 4.0 is within the 5.0 band, and the status is ACTIVE. S-8 counts.
+
+    Sensor S-9. A vibration sensor on a gearbox, a wide-band model. Measured drift plus 8.0 units against a tolerance band of 10.0 units — note the wider band on this model. The absolute drift of 8.0 is within the 10.0 band, so S-9 passes on tolerance despite a larger raw drift than S-6, which failed against a narrower band. S-9's status is ACTIVE, so S-9 counts. This entry shows why the per-sensor tolerance band must be read, not assumed uniform.
+
+    Sensor S-10. A strain gauge on a support member, another model with an 8.0-unit band. Measured drift minus 9.0 units against a tolerance band of 8.0 units. The absolute drift of 9.0 exceeds the 8.0 band, so S-10 fails on tolerance, even though its band is wider than the default 5.0; its status is ACTIVE but it does not count.
+
+    Reconciliation of the count. To publish the count, examine each sensor, discard any whose service status is DECOMMISSIONED or PENDING RECAL, and among the remaining ACTIVE sensors count those whose absolute drift is less than or equal to that sensor's own tolerance band. The laboratory reminds readers of the traps: an out-of-service sensor within tolerance does not count (S-4 and S-7), an active sensor out of tolerance does not count (S-2, S-6, S-10), and the tolerance band varies by model so the comparison must use each sensor's stated band rather than a single assumed band (S-9 passes on a wide band where a narrow-band sensor with less drift would fail).
+
+    Certification. The laboratory certifies that the drift figures were measured against traceable references and that the service statuses reflect the asset register as of quarter-end. An independent reviewer recomputed each pass/fail decision using the sensor-specific tolerance bands and confirmed the count of active, in-tolerance sensors.
+
+    QUESTION: How many sensors are BOTH active in service AND within their calibration tolerance (absolute drift less than or equal to that sensor's own tolerance band)? Exclude every decommissioned and pending-recal sensor regardless of its drift, and exclude every active sensor whose absolute drift exceeds its band. End your response with just the number on its own line.
+  mock_solution: |
+    Check each sensor for ACTIVE status AND |drift| <= its own band:
+    S-1: |3.0|<=5.0, ACTIVE -> counts.
+    S-2: |7.0|>5.0, fails.
+    S-3: |4.5|<=5.0, ACTIVE -> counts.
+    S-4: within tolerance but DECOMMISSIONED -> excluded.
+    S-5: |1.5|<=5.0, ACTIVE -> counts.
+    S-6: |6.5|>5.0, fails.
+    S-7: within tolerance but PENDING RECAL -> excluded.
+    S-8: |4.0|<=5.0, ACTIVE -> counts.
+    S-9: |8.0|<=10.0 (wide band), ACTIVE -> counts.
+    S-10: |9.0|>8.0, fails.
+    Counting S-1, S-3, S-5, S-8, S-9 = 5.
+
+- id: longcontext-orbital-usable-science-minutes
+  domain: longcontext
+  grader: numeric
+  answer: "380"
+  prompt: |
+    Read the following observatory log, then answer the question at the very end.
+
+    ORBITAL RIDGE OBSERVATORY — NIGHTLY OBSERVATION LOG AND USABLE-TIME RECONCILIATION
+
+    Prepared by the night-operations team. This log records every exposure taken during the observing run and reconciles the total USABLE SCIENCE EXPOSURE time delivered to the astronomers. Two classifications must be read for every entry before its time can be counted. The first is the FRAME TYPE: an exposure is either a SCIENCE frame, which images the sky target and can contribute science time, or a CALIBRATION frame — a flat field, dark, or bias — which is essential to processing but is never science time and is tracked in a separate calibration budget. The second, applying only to science frames, is the USABILITY FLAG: a science frame may be USABLE, in which case its usable time is its total exposure minus any minutes lost to a transient problem such as passing cloud, or it may be flagged UNUSABLE in full, meaning the entire frame was ruined (for example by a tracking failure that smeared every star) and contributes zero usable time.
+
+    A note before the entries. Calibration frames are never counted toward science time no matter how long they ran, and a science frame flagged unusable contributes nothing even though it occupied the telescope. For a usable science frame, the counted time is its total exposure minus the minutes explicitly recorded as lost; the lost minutes are subtracted because, although the shutter was open, those minutes produced no usable signal. The team publishes the sum, over usable science frames only, of total exposure minus lost minutes.
+
+    Observation OBS-1. A 120-minute SCIENCE exposure of a spiral galaxy. During the run, 20 minutes were lost to a bank of high cloud that drifted across the field; the flag records the frame as USABLE, since the remaining exposure was clean. Usable time is therefore 120 minus 20, or 100 minutes.
+
+    Observation OBS-2. A 30-minute CALIBRATION frame — a sequence of twilight flat fields taken to correct the detector's pixel-to-pixel response. Essential for reduction, but a calibration frame, so it contributes zero science time and is logged only in the calibration budget.
+
+    Observation OBS-3. A 90-minute SCIENCE exposure of a globular cluster. Conditions were photometric throughout and no minutes were lost; the frame is USABLE. Usable time is the full 90 minutes.
+
+    Observation OBS-4. A 110-minute SCIENCE exposure of a faint nebula that was ruined when the mount's tracking slipped early in the exposure and trailed every star across the frame. The frame is flagged UNUSABLE in full and contributes zero usable time, despite having occupied 110 minutes of telescope time. The team notes that the occupied time is recorded for scheduling statistics but is not science time.
+
+    Observation OBS-5. A 150-minute SCIENCE exposure of a galaxy cluster. Thin cloud cost 30 minutes partway through, but the rest of the exposure was usable and the frame is flagged USABLE. Usable time is 150 minus 30, or 120 minutes.
+
+    Observation OBS-6. A 45-minute CALIBRATION frame — a set of dark frames taken with the shutter closed to characterize thermal noise. A calibration frame, so zero science time; it posts to the calibration budget only.
+
+    Observation OBS-7. An 80-minute SCIENCE exposure of a variable star field. Ten minutes were lost to a brief dome-seeing episode, and the frame is flagged USABLE. Usable time is 80 minus 10, or 70 minutes.
+
+    Reconciliation of usable science time. To publish the run's usable science time, take every SCIENCE frame that is flagged USABLE, compute its usable time as total exposure minus lost minutes, and sum those values. Discard all CALIBRATION frames, which never contribute science time no matter their duration. Discard entirely any SCIENCE frame flagged UNUSABLE, which contributes zero even though the shutter was open. The team enumerates the traps: counting calibration time as science time (a flat or dark frame is not science), counting the full occupied time of an unusable frame (a ruined frame delivers zero), and forgetting to subtract the lost minutes from an otherwise usable frame (only the clean minutes are usable).
+
+    Scheduling context, not to be summed. The observatory also tracks total telescope-occupied time, which includes calibration frames and unusable science frames, for the purpose of efficiency statistics. That occupied-time figure is much larger than the usable-science figure and answers a different question about how the night was spent; it is never the science-time figure and must not be confused with it. The astronomers are billed for usable science time only, which is why the reconciliation is drawn narrowly.
+
+    Prior-run comparison, for context only. The previous observing run delivered 420 usable science minutes across five usable frames, two of which imaged targets that also appear in this run's program. That figure belongs to the previous run's accounting and is closed; it must not be blended into this run's usable-science total and is mentioned only so the time-allocation committee can see the trend across runs.
+
+    A note on partial-frame salvage. In rare cases a science frame partially affected by cloud can be salvaged by discarding only the affected sub-exposures, and this run's usable frames already reflect any such salvage in their lost-minute figures; the reader should not attempt any further adjustment. The lost-minute value stated for each usable frame is the final, reconciled loss, and the usable time is simply the total exposure minus that value. There is no additional partial credit to apply to the fully-unusable frame, which remains at zero regardless of how much of its exposure elapsed before the tracking failure ruined it.
+
+    Certification. The night-operations lead certifies that the lost-minute figures were recorded contemporaneously from the seeing and cloud monitors and that the usability flags were assigned before the data left the mountain. An independent reducer recomputed each usable science frame's contribution as its exposure minus its lost minutes and confirmed the run's usable-science total.
+
+    QUESTION: What is the total USABLE SCIENCE EXPOSURE time for the run, in minutes? Include only science frames flagged usable, compute each one's contribution as total exposure minus lost minutes, and exclude all calibration frames and every fully-unusable science frame. End your response with just the number on its own line.
+  mock_solution: |
+    Usable science frames and their usable minutes (total exposure minus lost):
+    OBS-1: 120 - 20 = 100 (SCIENCE, USABLE).
+    OBS-3: 90 - 0 = 90 (SCIENCE, USABLE).
+    OBS-5: 150 - 30 = 120 (SCIENCE, USABLE).
+    OBS-7: 80 - 10 = 70 (SCIENCE, USABLE).
+    Excluded: OBS-2 CALIBRATION (30), OBS-6 CALIBRATION (45), OBS-4 SCIENCE flagged UNUSABLE (110).
+    100 + 90 + 120 + 70 = 380 minutes.
+
+- id: longcontext-pemberton-packaged-sellable-liters
+  domain: longcontext
+  grader: numeric
+  answer: "1850"
+  prompt: |
+    Read the following brewery production report, then answer the question at the very end.
+
+    PEMBERTON CRAFT BREWERY — MONTHLY BATCH RECONCILIATION AND SELLABLE-VOLUME REPORT
+
+    Prepared by the cellar team. This report reconciles every batch that passed through the fermentation cellar this month and states the total SELLABLE VOLUME the brewery can offer to trade. Two facts must be read for each batch before its volume can be counted. The first is the batch STATE: a batch is either PACKAGED (fermentation complete, losses realized, product filled into kegs or cans and ready to sell), CONDITIONING (still maturing in tank, not yet packaged and therefore not yet sellable), or DUMPED (spoiled and disposed of, contributing nothing). The second, applying to packaged batches, is the loss reconciliation: the volume that reaches package is the fermented volume minus process losses — trub left behind in the fermenter, liquid absorbed by dry-hop material, and evaporation during conditioning — so the sellable volume of a packaged batch is its fermented volume minus its stated losses.
+
+    A note before the batch entries. A conditioning batch, however promising, is not yet sellable and contributes zero to this month's sellable volume; it will count in the month it is packaged. A dumped batch contributes zero and its fermented volume is recorded only to reconcile raw-material usage. For a packaged batch, the sellable figure is fermented volume minus losses; the fermented volume by itself overstates what can be sold, because the losses never reach a package.
+
+    Batch B-1. A pale ale. Fermented volume 500 liters; process losses 30 liters to trub and hop absorption. The batch is PACKAGED into kegs. Sellable volume is 500 minus 30, or 470 liters.
+
+    Batch B-2. A double IPA with a heavy dry-hop charge. Fermented volume 620 liters; anticipated losses 40 liters. The batch is still CONDITIONING on its dry hops and has not been packaged, so it is not sellable this month and contributes zero, notwithstanding its large fermented volume. It is expected to package next month.
+
+    Batch B-3. A stout. Fermented volume 450 liters; process losses 25 liters. The batch is PACKAGED into cans. Sellable volume is 450 minus 25, or 425 liters.
+
+    Batch B-4. A saison that developed an off-flavor traced to a wild-yeast contamination in the fermenter. The entire 700-liter fermented volume was condemned by the cellar team and the batch is DUMPED; it contributes zero sellable volume. The 700 liters is recorded solely so that the month's malt and hop usage reconciles against inventory.
+
+    Batch B-5. An amber lager. Fermented volume 540 liters; process losses 35 liters to trub and evaporation during a long cold conditioning. The batch is PACKAGED into kegs. Sellable volume is 540 minus 35, or 505 liters.
+
+    Batch B-6. A session bitter. Fermented volume 480 liters; process losses 30 liters. The batch is PACKAGED into cask. Sellable volume is 480 minus 30, or 450 liters.
+
+    Reconciliation of sellable volume. To publish the month's sellable volume, take every batch in the PACKAGED state, compute its sellable volume as fermented volume minus process losses, and sum those figures. Discard CONDITIONING batches, which are not yet sellable and will be counted only when they package. Discard DUMPED batches entirely, which deliver nothing to trade. The cellar team enumerates the traps: counting a conditioning batch because its beer is "as good as ready" (it is not packaged, so it cannot be sold this month), counting a dumped batch's fermented volume (spoiled beer is not sellable), and forgetting to subtract process losses from a packaged batch (the losses never reach a package, so fermented volume overstates sellable volume).
+
+    Raw-material context, not to be summed. The report also totals fermented volume across all batches, including conditioning and dumped ones, purely to reconcile grain and hop consumption against purchasing. That gross fermented figure is larger than the sellable figure and answers a supply-chain question, not a sales question; it must never be reported as sellable volume. Similarly, the sum of process losses is tracked to benchmark cellar efficiency but is a loss figure, not a sellable figure.
+
+    Prior-month comparison, for context only. Last month the brewery reported a sellable volume of 1,610 liters across four packaged batches, two of which have since sold through and are not part of this month's report. That figure is closed in the prior month's accounts and must never be blended into this month's sellable total; it is offered only so the cellar can see the month-over-month trend in output.
+
+    Packaging-format note. The sellable volume is stated in liters regardless of the container into which a batch was filled — kegs, cans, or cask — because a liter of finished beer is a liter of sellable product whichever format it takes. Readers should not weight formats differently or convert cask volumes into any other unit; the liter figures already stated for each packaged batch are the sellable figures, and the container format is recorded only for the warehouse's picking system.
+
+    A note on partially-blended stock. Occasionally two compatible batches are blended before packaging, but this month no blending occurred; each packaged batch was filled on its own, so no batch's sellable volume needs to be split or combined with another's. Any future month in which blending occurs will state the blended sellable volume as a single reconciled figure rather than leaving the reader to combine batch volumes, precisely so that the sellable total is never ambiguous.
+
+    Cellar-efficiency benchmark, not a sellable figure. The cellar team also computes a loss rate for each packaged batch — process losses as a fraction of fermented volume — to benchmark cellar performance over time. This month's loss rates were within the team's normal range, and the aggregate loss figure across packaged batches is tracked separately for that benchmarking purpose. That aggregate loss is, by construction, the difference between fermented and sellable volume for the packaged batches; it answers an efficiency question, is never itself reported as sellable volume, and adding it back to the sellable total would merely recover the fermented total, which is not what trade can buy.
+
+    Certification. The cellar lead certifies that the fermented volumes were measured by calibrated tank dip and that the loss figures were reconciled at packaging against filled-container counts. An independent checker recomputed each packaged batch's sellable volume as fermented volume minus losses and confirmed the month's sellable total, verifying that no conditioning or dumped batch had leaked into it.
+
+    QUESTION: What is the month's total SELLABLE VOLUME, in liters? Include only batches in the packaged state, compute each one's sellable volume as fermented volume minus process losses, and exclude all conditioning and dumped batches. End your response with just the number on its own line.
+  mock_solution: |
+    Packaged batches and their sellable volume (fermented minus losses):
+    B-1: 500 - 30 = 470 (PACKAGED).
+    B-3: 450 - 25 = 425 (PACKAGED).
+    B-5: 540 - 35 = 505 (PACKAGED).
+    B-6: 480 - 30 = 450 (PACKAGED).
+    Excluded: B-2 CONDITIONING (not yet sellable), B-4 DUMPED (700 L condemned).
+    470 + 425 + 505 + 450 = 1,850 liters.
+
+- id: longcontext-ashford-insured-owned-value
+  domain: longcontext
+  grader: numeric
+  answer: "173000"
+  prompt: |
+    Read the following museum acquisition ledger, then answer the question at the very end.
+
+    ASHFORD MUSEUM — ANNUAL ACQUISITION LEDGER AND INSURED-VALUE RECONCILIATION
+
+    Prepared by the registrar's office. This ledger records every object that entered the museum's care this year and reconciles the total INSURED VALUE of objects the museum actually OWNS in its permanent collection. Two attributes must be read for each object before its value can be counted. The first is the ACQUISITION MODE, which determines ownership: an object entered by PURCHASE (bought outright, owned), by GIFT (donated, owned), by LOAN (placed in the museum's care by another institution or collector but NOT owned by the museum), or was DEACCESSIONED (formally removed from the permanent collection and disposed of, no longer owned). Only owned objects — those acquired by purchase or gift — belong in the permanent-collection insured-value total; loaned objects belong to someone else, and deaccessioned objects have left the collection. The second attribute is which value to use: every object carries both an APPRAISED VALUE, set by an external valuer for internal records, and an INSURED VALUE, the amount the museum's fine-art policy would pay in the event of loss. This reconciliation uses the INSURED VALUE; appraised values are recorded for context and are never summed here.
+
+    A note before the entries. A loaned object may carry a very high insured value — indeed loans are often the most valuable objects on display — but the museum does not own them and does not insure them on its own permanent-collection schedule, so their value must not enter this total. A deaccessioned object may have been valuable while in the collection, but once removed it is no longer part of the collection and is excluded. And the appraised value, though often close to the insured value, is a different figure and must not be substituted for it.
+
+    Object ACQ-1. A landscape painting purchased at auction for the permanent collection. Acquisition mode PURCHASE, so it is owned. Appraised value 40,000; insured value 45,000. Because the museum owns it, its insured value of 45,000 counts.
+
+    Object ACQ-2. A marble sculpture on long-term LOAN from a partner institution for a special exhibition. Appraised value 200,000; insured value 220,000 — the highest figure in the ledger. But the museum does not own the sculpture; it is a loan, insured by the lender under the loan agreement. Its value does not count, despite being the largest in the ledger. This is a deliberate trap: the most valuable object on the floor is not owned.
+
+    Object ACQ-3. A collection of historical maps donated by a local family. Acquisition mode GIFT, so it is owned. Appraised value 30,000; insured value 32,000. Its insured value of 32,000 counts.
+
+    Object ACQ-4. A group of duplicate prints DEACCESSIONED this year and sold at a benefit auction to fund new acquisitions. While in the collection they had an appraised value of 15,000 and an insured value of 16,000, but they have been formally removed from the permanent collection and are no longer owned. Their value does not count.
+
+    Object ACQ-5. A bronze figurine purchased from a dealer. Acquisition mode PURCHASE, so it is owned. Appraised value 60,000; insured value 68,000. Its insured value of 68,000 counts.
+
+    Object ACQ-6. A set of ceramic vessels donated by an estate. Acquisition mode GIFT, so it is owned. Appraised value 25,000; insured value 28,000. Its insured value of 28,000 counts.
+
+    Reconciliation of insured value. To publish the permanent-collection insured-value total, take every object the museum OWNS — that is, every object acquired by PURCHASE or GIFT — read off its INSURED value, and sum those insured values. Exclude every LOAN, which the museum does not own; exclude every DEACCESSIONED object, which has left the collection; and use the insured value, never the appraised value, for the owned objects. The registrar enumerates the traps: counting a loaned object because it is prominent and highly valued (the museum does not own it), counting a deaccessioned object because it was recently in the collection (it has been removed), and summing appraised values instead of insured values (a different figure that answers a different question).
+
+    Context on the two value columns. The appraised-value column exists for collection-management and academic purposes and is periodically revalued; the insured-value column is set in agreement with the museum's insurer and drives premium calculations. The two often differ, and the registrar cautions that mixing them — taking some objects' appraised values and others' insured values — produces a meaningless total. This reconciliation is defined entirely on the insured column.
+
+    Prior-year comparison, for context only. Last year the permanent-collection insured-value total stood lower than this year's, before this year's purchases and gifts were added and before the deaccessioned prints left the collection. That prior figure is closed in last year's schedule and must not be blended with this year's total; it is mentioned only so the finance committee can see the trend in the collection's insured value.
+
+    A note on revaluation timing. Both the appraised and insured columns are revalued on a cycle, and an object's insured value may change at its next scheduled revaluation; the figures in this ledger are the values in force as of the reconciliation date and are the ones to be summed. Readers should not anticipate a future revaluation by adjusting any figure, nor use an object's prior-year insured value in place of the current one. The single most common error the registrar sees, apart from including loans, is the accidental substitution of an appraised value for an insured value on one or two lines, which produces a total that ties to neither column; the reviewer should check each included line against the insured column specifically.
+
+    Certification. The registrar certifies that the acquisition modes reflect the signed deeds of gift, purchase invoices, loan agreements, and deaccession approvals on file, and that the insured values match the current fine-art policy schedule. An independent reviewer confirmed that only purchased and gifted objects were included, that loaned and deaccessioned objects were excluded, and that the insured column, not the appraised column, was summed.
+
+    QUESTION: What is the total INSURED VALUE of the permanent-collection objects the museum OWNS? Include only objects acquired by purchase or gift, use each object's insured value (not its appraised value), and exclude all loaned and deaccessioned objects. End your response with just the number on its own line.
+  mock_solution: |
+    Owned objects (PURCHASE or GIFT) and their INSURED values:
+    ACQ-1: PURCHASE, insured 45,000 (appraised 40,000 not used).
+    ACQ-3: GIFT, insured 32,000 (appraised 30,000 not used).
+    ACQ-5: PURCHASE, insured 68,000 (appraised 60,000 not used).
+    ACQ-6: GIFT, insured 28,000 (appraised 25,000 not used).
+    Excluded: ACQ-2 LOAN (insured 220,000, not owned), ACQ-4 DEACCESSIONED (insured 16,000).
+    45,000 + 32,000 + 68,000 + 28,000 = 173,000.
+
+- id: longcontext-redfern-largest-unit-shortfall
+  domain: longcontext
+  grader: exact
+  answer: "Cranleigh"
+  prompt: |
+    Read the following stock reconciliation report, then answer the question at the very end.
+
+    REDFERN LOGISTICS — HALF-YEAR PHYSICAL STOCK RECONCILIATION ACROSS DEPOTS
+
+    Prepared by the inventory audit team. This report reconciles the book (expected) stock against the physical (counted) stock at each of the company's five depots and identifies the depot with the LARGEST SHORTFALL in UNITS. A "shortfall" occurs only where the physically counted quantity is LESS than the book quantity; the shortfall magnitude is the book quantity minus the counted quantity. Where the counted quantity EXCEEDS the book quantity, the depot has a SURPLUS, not a shortfall, and a surplus is never treated as a shortfall of any size — for the purpose of this question a surplus depot is simply not a candidate. The report asks specifically for the largest shortfall measured in UNITS, not in currency value; a separate column records the per-unit value at each depot, but that column is a distractor for this question and must not be used to rank the shortfalls.
+
+    A caution before the depot figures. Depots stock different product mixes, and a unit at one depot can be worth far more than a unit at another. A depot with a smaller unit shortfall but higher-value units can have a larger DOLLAR shortfall than a depot with a larger unit shortfall of cheap units. The board has asked, for this reconciliation, strictly for the largest shortfall in UNITS, because the operational cause it wants to investigate is physical stock loss, which is measured in units handled, not in their sale value. Ranking by dollar value would answer a different question and would, as it happens, point at a different depot.
+
+    Ashgrove depot. Book stock 3,400 units; physical count 3,250 units. The count is below book, so Ashgrove has a shortfall of 3,400 minus 3,250, or 150 units. Ashgrove's units are of moderate value. The depot manager attributes the shortfall to miscounts at receiving that are being addressed.
+
+    Bellcroft depot. Book stock 2,800 units; physical count 2,860 units. Here the count EXCEEDS book by 60 units, so Bellcroft has a SURPLUS of 60 units, not a shortfall. A surplus indicates an over-receipt or an earlier under-count and is investigated separately; for the purpose of finding the largest shortfall, Bellcroft is not a candidate at all, because it has no shortfall. Readers should not treat the 60-unit discrepancy as a shortfall merely because it is a discrepancy.
+
+    Cranleigh depot. Book stock 5,100 units; physical count 4,690 units. The count is below book, so Cranleigh has a shortfall of 5,100 minus 4,690, or 410 units. Cranleigh handles high-turnover, LOW-value units, so although its unit shortfall is the largest, its dollar shortfall is comparatively modest. The audit team notes that Cranleigh's large throughput makes a large unit discrepancy easier to accumulate.
+
+    Dunmoor depot. Book stock 4,000 units; physical count 3,720 units. The count is below book, so Dunmoor has a shortfall of 4,000 minus 3,720, or 280 units. Dunmoor's units are of moderate value.
+
+    Elswick depot. Book stock 2,500 units; physical count 2,180 units. The count is below book, so Elswick has a shortfall of 2,500 minus 2,180, or 320 units. Critically, Elswick stocks HIGH-value specialty units, so although its unit shortfall of 320 is smaller than Cranleigh's 410, its DOLLAR shortfall is the largest of any depot — a fact the board flags as a distractor, because this question asks for the largest shortfall in units, not dollars. A reader who ranks by dollar value would wrongly name Elswick.
+
+    Reconciliation of the shortfalls. To answer the board's question, compute for each depot the book quantity minus the counted quantity; where this is positive it is the unit shortfall, and where it is negative the depot has a surplus and is not a candidate. Then identify the depot with the single largest unit shortfall. The audit team enumerates the traps: treating Bellcroft's surplus as a shortfall (a surplus is not a shortfall of any magnitude), and ranking by dollar shortfall rather than unit shortfall (Elswick leads on dollars because its units are dear, but the question is about units). The unit shortfalls are Ashgrove 150, Cranleigh 410, Dunmoor 280, and Elswick 320, with Bellcroft in surplus; the largest unit shortfall is therefore the one that stands highest among these.
+
+    Prior-period comparison, for context only. At the last reconciliation the company's largest unit shortfall belonged to a different depot that has since improved its receiving controls and now reports only a minor discrepancy. That prior result is closed and must not be blended with this reconciliation; it is mentioned only so the board can see that the location of the largest shortfall has moved between periods, which is itself a signal worth noting.
+
+    A note on the value column. The report includes, for completeness, an estimated currency value of each depot's shortfall, obtained by multiplying its unit shortfall by that depot's average per-unit value. Because Elswick stocks high-value specialty units, its dollar shortfall is the largest in the company even though its unit shortfall is not; because Cranleigh stocks low-value units, its dollar shortfall is comparatively small even though its unit shortfall is the largest. The board has been explicit that the operational question here — physical stock loss to be investigated on the warehouse floor — is measured in units, so the value column must not be used to rank the shortfalls for this question. It is retained only so the finance team can separately estimate the write-down, a distinct exercise answering a distinct question.
+
+    Certification. The audit team certifies that the physical counts were taken under supervision on the same reconciliation date and that the book quantities are the system balances as of that date. An independent scrutineer recomputed each depot's book-minus-count difference, confirmed which depots were in shortfall and which in surplus, and verified that the largest UNIT shortfall belongs to a single depot outright, distinct from the depot that would lead a dollar-value ranking.
+
+    QUESTION: Which depot has the LARGEST shortfall measured in UNITS (book quantity minus counted quantity, considering only depots where the count is below book)? Rank by unit shortfall, not by dollar value, and treat any surplus depot as not a candidate. Answer with just the depot's name on its own line.
+  mock_solution: |
+    Unit shortfall = book minus count, only where count < book:
+    Ashgrove: 3,400 - 3,250 = 150.
+    Bellcroft: 2,800 - 2,860 = -60 -> SURPLUS, not a candidate.
+    Cranleigh: 5,100 - 4,690 = 410.
+    Dunmoor: 4,000 - 3,720 = 280.
+    Elswick: 2,500 - 2,180 = 320 (largest DOLLAR shortfall, but a distractor here).
+    Largest UNIT shortfall is Cranleigh (410), not Elswick (320, dear units) and not Bellcroft (surplus).
+    Answer: Cranleigh.
+
+- id: longcontext-glasswing-postmortem-summary
+  domain: longcontext
+  grader: judge
+  rubric: |
+    A faithful summary must convey the postmortem's root cause, impact, decision,
+    and action ownership without fabrication. To score well it should include ALL
+    of the following, each explicit in the document: (1) the root cause was a
+    rate-limiter configuration change deployed WITHOUT staging validation, whose
+    effect was amplified by a latent retry-logic bug that caused a retry storm
+    (thundering herd); (2) the impact was roughly 47 minutes of DEGRADED checkout
+    (slow / partially failing), NOT a full outage and NOT any data loss or breach;
+    (3) the decision was to KEEP the rate limiter (it is needed) but add a
+    MANDATORY staging gate before production config changes AND fix the retry
+    backoff — it was explicitly NOT a permanent rollback/removal of the rate
+    limiter; (4) the two action owners: Dana owns enforcing the mandatory staging
+    gate, and Rafael owns fixing the retry backoff. The summary MUST NOT claim
+    customer data was lost or breached, MUST NOT claim anyone was fired or blamed
+    (the review was blameless), MUST NOT claim the rate limiter was removed or
+    permanently rolled back, and MUST NOT invent dollar figures, customer counts,
+    or durations other than the stated 47 minutes. Reward correct, hedged
+    attribution of each action item to its owner.
+  prompt: |
+    Read the following incident postmortem, then write a faithful summary as instructed at the end.
+
+    GLASSWING PAYMENTS — INCIDENT POSTMORTEM (INTERNAL, BLAMELESS)
+
+    This document records the postmortem for the checkout-degradation incident and the decisions the reliability review reached. It is an internal, blameless review; its purpose is to prevent recurrence, not to assign personal fault, and nothing here should be read as disciplinary.
+
+    Summary of impact. For approximately 47 minutes during the evening peak, Glasswing's checkout service was DEGRADED: a substantial fraction of checkout requests were slow or failed on first attempt and had to be retried by customers or by the client. Checkout did not go fully offline — many payments still completed, and the service recovered on its own once the underlying condition was corrected. No customer data was lost, corrupted, or exposed at any point; this was a performance and availability degradation, not a data incident. The team wishes to be precise that "degraded" is the correct characterization, not "outage," because payments continued to flow, albeit unreliably, throughout the window.
+
+    Timeline in brief. The degradation began shortly after a routine configuration change was pushed to the checkout service's rate limiter. Within minutes, error rates and latency climbed. On-call engineers were paged, identified the correlation with the config change, and reverted that specific change, after which the service recovered over the following few minutes. The total degraded window was about 47 minutes from first elevated errors to full recovery.
+
+    Root cause. The proximate cause was a configuration change to the checkout rate limiter that lowered a concurrency threshold. Crucially, that change was deployed straight to production WITHOUT passing through the staging environment, so its interaction with production traffic was never observed before release. On its own, a tighter rate limit would have shed some load gracefully. What turned it into an incident was a LATENT BUG in the client retry logic: when the rate limiter rejected a request, the client retried almost immediately and without proper exponential backoff, so rejected requests rebounded as a flood of near-instant retries. This produced a retry storm — a "thundering herd" — that multiplied load precisely when the limiter was trying to reduce it, driving the service into sustained degradation. The review is explicit that neither factor alone would have caused the incident: the untested config change lit the match, and the retry-logic bug was the accelerant.
+
+    What went well. On-call detection and paging worked as designed; the correlation between the config push and the error spike was spotted quickly; and the targeted revert resolved the issue without a broader rollback. The review credited the monitoring dashboards for making the config-change correlation visible.
+
+    What went wrong. Two things. First, a production-affecting configuration change reached production without any staging validation, so a foreseeable interaction went unobserved until customers felt it. Second, the retry logic had lacked proper backoff for some time — a latent weakness that had never been exercised because the rate limiter had rarely rejected requests before this change. The incident exposed the retry bug rather than introduced it.
+
+    The decision. The review considered whether the fix was simply to abandon the rate limiter, since the incident began with a rate-limiter change. It explicitly REJECTED that option: the rate limiter is a necessary protection against overload and removing it would leave the service more exposed, not less. Instead, the review decided on two durable changes. First, a MANDATORY staging gate: no configuration change to the checkout service may go to production without first being exercised in staging against representative traffic, with the staging result reviewed before promotion. This closes the "untested change" hole without removing the limiter. Second, a FIX to the client retry logic to implement proper exponential backoff with jitter, so that rejected requests no longer rebound as an instantaneous flood. The review framed these as complementary: the staging gate prevents an untested trigger, and the backoff fix removes the accelerant, so that even an imperfect future config change cannot escalate into a retry storm.
+
+    Explicitly not done. The review did not remove or permanently roll back the rate limiter; the offending config value was reverted to its prior setting, but the limiter itself remains in place and will be tuned through the new staging gate. No one was blamed or disciplined; consistent with the blameless charter, the review treated the untested-change path and the latent retry bug as system weaknesses to be engineered away, not as individual failings. No customer compensation was discussed because, while checkout was degraded, the review found no evidence of lasting customer harm or data impact.
+
+    Action items. The review assigned two owners. First, Dana will own establishing and ENFORCING the mandatory staging gate for checkout configuration changes, including the tooling that blocks a production config promotion until a staging run has been recorded and reviewed. Second, Rafael will own FIXING the client retry logic to add exponential backoff with jitter and removing the immediate-retry behavior that caused the storm. Both action items are to be completed before the next scheduled checkout release, and the review will verify completion at that point. No other action items were assigned, and no owner other than Dana and Rafael was named.
+
+    Follow-up and verification. The review will reconvene at the next release to confirm that the staging gate is enforced in tooling (not merely documented) and that the retry backoff is deployed and validated under a load test that deliberately induces rate-limiter rejections to prove the storm no longer forms. Until both are verified, the checkout service is considered to carry residual risk from the same failure mode, and the on-call team has been briefed to watch for the retry-storm signature specifically.
+
+    Closing note. The reliability review emphasized the general lesson: an individually small change (a tighter limit) interacting with a dormant weakness (missing backoff) can produce an outsized effect, and the defenses are to prevent untested changes from reaching production and to ensure that protective mechanisms fail gracefully rather than amplifying load. Both defenses are now owned and scheduled.
+
+    INSTRUCTION: Write a faithful summary of this postmortem in 4 to 7 sentences. Capture the root cause (an untested rate-limiter config change amplified by a retry-logic bug / retry storm), the impact (about 47 minutes of degraded checkout, no data loss), the decision (keep the rate limiter but add a mandatory staging gate and fix the retry backoff — not a permanent rollback), and correctly attribute the two action items to Dana and Rafael. Do not fabricate data loss, blame, dollar figures, or durations other than the stated 47 minutes.
+  mock_solution: |
+    Glasswing Payments' checkout service was degraded for about 47 minutes during
+    evening peak, with requests slow or failing on first attempt but payments still
+    partly flowing; it was a performance/availability degradation, not a full
+    outage, and no customer data was lost or exposed. The root cause was a
+    rate-limiter configuration change pushed straight to production without staging
+    validation, whose effect was amplified by a latent retry-logic bug that lacked
+    proper backoff and turned rejected requests into a retry storm (a thundering
+    herd). The blameless review reverted the offending config value but decided to
+    KEEP the rate limiter rather than remove it, since it is a needed protection.
+    It resolved instead to add a mandatory staging gate for checkout config changes
+    and to fix the client retry logic with exponential backoff and jitter. Two
+    action items were assigned: Dana owns establishing and enforcing the mandatory
+    staging gate, and Rafael owns fixing the retry backoff, both before the next
+    checkout release. No one was blamed or disciplined and no data incident
+    occurred.
+
+- id: longcontext-perenne-lease-summary
+  domain: longcontext
+  grader: judge
+  rubric: |
+    A faithful summary must convey the lease's key commercial terms without
+    fabrication. To score well it should include ALL of the following, each
+    explicit in the document: (1) a 7-year term with base rent of 18,000 per month
+    in year one, escalating 3% each year; (2) the tenant (Perenne Textiles) is
+    responsible for utilities and interior maintenance, while the landlord
+    (Holloway Estates) is responsible for the roof and structure; (3) one renewal
+    option for an additional 5 years at market rate, exercisable only with at least
+    9 months' written notice; (4) an early-termination (break) right available only
+    AFTER year four, requiring 6 months' notice AND a penalty of 3 months' rent.
+    The summary MUST NOT state that the lease can be terminated at any time or
+    before year four, MUST NOT misstate the escalation percentage or base rent,
+    MUST NOT claim the landlord pays utilities or that the tenant is responsible
+    for the roof/structure, MUST NOT invent a security-deposit amount other than
+    the stated two months, and MUST NOT invent figures or notice periods not in the
+    document. Reward correct separation of tenant vs landlord obligations and
+    correct statement of the break-clause conditions.
+  prompt: |
+    Read the following commercial lease abstract, then write a faithful summary as instructed at the end.
+
+    HOLLOWAY ESTATES / PERENNE TEXTILES — COMMERCIAL LEASE ABSTRACT (WAREHOUSE UNIT 7)
+
+    This abstract summarizes the principal commercial terms of the lease between Holloway Estates, as landlord, and Perenne Textiles, as tenant, for Warehouse Unit 7 at the Holloway industrial park. It is prepared for internal reference and does not replace the executed lease, which governs in the event of any conflict; where this abstract and the deed differ, the deed controls.
+
+    Premises and use. The demised premises comprise Warehouse Unit 7, a single-story storage and light-assembly building, together with the loading yard immediately adjoining it. The permitted use is warehousing and light textile assembly; retail sales from the premises are not permitted without the landlord's prior written consent.
+
+    Term. The lease term is SEVEN years, commencing on the agreed rent-commencement date. There is no rolling periodic tenancy; at the end of the seven-year term the lease ends unless renewed under the renewal option described below. The parties confirmed that the term is fixed and that neither party may end it early except through the specific break right set out later in this abstract.
+
+    Base rent and escalation. The base rent for the FIRST year of the term is 18,000 per month, payable monthly in advance. The rent ESCALATES by 3 percent each year: at each anniversary of the rent-commencement date, the monthly rent increases to 103 percent of the preceding year's monthly rent. The escalation is fixed at 3 percent per year and is not tied to any external index; the parties chose a fixed escalator specifically to avoid uncertainty from index movements. Rent is quoted exclusive of any outgoings that the tenant bears directly under the obligations below.
+
+    Security deposit. On signing, the tenant lodged a security deposit equal to TWO months' base rent, held by the landlord against damage or default and returnable at the end of the term less any proper deductions. The deposit is not rent in advance and may not be applied by the tenant toward the final months' rent.
+
+    Repair and maintenance obligations. The lease allocates responsibility as follows, and the split is important. The TENANT is responsible for all UTILITIES serving the premises (electricity, water, gas, and telecommunications) and for INTERIOR maintenance, including the interior finishes, fixtures, and the loading-dock equipment inside the unit. The LANDLORD is responsible for the ROOF and the STRUCTURE of the building, including the foundations, external walls, and structural steel. In short, the tenant looks after the inside and pays the running utilities; the landlord looks after the building's shell. Neither party may charge the other for work falling within its own sphere without prior agreement.
+
+    Renewal option. The tenant has ONE option to renew the lease for a single further term of FIVE years at the end of the initial seven-year term. The renewal rent will be the prevailing MARKET RATE for comparable warehouse space at the time of renewal, determined by agreement or, failing agreement, by an independent valuer appointed under the lease. To exercise the option, the tenant must give the landlord written notice at least NINE months before the end of the initial term. If the tenant does not give notice within that window, the option lapses and the lease ends at the close of the seven-year term. The option is personal to Perenne Textiles and does not pass automatically on an assignment.
+
+    Early termination (break clause). The lease is otherwise fixed for its full term, with one exception. The tenant has a break right that may be exercised only AFTER the FOURTH year of the term — that is, at no point during years one through four. To exercise the break, the tenant must give at least SIX months' written notice AND pay a break penalty equal to THREE months' base rent, calculated at the rent then in effect. Both conditions must be satisfied: notice alone does not end the lease, and payment alone does not either. There is no break right in the landlord's favor; only the tenant may break, and only after year four on the stated terms. The parties were explicit that this is the sole route to ending the lease early and that the term is otherwise non-cancelable.
+
+    Assignment and subletting. The tenant may assign or sublet the whole of the premises only with the landlord's prior written consent, which is not to be unreasonably withheld. Subletting part of the premises is not permitted. Any assignment does not by itself transfer the renewal option, which remains personal to Perenne Textiles unless the landlord agrees otherwise in writing.
+
+    Insurance. The landlord insures the building structure and recovers the premium from the tenant as an outgoing; the tenant separately insures its own stock, contents, and business interruption. The tenant's contents insurance is the tenant's own responsibility and is not part of the landlord's building policy.
+
+    Other terms, in brief. The tenant must keep the loading yard clear and must not store hazardous materials beyond agreed limits. Alterations to the interior require the landlord's consent for structural changes but not for non-structural fit-out. A rent-review provision beyond the fixed escalator does not apply during the initial term, since the escalator is fixed; the market-rate determination arises only on renewal. Late rent accrues interest at the rate stated in the deed.
+
+    Governing points restated. For quick reference: a seven-year fixed term; 18,000 per month in year one escalating 3 percent annually; tenant pays utilities and interior maintenance while the landlord maintains roof and structure; one five-year renewal at market rate on nine months' notice; and a tenant-only break right available after year four on six months' notice plus a penalty of three months' rent.
+
+    INSTRUCTION: Write a faithful summary of this lease abstract in 4 to 7 sentences. Capture the term and rent (including the 3% annual escalation), the split of tenant versus landlord maintenance/utility obligations, the renewal option and its notice requirement, and the break clause with its precise conditions (available only after year four, six months' notice, penalty of three months' rent). Do not invent figures or notice periods, and do not misstate who is responsible for what.
+  mock_solution: |
+    The lease between Holloway Estates (landlord) and Perenne Textiles (tenant) for
+    Warehouse Unit 7 runs for a fixed seven-year term, with base rent of 18,000 per
+    month in the first year escalating by a fixed 3 percent each year. The tenant is
+    responsible for all utilities and interior maintenance, while the landlord is
+    responsible for the roof and structure (foundations, external walls, and
+    structural steel). The tenant has one option to renew for a further five years
+    at market rate, which it must exercise by giving at least nine months' written
+    notice before the initial term ends. The lease is otherwise non-cancelable
+    except for a tenant-only break right available only after the fourth year,
+    which requires six months' written notice and payment of a penalty equal to
+    three months' rent, both conditions being necessary. A security deposit of two
+    months' rent was lodged on signing.
+
+- id: longcontext-solstice-conservation-summary
+  domain: longcontext
+  grader: judge
+  rubric: |
+    A faithful summary must convey the conservation review's mixed results and the
+    actual decision without fabrication. To score well it should include ALL of the
+    following, each explicit in the document: (1) a three-year beaver
+    reintroduction pilot ran in two catchments, Wren Beck and Aldon Water, and it
+    INCREASED wetland area and water retention and MODESTLY REDUCED downstream
+    flood peaks (an ecological positive); (2) it also caused CONFLICT with
+    landowners over flooded pasture and incurred HIGH monitoring costs, so the
+    overall result was ecologically positive but socially contested / mixed, not a
+    clear success; (3) the decision was NEITHER to expand to new catchments NOR to
+    end the program, but to EXTEND monitoring for two more years in the SAME two
+    catchments and add a landowner-compensation scheme before deciding on any wider
+    rollout. The summary MUST NOT claim expansion to new/additional catchments was
+    approved, MUST NOT claim the program was cancelled or judged a clear success or
+    failure, MUST NOT invent specific numeric figures (areas, percentages, costs)
+    the document does not state, and MUST NOT name any catchment other than Wren
+    Beck and Aldon Water. Reward faithful, hedged phrasing that matches the
+    document's contested/ambivalent conclusion and the "extend and compensate, then
+    decide" decision.
+  prompt: |
+    Read the following program review, then write a faithful summary as instructed at the end.
+
+    SOLSTICE TRUST — BEAVER REINTRODUCTION PILOT REVIEW (INTERNAL, PRE-DECISION)
+
+    This review evaluates the three-year beaver reintroduction pilot the Trust ran in two river catchments and records the decision the trustees reached at the close of the pilot period. It is an internal, pre-decision document and does not constitute a public commitment to any wider program.
+
+    Background. Solstice Trust manages upland catchments for flood resilience and biodiversity. The pilot introduced beavers into two catchments — Wren Beck and Aldon Water — chosen because they are hydrologically distinct from one another yet both feed settlements downstream that have a history of flooding. The hypothesis was that beaver activity, by building dams and creating wetland, would slow water, increase storage in the landscape, and reduce the sharpness of downstream flood peaks, while also improving habitat.
+
+    Pilot design. The pilot ran for THREE years in exactly these two catchments, Wren Beck and Aldon Water. All other catchments the Trust manages continued under conventional management and served as an informal comparison. The team monitored several outcomes: wetland area created, water retention in the catchment, the height of downstream flood peaks during high-rainfall events, and the reactions of landowners whose land adjoins the beaver territories.
+
+    Ecological results. On the ecological measures, the pilot performed well. In both catchments, WETLAND AREA increased and WATER RETENTION rose measurably as dams impounded water and raised local water tables; the team described the habitat gains as clear, with wetland-associated species returning to both sites. On flooding, downstream FLOOD PEAKS were MODESTLY REDUCED during the monitored high-rainfall events — a real reduction, though the team was careful to call it modest rather than dramatic, and noted that a longer record spanning more extreme events would be needed to be confident about the largest floods. The team deliberately declined to attach a single headline percentage to the flood-peak reduction in this pre-decision memo, pending further hydrological analysis.
+
+    Social and cost results. Against the ecological gains sat two real problems. First, the beaver activity FLOODED areas of productive PASTURE belonging to two landowners whose fields adjoin the impounded reaches, and those landowners lodged complaints; the resulting CONFLICT consumed staff time and strained the Trust's relationship with the farming community. Second, the pilot's MONITORING COSTS ran HIGH — higher than budgeted — because tracking dams, water levels, and species across two catchments over three years proved labor-intensive. The team assessed that the pilot's ecological benefits were genuine but that its social license was contested and its cost per unit of benefit was not yet clearly favorable. In the team's words, the result was "ecologically positive but socially contested," not a clean success and not a failure.
+
+    The decision. Faced with a mixed result, the trustees decided NEITHER to expand the program to NEW catchments NOR to end it and remove the beavers. Some trustees had pressed for expansion on the strength of the wetland and flood-peak gains; others had pressed for termination on the strength of the landowner conflict and the cost overrun. The trustees rejected both. Instead, they decided to EXTEND MONITORING for a further TWO years in the SAME two catchments, Wren Beck and Aldon Water, and, in parallel, to establish a LANDOWNER-COMPENSATION SCHEME to pay affected landowners for pasture lost to flooding, before making any decision about wider rollout. The decision was explicitly framed as reducing uncertainty and repairing social license, not as a verdict on the pilot.
+
+    Why not decide now. The pilot lead argued that a mixed result of this kind — real ecological gains offset by real social and cost problems — is precisely the situation in which more evidence and a fairer deal for landowners are most valuable, because the wider-rollout question turns on whether the flood-peak benefit holds up over more extreme events and whether the landowner conflict can be managed rather than merely endured. A two-year extension in the same catchments would lengthen the flood record and test the compensation scheme in practice; expanding to new catchments now would multiply the conflict before it is understood, and terminating now would discard a benefit that may prove decisive with more data. The trustees accepted this reasoning.
+
+    Why compensation specifically. The review argued that the landowner conflict, more than the cost or the science, threatened the program's future, because a conservation intervention that imposes uncompensated losses on neighbors tends to lose its social license regardless of its ecological merit. A compensation scheme, funded from the Trust's stewardship budget, would convert an uncompensated externality into a managed cost and give the affected landowners a stake in the pilot's continuation rather than a grievance against it. If, after the extension, the compensated arrangement proves durable and the flood-peak benefit holds, that would tilt a future decision toward wider rollout; if conflict persists even with compensation, that would tilt it toward winding the program down.
+
+    Guardrails during the extension. The beavers already present in Wren Beck and Aldon Water will remain; no new catchments will be seeded during the extension, so that the only new variables are time and the compensation scheme. Monitoring will be streamlined to bring costs down from the pilot's high level while preserving the flood and habitat measurements. No parallel intervention will be introduced in the two catchments that could confound the results. The extension is time-boxed at two years; if the evidence is still ambiguous at its end, the default is to convene a full options review rather than to extend indefinitely.
+
+    Next steps. The hydrology team will extend the flood-peak record and refine the analysis toward a firm figure. The stewardship team will design and launch the landowner-compensation scheme. A wider-rollout decision will be revisited only after the two-year extension concludes. Until then, no new catchment will receive beavers, and the two pilot catchments continue under monitoring.
+
+    INSTRUCTION: Write a faithful summary of this review in 4 to 7 sentences. Capture the pilot's design (three years, two named catchments), its mixed results (ecological gains in wetland/retention and a modest flood-peak reduction, against landowner conflict and high monitoring costs), and the actual decision reached (extend monitoring two more years in the same two catchments and add a landowner-compensation scheme, rather than expand to new catchments or end the program). Do not invent numbers or name any catchment other than Wren Beck and Aldon Water.
+  mock_solution: |
+    Solstice Trust ran a three-year beaver reintroduction pilot in two catchments,
+    Wren Beck and Aldon Water, to test whether beaver activity would create
+    wetland, increase water retention, and reduce downstream flood peaks. On the
+    ecological measures the pilot did well: wetland area and water retention
+    increased in both catchments and downstream flood peaks were modestly reduced,
+    though the team called the flood benefit modest and unproven for the most
+    extreme events. Against these gains, beaver flooding of adjoining pasture
+    caused conflict with two landowners and the pilot's monitoring costs ran high,
+    so the overall result was ecologically positive but socially contested rather
+    than a clear success. The trustees decided neither to expand to new catchments
+    nor to end the program; instead they chose to extend monitoring for two more
+    years in the same two catchments and to establish a landowner-compensation
+    scheme before deciding on any wider rollout. The extension is framed as
+    reducing uncertainty and repairing social license, with a wider-rollout
+    decision deferred until it concludes.

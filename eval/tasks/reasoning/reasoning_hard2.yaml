@@ -1,0 +1,292 @@
+- id: reasoning-alien-eight-day-week
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    On the planet Vael a year lasts exactly 493 days, and the calendar uses an 8-day week whose days are numbered Day1, Day2, ..., Day8 and then back to Day1. This 8-day week cycles continuously and does NOT reset at the start of each year. A harvest festival is always held on the very same day-of-year (the same numbered day within the year) every year. This year the festival landed on Day3. On which numbered day of the week (a number from 1 to 8) will the festival land 5 years from now?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "4"
+  mock_solution: |
+    Because the 8-day week runs continuously, the day-of-week of the festival advances by (days in a year) mod 8 each year.
+    493 mod 8: 8 x 61 = 488, remainder 5. So each year the festival's day-of-week advances by 5.
+    Over 5 years the total advance is 5 x 5 = 25 positions; 25 mod 8 = 1.
+    Starting from Day3, advancing 1 position gives Day4.
+    (Check: ((3 - 1) + 25) mod 8 + 1 = (2 + 25) mod 8 + 1 = 27 mod 8 + 1 = 3 + 1 = 4.)
+    Answer: Day4, i.e. 4.
+
+- id: reasoning-increasing-digits-no-five
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Consider four-digit whole numbers (from 1000 to 9999) whose digits are strictly increasing from left to right (each digit strictly greater than the one before it, for example 1367). Among all such numbers, how many contain NO digit equal to 5?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "70"
+  mock_solution: |
+    A strictly increasing four-digit number is completely determined by choosing 4 distinct digits and writing them in increasing order. The digit 0 can never appear (it would have to be the smallest, hence first, but a four-digit number cannot start with 0).
+    So normally the digits come from {1,2,3,4,5,6,7,8,9}. Excluding the digit 5 leaves the 8 digits {1,2,3,4,6,7,8,9}.
+    Each choice of 4 of these 8 digits yields exactly one valid strictly increasing number.
+    Count = C(8,4) = (8 x 7 x 6 x 5)/(4 x 3 x 2 x 1) = 1680/24 = 70.
+    Answer: 70.
+
+- id: reasoning-three-colors-drawn
+  domain: reasoning
+  grader: exact
+  prompt: |
+    A box contains 4 green chips, 3 yellow chips, and 2 red chips, all otherwise identical (9 chips total). Four chips are drawn at random without replacement. What is the probability that all three colors appear among the four chips drawn? Give your answer as a fraction in lowest terms, written in the form a/b (for example, 3/7).
+    Show your reasoning, then give the final answer on its own line.
+  answer: "4/7"
+  mock_solution: |
+    Total ways to choose 4 of the 9 chips = C(9,4) = 126.
+    "All three colors appear" among 4 chips means the color counts are a partition of 4 into three positive parts assigned to (green, yellow, red). The unordered part-patterns are {2,1,1}.
+    Enumerate which color supplies the "2":
+    - Green=2, Yellow=1, Red=1: C(4,2) x C(3,1) x C(2,1) = 6 x 3 x 2 = 36.
+    - Yellow=2, Green=1, Red=1: C(3,2) x C(4,1) x C(2,1) = 3 x 4 x 2 = 24.
+    - Red=2, Green=1, Yellow=1: C(2,2) x C(4,1) x C(3,1) = 1 x 4 x 3 = 12.
+    Favorable = 36 + 24 + 12 = 72.
+    Probability = 72/126. Divide top and bottom by 18: 72/126 = 4/7.
+    Answer: 4/7.
+
+- id: reasoning-pump-breaks-midway
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Pump A alone can fill a reservoir in 12 hours, and pump B alone can fill the same reservoir in 18 hours. Both pumps start together on an empty reservoir. The moment the reservoir becomes exactly two-thirds full, pump A breaks down and stops; pump B alone continues until the reservoir is full. All pumping rates are constant. What is the total time, in hours, to fill the reservoir? Give the answer as a decimal number of hours.
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "10.8"
+  mock_solution: |
+    Rates: A = 1/12 reservoir per hour, B = 1/18 per hour.
+    Phase 1 (both pumps), until 2/3 full: combined rate = 1/12 + 1/18 = 3/36 + 2/36 = 5/36 per hour.
+    Time for phase 1 = (2/3) / (5/36) = (2/3) x (36/5) = 72/15 = 24/5 = 4.8 hours.
+    Phase 2 (B alone) fills the remaining 1/3: time = (1/3) / (1/18) = 18/3 = 6 hours.
+    Total = 4.8 + 6 = 10.8 hours.
+    Answer: 10.8.
+
+- id: reasoning-two-tank-alcohol-exchange
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Tank X holds 20 liters of a 50% alcohol solution. Tank Y holds 20 liters of a 20% alcohol solution. First, 5 liters are transferred from Tank X into Tank Y and stirred until uniform. Then, 5 liters are transferred from Tank Y back into Tank X and stirred until uniform. After both transfers, what is the alcohol concentration of Tank X, expressed as a percentage? Round to two decimal places if needed.
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number (the percentage value, without a percent sign).
+  answer: "44"
+  mock_solution: |
+    Track alcohol volume (in liters) and total volume in each tank.
+    Start: X has 10 L alcohol in 20 L. Y has 4 L alcohol in 20 L.
+    Transfer 1: move 5 L from X (which is 50% alcohol, so 2.5 L alcohol) to Y.
+      X now: 7.5 L alcohol in 15 L (still 50%). Y now: 4 + 2.5 = 6.5 L alcohol in 25 L.
+    Transfer 2: move 5 L from Y back to X. Y is now 6.5/25 = 0.26 alcohol, so 5 L carries 5 x 0.26 = 1.3 L alcohol.
+      X now: 7.5 + 1.3 = 8.8 L alcohol in 15 + 5 = 20 L.
+    Concentration of X = 8.8 / 20 = 0.44 = 44%.
+    Answer: 44.
+
+- id: reasoning-five-seat-logic-puzzle
+  domain: reasoning
+  grader: exact
+  prompt: |
+    Five people -- A, B, C, D, and E -- sit in a single row of five seats numbered 1 to 5 from left to right, one person per seat. All of the following are true:
+    - C sits exactly two seats to the right of D (that is, C's seat number is D's seat number plus 2).
+    - E sits in one of the two end seats (seat 1 or seat 5).
+    - A sits somewhere to the left of B (A's seat number is smaller than B's).
+    - A does not sit in an end seat.
+    - D sits somewhere to the left of A.
+    - B does not sit in an end seat.
+    Exactly one seating arrangement satisfies all these conditions. Who sits in seat 3? Answer with just the letter a, b, c, d, or e.
+    Show your reasoning, then give the final answer on its own line.
+  answer: "c"
+  mock_solution: |
+    From "C = D + 2", the (D, C) pair can occupy seats (1,3), (2,4), or (3,5).
+    "D is left of A" and "A is not an end seat" and "B is not an end seat" push things:
+    Try D=1, C=3. Remaining seats {2,4,5} for A, B, E. E must be an end seat, so E=5. Then A, B take {2,4} with A left of B: A=2, B=4. Check: A not end (2, ok), B not end (4, ok), D=1 left of A=2 (ok). All conditions hold: arrangement D A C B E = seats 1..5.
+    Verify no other (D,C) works:
+    - D=2, C=4: remaining {1,3,5} for A,B,E. E end -> E=1 or 5. A not end and B not end forces A and B both in {3} only one interior seat left besides... interior seats are 3 (since 2,4 taken); need two interior seats for A and B but only seat 3 is interior and free -> impossible.
+    - D=3, C=5: then D=3 is not left of enough seats for A (A must be >3 and not end, but seat 4 is the only interior seat >3, leaving B nowhere non-end) -> impossible; also E needs an end seat 1, leaving A,B in {2,4}, but then A left of B and both non-end works as A=2,B=4, yet D=3 must be left of A=2 fails. Impossible.
+    Unique arrangement: seat1=D, seat2=A, seat3=C, seat4=B, seat5=E.
+    Seat 3 holds C.
+    Answer: c.
+
+- id: reasoning-div-3-or-5-not-7
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Among the whole numbers from 1 to 1000 inclusive, how many are divisible by 3 or by 5 (or both) but NOT divisible by 7?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "401"
+  mock_solution: |
+    First count divisible by 3 or 5 in 1..1000.
+    Divisible by 3: floor(1000/3) = 333. Divisible by 5: floor(1000/5) = 200. Divisible by 15: floor(1000/15) = 66.
+    Divisible by 3 or 5 = 333 + 200 - 66 = 467.
+    Now subtract those (in that set) also divisible by 7, i.e. divisible by (3 or 5) AND 7 = divisible by 21 or by 35.
+    Divisible by 21: floor(1000/21) = 47. Divisible by 35: floor(1000/35) = 28. Divisible by 105 (lcm of 21 and 35): floor(1000/105) = 9.
+    Divisible by (21 or 35) = 47 + 28 - 9 = 66.
+    Answer = 467 - 66 = 401.
+
+- id: reasoning-weighted-grade-threshold
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A course grade is computed from three midterm exams and one final exam. Each of the three midterms counts for 20% of the course grade, and the final exam counts for the remaining 40%. A student scored 85, 78, and 92 on the three midterms. The student wants a course grade of at least 88. Assuming the final exam is scored on the usual 0-to-100 scale, what is the minimum final-exam score that achieves this? Give the exact numeric threshold.
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "92.5"
+  mock_solution: |
+    The three midterms contribute 20% each: 0.20 x 85 + 0.20 x 78 + 0.20 x 92 = 17 + 15.6 + 18.4 = 51.
+    Let F be the final score, contributing 0.40 x F.
+    Require 51 + 0.40 F >= 88, so 0.40 F >= 37, giving F >= 37 / 0.40 = 92.5.
+    The minimum qualifying final score is 92.5.
+    Answer: 92.5.
+
+- id: reasoning-three-dice-sum-multiple-five
+  domain: reasoning
+  grader: exact
+  prompt: |
+    Three ordinary fair six-sided dice (faces 1 through 6) are rolled and their three numbers are added. Considering all 216 equally likely ordered outcomes, what is the probability that the sum is a multiple of 5 (that is, the sum equals 5, 10, 15, or 20)? Give your answer as a fraction in lowest terms, written in the form a/b.
+    Show your reasoning, then give the final answer on its own line.
+  answer: "43/216"
+  mock_solution: |
+    Count ordered triples (a,b,c), each 1..6, whose sum is 5, 10, 15, or 20. The minimum sum is 3 and the maximum is 18, so sum = 20 is impossible (0 outcomes).
+    Sum = 5: unordered part-sets are {1,1,3} (3 orderings) and {1,2,2} (3 orderings). Total 6.
+    Sum = 15: unordered part-sets are {3,6,6} (3), {4,5,6} (6), {5,5,5} (1). Total 10.
+    Sum = 10: unordered part-sets are {1,3,6} (6), {1,4,5} (6), {2,2,6} (3), {2,3,5} (6), {2,4,4} (3), {3,3,4} (3). Total 6+6+3+6+3+3 = 27.
+    Total favorable = 6 (sum 5) + 27 (sum 10) + 10 (sum 15) + 0 (sum 20) = 43.
+    Probability = 43/216. Since 43 is prime and does not divide 216, this is already in lowest terms.
+    Answer: 43/216.
+
+- id: reasoning-last-two-digits-power-seven
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    What are the last two digits of 7 raised to the power 2023? (Equivalently, compute 7^2023 modulo 100.) If the result is a single digit, give it as written (do not pad with a leading zero).
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "43"
+  mock_solution: |
+    Work modulo 100. Powers of 7 mod 100 cycle: 7^1 = 7, 7^2 = 49, 7^3 = 343 -> 43, 7^4 = 7 x 43 = 301 -> 1. So the cycle length is 4 (7^4 = 2401 ends in 01).
+    2023 mod 4 = 3 (since 2020 is divisible by 4, remainder 3).
+    Therefore 7^2023 = 7^3 (mod 100) = 43.
+    Answer: 43.
+
+- id: reasoning-grid-paths-avoid-two
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    On a grid a token starts at (0,0) and must reach (5,4), moving only one unit right (x increases by 1) or one unit up (y increases by 1) at each step. How many such shortest paths pass through NEITHER of the two points (2,1) and (3,3)?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "33"
+  mock_solution: |
+    A shortest path from (a,b) to (c,d) has C((c-a)+(d-b), c-a) paths.
+    Total from (0,0) to (5,4): C(9,5) = 126.
+    Through (2,1): C(3,2) [from (0,0) to (2,1): 2 right,1 up] x C(6,3) [from (2,1) to (5,4): 3 right,3 up] = 3 x 20 = 60.
+    Through (3,3): C(6,3) [from (0,0): 3 right,3 up] x C(3,2) [from (3,3) to (5,4): 2 right,1 up] = 20 x 3 = 60.
+    Through both (2,1) then (3,3): C(3,2) x C(3,1) [from (2,1) to (3,3): 1 right,2 up] x C(3,2) = 3 x 3 x 3 = 27.
+    By inclusion-exclusion, paths through (2,1) or (3,3) = 60 + 60 - 27 = 93.
+    Paths avoiding both = 126 - 93 = 33.
+    Answer: 33.
+
+- id: reasoning-age-ratio-shift
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    The ratio of Anwar's age to Priya's age right now is 5 to 3. In 8 years, the ratio of their ages will be 7 to 5. What is Anwar's current age in years?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "20"
+  mock_solution: |
+    Let Anwar = 5k and Priya = 3k for some positive number k.
+    In 8 years: (5k + 8)/(3k + 8) = 7/5.
+    Cross-multiply: 5(5k + 8) = 7(3k + 8) -> 25k + 40 = 21k + 56 -> 4k = 16 -> k = 4.
+    Anwar's current age = 5k = 20. (Check: now 20 and 12, ratio 5:3; in 8 years 28 and 20, ratio 7:5. Correct.)
+    Answer: 20.
+
+- id: reasoning-nonlinear-recurrence
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A sequence is defined by a(1) = 3, and for every n >= 1, a(n+1) = 2 * a(n) - n. Compute a(7).
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "72"
+  mock_solution: |
+    Apply the rule step by step:
+    a(1) = 3.
+    a(2) = 2 x 3 - 1 = 5.
+    a(3) = 2 x 5 - 2 = 8.
+    a(4) = 2 x 8 - 3 = 13.
+    a(5) = 2 x 13 - 4 = 22.
+    a(6) = 2 x 22 - 5 = 39.
+    a(7) = 2 x 39 - 6 = 72.
+    Answer: 72.
+
+- id: reasoning-divisible-by-none
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Among the whole numbers from 1 to 600 inclusive, how many are divisible by none of 4, 6, and 9 (that is, not divisible by 4, not divisible by 6, and not divisible by 9)?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "367"
+  mock_solution: |
+    Count numbers in 1..600 divisible by at least one of 4, 6, 9, using inclusion-exclusion, then subtract from 600.
+    Singles: floor(600/4) = 150; floor(600/6) = 100; floor(600/9) = 66.
+    Pairwise LCMs: lcm(4,6) = 12 -> floor(600/12) = 50; lcm(4,9) = 36 -> floor(600/36) = 16; lcm(6,9) = 18 -> floor(600/18) = 33.
+    Triple LCM: lcm(4,6,9) = 36 -> floor(600/36) = 16.
+    Divisible by at least one = 150 + 100 + 66 - 50 - 16 - 33 + 16 = 233.
+    Divisible by none = 600 - 233 = 367.
+    Answer: 367.
+
+- id: reasoning-cyclist-catch-with-break
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Cyclist A leaves a checkpoint riding along a straight road at a constant 24 km/h. Exactly 15 minutes after A leaves, cyclist B leaves the same checkpoint in the same direction along the same road at a constant 30 km/h. However, after B has ridden 20 km, B stops for a 5-minute break and then resumes at 30 km/h. Both cyclists otherwise ride at their stated constant speeds. How many kilometers from the checkpoint does B catch up to A (the point where B draws even with A)?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "40"
+  mock_solution: |
+    Measure time t in hours from the moment A leaves. A's position: 24t.
+    B leaves at t = 0.25 h (15 minutes). B rides 20 km at 30 km/h, which takes 20/30 = 2/3 h, finishing that stretch at t = 0.25 + 2/3 h. Then B breaks 5 min = 1/12 h. B resumes at t = 0.25 + 2/3 + 1/12 = 3/12 + 8/12 + 1/12 = 12/12 = 1 h, at position 20 km.
+    Before the break, could B have caught A? Setting 30(t - 0.25) = 24t gives 6t = 7.5, t = 1.25 h, which is after B's break began, so the catch does not happen in that phase.
+    During the break (t from about 0.917 to 1.0) B is stopped at 20 km while A keeps moving, so B is still behind at t = 1 (A is at 24 km).
+    After resuming: B's position = 20 + 30(t - 1). Set equal to A: 20 + 30(t - 1) = 24t -> 20 + 30t - 30 = 24t -> 30t - 10 = 24t -> 6t = 10 -> t = 5/3 h.
+    Position = 24 x (5/3) = 40 km. (Check B: 20 + 30(5/3 - 1) = 20 + 30(2/3) = 20 + 20 = 40.)
+    Answer: 40.
+
+- id: reasoning-alloy-copper-mix
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Alloy X is 30% copper by mass, and alloy Y is 55% copper by mass. You start with 40 kg of alloy X and melt in some amount of alloy Y so that the resulting blend is exactly 45% copper by mass. How many kilograms of alloy Y must be added?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "60"
+  mock_solution: |
+    Let y = kilograms of alloy Y added.
+    Copper mass: from X, 0.30 x 40 = 12 kg; from Y, 0.55y kg. Total blend mass = 40 + y kg.
+    Require (12 + 0.55y) / (40 + y) = 0.45.
+    12 + 0.55y = 0.45(40 + y) = 18 + 0.45y.
+    0.55y - 0.45y = 18 - 12 -> 0.10y = 6 -> y = 60.
+    (Check: copper = 12 + 0.55 x 60 = 12 + 33 = 45 kg out of 100 kg total = 45%.)
+    Answer: 60.
+
+- id: reasoning-staggered-bus-departures
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    At a depot, bus A departs every 12 minutes with its first departure at exactly 6:00 (so at 0, 12, 24, ... minutes after 6:00). Bus C departs every 20 minutes with its first departure also at 6:00 (0, 20, 40, ... minutes after 6:00). Bus B departs every 16 minutes, but its first departure is at 6:04 (so at 4, 20, 36, ... minutes after 6:00). Counting time in whole minutes after 6:00, how many minutes after 6:00 is the FIRST time (later than 6:00 itself) at which all three buses depart simultaneously?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "180"
+  mock_solution: |
+    Let t = minutes after 6:00.
+    Bus A departs when t is a multiple of 12; bus C when t is a multiple of 20. A time serving both A and C must be a multiple of lcm(12, 20) = 60. So t is in {60, 120, 180, ...}.
+    Bus B departs when t = 4 (mod 16), i.e. t leaves remainder 4 upon division by 16.
+    Test the candidates:
+      t = 60: 60 mod 16 = 12 (not 4).
+      t = 120: 120 mod 16 = 8 (not 4).
+      t = 180: 180 mod 16 = 4. Match.
+    Verify t = 180: A -> 180/12 = 15 (integer, ok); C -> 180/20 = 9 (ok); B -> (180 - 4)/16 = 176/16 = 11 (ok).
+    The first simultaneous departure after 6:00 is 180 minutes after 6:00.
+    Answer: 180.
+
+- id: reasoning-mean-age-membership-change
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A club of 12 members has a mean (average) age of 31 years. Two members, aged 54 and 48, leave the club, and then one new member aged 25 joins. After these changes, what is the mean age of the club's members? Round to two decimal places.
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "26.82"
+  mock_solution: |
+    Total age of the original 12 members = 12 x 31 = 372 years.
+    Two members leave: subtract 54 + 48 = 102, leaving 372 - 102 = 270 years among 10 members.
+    One new member joins: add 25, giving 270 + 25 = 295 years among 11 members.
+    Mean = 295 / 11 = 26.8181... which rounds to 26.82.
+    Answer: 26.82.

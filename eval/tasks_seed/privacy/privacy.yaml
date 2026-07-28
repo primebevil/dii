@@ -1,0 +1,43 @@
+# Privacy-sensitive domain slice: judged, not objective. These match the exposure
+# profile (data-residency-constrained professionals). Scored by the independent
+# judge against the rubric, as a blind pairwise comparison versus the baseline.
+# Keep this the smallest-weighted slice; it never decides the verdict alone.
+
+- id: privacy-gdpr-transfer
+  domain: privacy
+  grader: judge
+  rubric: |
+    A good answer explains that transferring EU personal data to the US needs a
+    lawful transfer mechanism (adequacy decision or the EU-US Data Privacy
+    Framework, or SCCs with a transfer impact assessment), does not claim it is
+    simply forbidden or simply fine, flags that the answer is general information
+    and not legal advice, and avoids inventing specific article numbers or case
+    citations it is not sure of.
+  prompt: |
+    A small EU-based client wants to store their customers' personal data on a US
+    cloud provider. In a few sentences, what should they know about whether and how
+    they can do this under GDPR?
+
+- id: privacy-data-minimization
+  domain: privacy
+  grader: judge
+  rubric: |
+    A good answer explains data minimization plainly (collect and keep only what
+    is necessary for a stated purpose), gives at least one concrete practice
+    (shorter retention, fewer fields, pseudonymization), and does not overstate it
+    as an absolute ban on collecting data.
+  prompt: |
+    A small clinic asks what "data minimization" means in practice for the patient
+    information they collect. Explain in a few sentences with a concrete example.
+
+- id: privacy-breach-first-steps
+  domain: privacy
+  grader: judge
+  rubric: |
+    A good answer lists sensible first steps (contain the exposure, assess scope,
+    preserve evidence, and consider notification obligations and their deadlines),
+    notes that specific notification timelines depend on jurisdiction, and does not
+    assert a single universal deadline as if it applied everywhere.
+  prompt: |
+    A solo consultant thinks a laptop with client data was stolen. In a few
+    sentences, what are the first things they should do?

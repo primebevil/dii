@@ -1,0 +1,71 @@
+- id: coding-sum-list
+  domain: coding
+  grader: unit_test
+  entrypoint: sum_list
+  prompt: |
+    Write a Python function `sum_list(xs)` that returns the sum of a list of
+    numbers, returning 0 for an empty list. Reply with the function in a code block.
+  test: |
+    assert sum_list([1, 2, 3]) == 6
+    assert sum_list([]) == 0
+    assert sum_list([-1, 1]) == 0
+  mock_solution: |
+    def sum_list(xs):
+        return sum(xs)
+
+- id: coding-is-palindrome
+  domain: coding
+  grader: unit_test
+  entrypoint: is_palindrome
+  prompt: |
+    Write a Python function `is_palindrome(s)` that returns True if the string is
+    a palindrome ignoring case and non-alphanumeric characters, else False.
+    Reply with the function in a code block.
+  test: |
+    assert is_palindrome("A man, a plan, a canal: Panama") is True
+    assert is_palindrome("hello") is False
+    assert is_palindrome("") is True
+  mock_solution: |
+    def is_palindrome(s):
+        t = [c.lower() for c in s if c.isalnum()]
+        return t == t[::-1]
+
+- id: coding-word-count
+  domain: coding
+  grader: unit_test
+  entrypoint: word_count
+  prompt: |
+    Write a Python function `word_count(text)` returning a dict mapping each
+    lowercased word to its count, splitting on whitespace. Reply with the function
+    in a code block.
+  test: |
+    assert word_count("a a b") == {"a": 2, "b": 1}
+    assert word_count("") == {}
+    assert word_count("The the THE") == {"the": 3}
+  mock_solution: |
+    def word_count(text):
+        d = {}
+        for w in text.lower().split():
+            d[w] = d.get(w, 0) + 1
+        return d
+
+- id: coding-two-sum
+  domain: coding
+  grader: unit_test
+  entrypoint: two_sum
+  prompt: |
+    Write a Python function `two_sum(nums, target)` that returns a tuple of two
+    indices whose values add to target, or None if no pair exists. Reply with the
+    function in a code block.
+  test: |
+    r = two_sum([2, 7, 11, 15], 9)
+    assert sorted(r) == [0, 1]
+    assert two_sum([1, 2, 3], 100) is None
+  mock_solution: |
+    def two_sum(nums, target):
+        seen = {}
+        for i, n in enumerate(nums):
+            if target - n in seen:
+                return (seen[target - n], i)
+            seen[n] = i
+        return None

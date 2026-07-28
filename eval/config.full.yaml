@@ -1,0 +1,42 @@
+# FULL RUN config — the real variety experiment (docs/Variety_Experiment_Plan.md).
+# Diverse cross-family pool + an out-of-family judge. Unlike config.yaml (shakedown),
+# the numbers from THIS config are meant to inform the verdict — but only once the
+# task bank is expanded toward the pre-registered 50-100 tasks/domain and the margin
+# below is confirmed. See the plan's success/kill criteria.
+
+node_url: "http://100.118.77.40:8090"   # atlas (has the timeout fix); no token -> local door
+token: ""
+
+# Five-family intent (Qwen, Gemma, Mistral, Meta, code specialist). Mistral is held
+# OUT as the judge (see below), leaving a 4-model pool spanning Gemma / Meta / Qwen /
+# Qwen-code. To run all five as the pool instead, move mistral-small here and set a
+# hosted judge via judge_url (keeps the judge out-of-family AND fast).
+pool:
+  - "gemma3:12b"          # Google
+  - "llama3.1:8b"         # Meta
+  - "qwen3:30b"           # Qwen (reasoning — max_tokens below gives it room)
+  - "qwen2.5-coder:14b"   # code specialist
+
+# Judge: strong, out-of-pool, and NON-reasoning (a reasoning judge is too slow across
+# the hundreds of judge calls a full run makes). mistral-small:24b fits. For a higher-
+# quality judge, set judge_url/judge_token to a hosted frontier endpoint and put
+# mistral-small back in the pool — the plan permits a hosted judge (it is measurement,
+# not part of the network under test).
+judge_model: "mistral-small:24b"
+judge_url: ""             # empty => same endpoint as the pool
+judge_token: ""
+judge_max_tokens: 1024
+
+samples: 0                # 0 = len(pool) = 4, so S2 and S3 spend equal budget
+temperature: 0.7
+eval_fraction: 0.5        # half held out for scoring; half is dev (baseline + router)
+split_seed: 1
+noise_repeats: 5          # baseline re-runs for the run-to-run noise floor
+max_tokens: 2048          # headroom for the reasoning model to think AND emit full code/answers
+
+# PRE-REGISTERED MEANINGFUL MARGIN (still needs your sign-off — see the plan).
+# A contrast must beat noise_floor + margin to count. 0.05 = "5 points of task
+# success above run-to-run wobble." This is a placeholder default; confirm or set
+# per-domain values BEFORE the run, and record them in the plan.
+margin: 0.05
+margin_by_domain: {}      # e.g. {coding: 0.05, reasoning: 0.05, longcontext: 0.07}

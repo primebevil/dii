@@ -1,0 +1,499 @@
+- id: coding-tally-weighted
+  domain: coding
+  grader: unit_test
+  entrypoint: tally_weighted
+  prompt: |
+    Write a Python function `tally_weighted(pairs)` where `pairs` is a list of
+    `(name, weight)` tuples (`name` is a string, `weight` is an int that may be
+    negative). Return a dict mapping each name to the sum of all weights recorded
+    for it, in any order. An empty list must return an empty dict.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert tally_weighted([]) == {}
+    assert tally_weighted([("a", 3)]) == {"a": 3}
+    assert tally_weighted([("a", 3), ("b", 1), ("a", 4)]) == {"a": 7, "b": 1}
+    assert tally_weighted([("x", 5), ("x", -5)]) == {"x": 0}
+    assert tally_weighted([("p", -2), ("q", -3), ("p", -4)]) == {"p": -6, "q": -3}
+    big = [("k", 1)] * 1000
+    assert tally_weighted(big) == {"k": 1000}
+  mock_solution: |
+    def tally_weighted(pairs):
+        d = {}
+        for name, w in pairs:
+            d[name] = d.get(name, 0) + w
+        return d
+
+- id: coding-zigzag-case
+  domain: coding
+  grader: unit_test
+  entrypoint: zigzag_case
+  prompt: |
+    Write a Python function `zigzag_case(s)` that returns a new string in which the
+    character at every even index (0, 2, 4, ...) is uppercased and the character at
+    every odd index is lowercased. Indexing counts ALL characters including spaces
+    and punctuation. The empty string returns the empty string.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert zigzag_case("") == ""
+    assert zigzag_case("a") == "A"
+    assert zigzag_case("abcd") == "AbCd"
+    assert zigzag_case("Hello World") == "HeLlO WoRlD"
+    assert zigzag_case("ABCD") == "AbCd"
+    assert zigzag_case("a1b2") == "A1B2"
+    assert zigzag_case("  x") == "  X"
+  mock_solution: |
+    def zigzag_case(s):
+        return "".join(c.upper() if i % 2 == 0 else c.lower()
+                        for i, c in enumerate(s))
+
+- id: coding-clamp-all
+  domain: coding
+  grader: unit_test
+  entrypoint: clamp_all
+  prompt: |
+    Write a Python function `clamp_all(xs, lo, hi)` that returns a NEW list in which
+    every number from `xs` is clamped into the inclusive range `[lo, hi]`: values
+    below `lo` become `lo`, values above `hi` become `hi`, others are unchanged.
+    Assume `lo <= hi`. An empty input returns an empty list.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert clamp_all([], 0, 10) == []
+    assert clamp_all([5], 0, 10) == [5]
+    assert clamp_all([-3, 5, 20], 0, 10) == [0, 5, 10]
+    assert clamp_all([0, 10], 0, 10) == [0, 10]
+    assert clamp_all([-5, -1], -2, 2) == [-2, -1]
+    src = [7, 7, 7]
+    out = clamp_all(src, 0, 5)
+    assert out == [5, 5, 5]
+    assert src == [7, 7, 7]
+  mock_solution: |
+    def clamp_all(xs, lo, hi):
+        return [lo if x < lo else hi if x > hi else x for x in xs]
+
+- id: coding-longest-plateau
+  domain: coding
+  grader: unit_test
+  entrypoint: longest_plateau
+  prompt: |
+    Write a Python function `longest_plateau(xs)` that returns the length of the
+    longest run of EQUAL consecutive elements in the list `xs`. For an empty list
+    return 0.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert longest_plateau([]) == 0
+    assert longest_plateau([9]) == 1
+    assert longest_plateau([1, 1, 1]) == 3
+    assert longest_plateau([1, 2, 2, 3, 3, 3, 1]) == 3
+    assert longest_plateau([4, 4, 5, 5]) == 2
+    assert longest_plateau([0, 0, 0, 0, 1]) == 4
+    assert longest_plateau([1, 2, 3, 4]) == 1
+    assert longest_plateau(["a", "a", "b"]) == 2
+  mock_solution: |
+    def longest_plateau(xs):
+        if not xs:
+            return 0
+        best = cur = 1
+        for i in range(1, len(xs)):
+            if xs[i] == xs[i - 1]:
+                cur += 1
+                if cur > best:
+                    best = cur
+            else:
+                cur = 1
+        return best
+
+- id: coding-flatten-depth
+  domain: coding
+  grader: unit_test
+  entrypoint: flatten_depth
+  prompt: |
+    Write a Python function `flatten_depth(lst, depth)` that flattens a nested list
+    up to `depth` levels. `depth` is a non-negative int. With `depth == 0` no
+    flattening happens and a shallow copy of `lst` is returned. With `depth == 1`
+    one level of nested lists is expanded, and so on. Non-list elements (including
+    ints, strings, and bools) are kept as-is. Only values that are exactly Python
+    `list` instances count as nestable.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert flatten_depth([], 5) == []
+    assert flatten_depth([1, 2, 3], 0) == [1, 2, 3]
+    assert flatten_depth([1, [2, 3]], 0) == [1, [2, 3]]
+    assert flatten_depth([1, [2, 3]], 1) == [1, 2, 3]
+    assert flatten_depth([1, [2, [3, 4]]], 1) == [1, 2, [3, 4]]
+    assert flatten_depth([1, [2, [3, 4]]], 2) == [1, 2, 3, 4]
+    assert flatten_depth([1, [2, [3, [4]]]], 5) == [1, 2, 3, 4]
+    assert flatten_depth(["a", ["b"]], 1) == ["a", "b"]
+    assert flatten_depth([1, [2, 3]], 0) is not None
+    src = [1, [2]]
+    out = flatten_depth(src, 0)
+    assert out == [1, [2]] and out is not src
+  mock_solution: |
+    def flatten_depth(lst, depth):
+        result = []
+        for item in lst:
+            if depth > 0 and type(item) is list:
+                result.extend(flatten_depth(item, depth - 1))
+            else:
+                result.append(item)
+        return result
+
+- id: coding-expand-ranges
+  domain: coding
+  grader: unit_test
+  entrypoint: expand_ranges
+  prompt: |
+    Write a Python function `expand_ranges(s)` that decodes a run-length string. The
+    input is a sequence of blocks, each being a single character followed by a
+    multi-digit decimal count (1 or more digits) telling how many times to repeat
+    that character. For example `"a3b1c2"` decodes to `"aaabcc"` and `"x10"` decodes
+    to ten `x` characters. Counts are always present and are at least 1. The empty
+    string decodes to the empty string. You may assume the input is well-formed.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert expand_ranges("") == ""
+    assert expand_ranges("a1") == "a"
+    assert expand_ranges("a3b1c2") == "aaabcc"
+    assert expand_ranges("x10") == "x" * 10
+    assert expand_ranges("z100") == "z" * 100
+    assert expand_ranges("9" + "3") == "999"
+    assert expand_ranges(" 2") == "  "
+    assert expand_ranges("a2b3a1") == "aabbba"
+  mock_solution: |
+    def expand_ranges(s):
+        out = []
+        i = 0
+        n = len(s)
+        while i < n:
+            ch = s[i]
+            i += 1
+            j = i
+            while j < n and s[j].isdigit():
+                j += 1
+            count = int(s[i:j])
+            out.append(ch * count)
+            i = j
+        return "".join(out)
+
+- id: coding-rotate-letters
+  domain: coding
+  grader: unit_test
+  entrypoint: rotate_letters
+  prompt: |
+    Write a Python function `rotate_letters(s, k)` that shifts each ASCII letter in
+    `s` forward by `k` positions in the alphabet, wrapping around (Caesar shift).
+    Uppercase stays uppercase, lowercase stays lowercase, and any non-letter
+    character is left unchanged. `k` may be zero, negative, or larger than 26.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert rotate_letters("abc", 1) == "bcd"
+    assert rotate_letters("xyz", 3) == "abc"
+    assert rotate_letters("ABC", 2) == "CDE"
+    assert rotate_letters("Hello, World!", 0) == "Hello, World!"
+    assert rotate_letters("abc", -1) == "zab"
+    assert rotate_letters("abc", 27) == "bcd"
+    assert rotate_letters("abc", 52) == "abc"
+    assert rotate_letters("aZ", -26) == "aZ"
+    assert rotate_letters("Hi 5!", 25) == "Gh 5!"
+    assert rotate_letters("", 5) == ""
+  mock_solution: |
+    def rotate_letters(s, k):
+        out = []
+        for c in s:
+            if "a" <= c <= "z":
+                out.append(chr((ord(c) - 97 + k) % 26 + 97))
+            elif "A" <= c <= "Z":
+                out.append(chr((ord(c) - 65 + k) % 26 + 65))
+            else:
+                out.append(c)
+        return "".join(out)
+
+- id: coding-snake-read
+  domain: coding
+  grader: unit_test
+  entrypoint: snake_read
+  prompt: |
+    Write a Python function `snake_read(grid)` that reads a rectangular grid (a list
+    of equal-length lists) in boustrophedon order: the first row left-to-right, the
+    second row right-to-left, the third left-to-right, and so on, alternating.
+    Return a single flat list of all elements in that order. An empty grid returns an
+    empty list. Do not mutate the input rows.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert snake_read([]) == []
+    assert snake_read([[1, 2, 3]]) == [1, 2, 3]
+    assert snake_read([[1, 2], [3, 4]]) == [1, 2, 4, 3]
+    assert snake_read([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [1, 2, 3, 6, 5, 4, 7, 8, 9]
+    assert snake_read([[1], [2], [3]]) == [1, 2, 3]
+    g = [[1, 2], [3, 4]]
+    _ = snake_read(g)
+    assert g == [[1, 2], [3, 4]]
+  mock_solution: |
+    def snake_read(grid):
+        out = []
+        for i, row in enumerate(grid):
+            out.extend(row if i % 2 == 0 else list(reversed(row)))
+        return out
+
+- id: coding-top-element
+  domain: coding
+  grader: unit_test
+  entrypoint: top_element
+  prompt: |
+    Write a Python function `top_element(xs)` that returns the element occurring most
+    often in list `xs`. If several elements tie for the highest count, return the one
+    whose FIRST occurrence comes earliest in the list. For an empty list return None.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert top_element([]) is None
+    assert top_element([7]) == 7
+    assert top_element([1, 1, 2]) == 1
+    assert top_element([1, 2, 2, 1]) == 1
+    assert top_element([3, 3, 2, 2, 1]) == 3
+    assert top_element(["b", "a", "a", "b"]) == "b"
+    assert top_element([5, 4, 4, 5, 4]) == 4
+    assert top_element([1, 2, 3]) == 1
+    assert top_element([9, 8, 8, 9, 7]) == 9
+  mock_solution: |
+    def top_element(xs):
+        counts = {}
+        order = []
+        for x in xs:
+            if x not in counts:
+                counts[x] = 0
+                order.append(x)
+            counts[x] += 1
+        best = None
+        best_count = -1
+        for x in order:
+            if counts[x] > best_count:
+                best_count = counts[x]
+                best = x
+        return best
+
+- id: coding-bracket-depth
+  domain: coding
+  grader: unit_test
+  entrypoint: bracket_depth
+  prompt: |
+    Write a Python function `bracket_depth(s)` that scans a string containing three
+    kinds of brackets -- `()`, `[]`, and `{}` -- possibly mixed with other
+    characters (which are ignored). If the brackets are correctly balanced and
+    properly nested (every closer matches the most recent unmatched opener OF THE
+    SAME TYPE), return the maximum nesting depth reached. If they are not balanced,
+    return -1. The empty string is balanced with depth 0.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert bracket_depth("") == 0
+    assert bracket_depth("abc") == 0
+    assert bracket_depth("()") == 1
+    assert bracket_depth("(())") == 2
+    assert bracket_depth("()()") == 1
+    assert bracket_depth("([{}])") == 3
+    assert bracket_depth("a(b[c]d)e") == 2
+    assert bracket_depth("(]") == -1
+    assert bracket_depth("([)]") == -1
+    assert bracket_depth("(") == -1
+    assert bracket_depth(")(") == -1
+    assert bracket_depth("{[()]}{}") == 3
+    assert bracket_depth("(((((())))))") == 6
+  mock_solution: |
+    def bracket_depth(s):
+        openers = {"(": ")", "[": "]", "{": "}"}
+        match = {")": "(", "]": "[", "}": "{"}
+        stack = []
+        depth = 0
+        for c in s:
+            if c in openers:
+                stack.append(c)
+                if len(stack) > depth:
+                    depth = len(stack)
+            elif c in match:
+                if not stack or stack[-1] != match[c]:
+                    return -1
+                stack.pop()
+        return -1 if stack else depth
+
+- id: coding-eval-addmul
+  domain: coding
+  grader: unit_test
+  entrypoint: eval_addmul
+  prompt: |
+    Write a Python function `eval_addmul(expr)` that evaluates an arithmetic
+    expression made only of non-negative integers, the `+` operator, and the `*`
+    operator, with NO spaces and NO parentheses. Multiplication binds tighter than
+    addition (standard precedence). Numbers may have multiple digits. Return the
+    integer result. A bare number like `"42"` evaluates to itself.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert eval_addmul("5") == 5
+    assert eval_addmul("42") == 42
+    assert eval_addmul("2+3") == 5
+    assert eval_addmul("2*3") == 6
+    assert eval_addmul("2+3*4") == 14
+    assert eval_addmul("2*3+4") == 10
+    assert eval_addmul("2*3*4") == 24
+    assert eval_addmul("1+2+3+4") == 10
+    assert eval_addmul("10*10+1") == 101
+    assert eval_addmul("0*5+7") == 7
+    assert eval_addmul("2*2+2*2") == 8
+    assert eval_addmul("11+22*2") == 55
+  mock_solution: |
+    def eval_addmul(expr):
+        total = 0
+        for term in expr.split("+"):
+            product = 1
+            for factor in term.split("*"):
+                product *= int(factor)
+            total += product
+        return total
+
+- id: coding-split-escaped
+  domain: coding
+  grader: unit_test
+  entrypoint: split_escaped
+  prompt: |
+    Write a Python function `split_escaped(s)` that splits the string `s` on comma
+    separators, but a backslash `\` acts as an escape: `\,` produces a literal comma
+    inside a field (not a separator), and `\\` produces a literal backslash. Any
+    other character following a backslash is taken literally (the backslash is
+    consumed). A trailing lone backslash (with nothing after it) is dropped. Return
+    the list of field strings. The empty string returns `[""]`. Note that `"a,"`
+    returns `["a", ""]`.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert split_escaped("") == [""]
+    assert split_escaped("a") == ["a"]
+    assert split_escaped("a,b,c") == ["a", "b", "c"]
+    assert split_escaped("a,") == ["a", ""]
+    assert split_escaped(",") == ["", ""]
+    assert split_escaped("a\\,b") == ["a,b"]
+    assert split_escaped("a\\,b,c") == ["a,b", "c"]
+    assert split_escaped("a\\\\b") == ["a\\b"]
+    assert split_escaped("a\\\\,b") == ["a\\", "b"]
+    assert split_escaped("x\\y") == ["xy"]
+    assert split_escaped("end\\") == ["end"]
+    assert split_escaped("\\,") == [","]
+  mock_solution: |
+    def split_escaped(s):
+        fields = []
+        cur = []
+        i = 0
+        n = len(s)
+        while i < n:
+            c = s[i]
+            if c == "\\":
+                if i + 1 < n:
+                    cur.append(s[i + 1])
+                    i += 2
+                else:
+                    i += 1
+            elif c == ",":
+                fields.append("".join(cur))
+                cur = []
+                i += 1
+            else:
+                cur.append(c)
+                i += 1
+        fields.append("".join(cur))
+        return fields
+
+- id: coding-next-taller
+  domain: coding
+  grader: unit_test
+  entrypoint: next_taller
+  prompt: |
+    Write a Python function `next_taller(xs)` that, for each element of the integer
+    list `xs`, finds the FIRST element to its right that is strictly greater than it.
+    Return a new list of the same length whose i-th entry is that next-greater value,
+    or -1 if no element to the right is greater. The empty list returns an empty list.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert next_taller([]) == []
+    assert next_taller([5]) == [-1]
+    assert next_taller([1, 2, 3]) == [2, 3, -1]
+    assert next_taller([3, 2, 1]) == [-1, -1, -1]
+    assert next_taller([2, 1, 2, 4, 3]) == [4, 2, 4, -1, -1]
+    assert next_taller([5, 5, 5]) == [-1, -1, -1]
+    assert next_taller([1, 3, 2, 4]) == [3, 4, 4, -1]
+    assert next_taller([-1, -3, -2]) == [-1, -2, -1]
+    assert next_taller([10, 9, 11, 8]) == [11, 11, -1, -1]
+  mock_solution: |
+    def next_taller(xs):
+        res = [-1] * len(xs)
+        stack = []
+        for i, v in enumerate(xs):
+            while stack and xs[stack[-1]] < v:
+                res[stack.pop()] = v
+            stack.append(i)
+        return res
+
+- id: coding-fewest-stamps
+  domain: coding
+  grader: unit_test
+  entrypoint: fewest_stamps
+  prompt: |
+    Write a Python function `fewest_stamps(target, denoms)` that returns the minimum
+    number of stamps needed to make postage exactly equal to `target`, using stamps
+    from `denoms` (a list of positive int denominations) in unlimited supply. Return
+    -1 if the target cannot be made exactly. `target` is a non-negative int; a target
+    of 0 needs 0 stamps.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert fewest_stamps(0, [1, 5]) == 0
+    assert fewest_stamps(11, [1, 5, 10]) == 2
+    assert fewest_stamps(7, [2, 4]) == -1
+    assert fewest_stamps(6, [1, 3, 4]) == 2
+    assert fewest_stamps(3, [2]) == -1
+    assert fewest_stamps(100, [1]) == 100
+    assert fewest_stamps(27, [1, 5, 10, 25]) == 3
+    assert fewest_stamps(8, [3, 5]) == 2
+    assert fewest_stamps(5, [7]) == -1
+    assert fewest_stamps(30, [1, 15, 25]) == 2
+  mock_solution: |
+    def fewest_stamps(target, denoms):
+        INF = float("inf")
+        dp = [0] + [INF] * target
+        for amount in range(1, target + 1):
+            for d in denoms:
+                if d <= amount and dp[amount - d] + 1 < dp[amount]:
+                    dp[amount] = dp[amount - d] + 1
+        return dp[target] if dp[target] != INF else -1
+
+- id: coding-run-turtle
+  domain: coding
+  grader: unit_test
+  entrypoint: run_turtle
+  prompt: |
+    Write a Python function `run_turtle(cmds)` that simulates a turtle on an integer
+    grid. The turtle starts at position `(0, 0)` facing north, i.e. its heading is
+    `(0, 1)`. Process the command string `cmds` left to right: `'F'` moves one step
+    forward along the current heading; `'L'` turns the heading 90 degrees to the left
+    (counter-clockwise); `'R'` turns it 90 degrees to the right (clockwise). Any other
+    character is ignored. Return the final position as a `(x, y)` tuple.
+    A left turn maps heading (dx, dy) to (-dy, dx).
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert run_turtle("") == (0, 0)
+    assert run_turtle("F") == (0, 1)
+    assert run_turtle("FF") == (0, 2)
+    assert run_turtle("RF") == (1, 0)
+    assert run_turtle("LF") == (-1, 0)
+    assert run_turtle("RRF") == (0, -1)
+    assert run_turtle("FRFRFRF") == (0, 0)
+    assert run_turtle("FLFLFLF") == (0, 0)
+    assert run_turtle("FRF") == (1, 1)
+    assert run_turtle("F F R F") == (1, 2)
+    assert run_turtle("RRRRF") == (0, 1)
+  mock_solution: |
+    def run_turtle(cmds):
+        x, y = 0, 0
+        dx, dy = 0, 1
+        for c in cmds:
+            if c == "F":
+                x += dx
+                y += dy
+            elif c == "L":
+                dx, dy = -dy, dx
+            elif c == "R":
+                dx, dy = dy, -dx
+        return (x, y)

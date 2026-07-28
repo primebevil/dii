@@ -1,0 +1,782 @@
+- id: coding-eval-parens
+  domain: coding
+  grader: unit_test
+  entrypoint: eval_parens
+  prompt: |
+    Write a Python function `eval_parens(expr)` that evaluates an arithmetic
+    expression containing non-negative integers and the operators `+`, `-`, and
+    `*`, together with parentheses `(` and `)`. There are NO spaces. Multiplication
+    binds tighter than addition and subtraction; `+` and `-` are left-associative
+    and have equal precedence. Parentheses override precedence in the usual way.
+    Numbers may have multiple digits. Return the integer result, which may be
+    negative because of subtraction.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert eval_parens("0") == 0
+    assert eval_parens("42") == 42
+    assert eval_parens("2+3*4") == 14
+    assert eval_parens("(2+3)*4") == 20
+    assert eval_parens("2*(3+4)") == 14
+    assert eval_parens("10-2-3") == 5
+    assert eval_parens("2*3-4*5") == -14
+    assert eval_parens("((1))") == 1
+    assert eval_parens("1+2*(3+4*5)") == 47
+    assert eval_parens("7-10") == -3
+    assert eval_parens("2*(2+2)*2") == 16
+    assert eval_parens("(1+2)*(3+4)") == 21
+    assert eval_parens("100-((10-5)*2)") == 90
+    assert eval_parens("3*3*3-1") == 26
+  mock_solution: |
+    def eval_parens(expr):
+        i = 0
+        n = len(expr)
+        def parse_expr():
+            nonlocal i
+            val = parse_term()
+            while i < n and expr[i] in "+-":
+                op = expr[i]
+                i += 1
+                r = parse_term()
+                val = val + r if op == "+" else val - r
+            return val
+        def parse_term():
+            nonlocal i
+            val = parse_factor()
+            while i < n and expr[i] == "*":
+                i += 1
+                val = val * parse_factor()
+            return val
+        def parse_factor():
+            nonlocal i
+            if expr[i] == "(":
+                i += 1
+                val = parse_expr()
+                i += 1
+                return val
+            j = i
+            while i < n and expr[i].isdigit():
+                i += 1
+            return int(expr[j:i])
+        return parse_expr()
+
+- id: coding-wildcard-match
+  domain: coding
+  grader: unit_test
+  entrypoint: wildcard_match
+  prompt: |
+    Write a Python function `wildcard_match(pattern, text)` that returns True if
+    `pattern` matches the ENTIRE string `text`, else False. In the pattern, `*`
+    matches any sequence of characters including the empty sequence, and `?` matches
+    exactly one character. Every other character matches only itself. The match must
+    cover the whole text (not just a prefix).
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert wildcard_match("", "") == True
+    assert wildcard_match("*", "") == True
+    assert wildcard_match("?", "") == False
+    assert wildcard_match("a*b", "aXXXb") == True
+    assert wildcard_match("a*b", "ab") == True
+    assert wildcard_match("a?c", "abc") == True
+    assert wildcard_match("a?c", "ac") == False
+    assert wildcard_match("*a", "ba") == True
+    assert wildcard_match("*a", "ab") == False
+    assert wildcard_match("a*b*c", "axbyc") == True
+    assert wildcard_match("*.*", "file.txt") == True
+    assert wildcard_match("**", "abc") == True
+    assert wildcard_match("abc", "abc") == True
+    assert wildcard_match("abc", "abd") == False
+    assert wildcard_match("?*?", "ab") == True
+    assert wildcard_match("?*?", "a") == False
+    assert wildcard_match("a*a*a", "aaaa") == True
+    assert wildcard_match("a*c", "ab") == False
+  mock_solution: |
+    def wildcard_match(pattern, text):
+        i = j = 0
+        star = -1
+        mark = 0
+        while i < len(text):
+            if j < len(pattern) and (pattern[j] == text[i] or pattern[j] == "?"):
+                i += 1
+                j += 1
+            elif j < len(pattern) and pattern[j] == "*":
+                star = j
+                mark = i
+                j += 1
+            elif star != -1:
+                j = star + 1
+                mark += 1
+                i = mark
+            else:
+                return False
+        while j < len(pattern) and pattern[j] == "*":
+            j += 1
+        return j == len(pattern)
+
+- id: coding-merge-spans
+  domain: coding
+  grader: unit_test
+  entrypoint: merge_spans
+  prompt: |
+    Write a Python function `merge_spans(spans)` that merges overlapping or touching
+    closed integer intervals. `spans` is a list of `(start, end)` tuples with
+    `start <= end`; the list is not necessarily sorted. Two intervals merge when they
+    overlap OR share an endpoint (for example `(1, 2)` and `(2, 3)` merge into
+    `(1, 3)`), but `(1, 2)` and `(3, 4)` do NOT merge. Return a new list of merged
+    `(start, end)` tuples sorted by start. An empty input returns an empty list.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert merge_spans([]) == []
+    assert merge_spans([(1, 3)]) == [(1, 3)]
+    assert merge_spans([(1, 3), (2, 4)]) == [(1, 4)]
+    assert merge_spans([(1, 2), (2, 3)]) == [(1, 3)]
+    assert merge_spans([(1, 2), (3, 4)]) == [(1, 2), (3, 4)]
+    assert merge_spans([(3, 4), (1, 2)]) == [(1, 2), (3, 4)]
+    assert merge_spans([(1, 10), (2, 3), (4, 5)]) == [(1, 10)]
+    assert merge_spans([(1, 4), (5, 6), (2, 7)]) == [(1, 7)]
+    assert merge_spans([(5, 5)]) == [(5, 5)]
+    assert merge_spans([(1, 1), (1, 1)]) == [(1, 1)]
+    assert merge_spans([(10, 12), (1, 3), (11, 20), (2, 2)]) == [(1, 3), (10, 20)]
+    assert merge_spans([(-5, -1), (-2, 0)]) == [(-5, 0)]
+  mock_solution: |
+    def merge_spans(spans):
+        if not spans:
+            return []
+        ss = sorted(spans)
+        res = [list(ss[0])]
+        for a, b in ss[1:]:
+            if a <= res[-1][1]:
+                if b > res[-1][1]:
+                    res[-1][1] = b
+            else:
+                res.append([a, b])
+        return [tuple(x) for x in res]
+
+- id: coding-column-number
+  domain: coding
+  grader: unit_test
+  entrypoint: column_number
+  prompt: |
+    Write a Python function `column_number(label)` that converts a spreadsheet-style
+    column label into its 1-based number. Labels use the bijective base-26 system:
+    `"A"` is 1, `"B"` is 2, ..., `"Z"` is 26, `"AA"` is 27, `"AZ"` is 52, `"BA"` is
+    53, `"ZZ"` is 702, `"AAA"` is 703, and so on. The label is a non-empty string of
+    uppercase letters. Return the integer.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert column_number("A") == 1
+    assert column_number("B") == 2
+    assert column_number("Z") == 26
+    assert column_number("AA") == 27
+    assert column_number("AZ") == 52
+    assert column_number("BA") == 53
+    assert column_number("ZZ") == 702
+    assert column_number("AAA") == 703
+    assert column_number("XFD") == 16384
+    assert column_number("AAZ") == 728
+    assert column_number("ZY") == 701
+  mock_solution: |
+    def column_number(label):
+        n = 0
+        for c in label:
+            n = n * 26 + (ord(c) - ord("A") + 1)
+        return n
+
+- id: coding-can-split-evenly
+  domain: coding
+  grader: unit_test
+  entrypoint: can_split_evenly
+  prompt: |
+    Write a Python function `can_split_evenly(xs)` that returns True if the list of
+    non-negative integers `xs` can be partitioned into two groups whose sums are
+    equal, otherwise False. Every element must go into exactly one group. The empty
+    list can be split (into two empty groups) and returns True.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert can_split_evenly([]) == True
+    assert can_split_evenly([2, 2]) == True
+    assert can_split_evenly([1, 2]) == False
+    assert can_split_evenly([1, 5, 11, 5]) == True
+    assert can_split_evenly([1, 2, 3, 4]) == True
+    assert can_split_evenly([3, 3, 3, 3]) == True
+    assert can_split_evenly([1, 1, 1]) == False
+    assert can_split_evenly([2, 2, 3, 5]) == False
+    assert can_split_evenly([10]) == False
+    assert can_split_evenly([0, 0]) == True
+    assert can_split_evenly([2, 3, 5]) == True
+    assert can_split_evenly([1, 2, 5]) == False
+    assert can_split_evenly([100, 100, 100, 100, 100, 100]) == True
+  mock_solution: |
+    def can_split_evenly(xs):
+        total = sum(xs)
+        if total % 2 != 0:
+            return False
+        target = total // 2
+        possible = {0}
+        for x in xs:
+            possible |= {p + x for p in possible if p + x <= target}
+        return target in possible
+
+- id: coding-unfold
+  domain: coding
+  grader: unit_test
+  entrypoint: unfold
+  prompt: |
+    Write a Python function `unfold(s)` that expands a compressed string. The string
+    is a sequence of items. An item is either a single literal character (never a
+    digit, `(`, or `)`) that stands for itself, or a group of the form
+    `<count>(<items>)` where `<count>` is a run of one or more decimal digits and
+    `<items>` is a possibly-empty nested sequence; the group expands to `<items>`
+    repeated `<count>` times. Groups may nest arbitrarily. For example `"3(ab)"`
+    expands to `"ababab"` and `"2(a3(b))"` expands to `"abbbabbb"`. The empty string
+    expands to the empty string. Assume the input is well-formed.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert unfold("") == ""
+    assert unfold("abc") == "abc"
+    assert unfold("3(ab)") == "ababab"
+    assert unfold("2(a3(b))") == "abbbabbb"
+    assert unfold("a2(b)c") == "abbc"
+    assert unfold("10(x)") == "x" * 10
+    assert unfold("2(2(a)2(b))") == "aabbaabb"
+    assert unfold("1(z)") == "z"
+    assert unfold("3()") == ""
+    assert unfold("2(ab)2(cd)") == "ababcdcd"
+    assert unfold("2(a2(b2(c)))") == "abccbccabccbcc"
+  mock_solution: |
+    def unfold(s):
+        i = 0
+        n = len(s)
+        def parse():
+            nonlocal i
+            out = []
+            while i < n and s[i] != ")":
+                c = s[i]
+                if c.isdigit():
+                    j = i
+                    while s[j].isdigit():
+                        j += 1
+                    count = int(s[i:j])
+                    i = j + 1
+                    inner = parse()
+                    i += 1
+                    out.append(inner * count)
+                else:
+                    out.append(c)
+                    i += 1
+            return "".join(out)
+        return parse()
+
+- id: coding-rebase
+  domain: coding
+  grader: unit_test
+  entrypoint: rebase
+  prompt: |
+    Write a Python function `rebase(s, from_base, to_base)` that converts the
+    non-negative integer represented by the string `s` (written in base `from_base`)
+    into its representation in base `to_base`. Both bases are between 2 and 36
+    inclusive. Digits above 9 use uppercase letters `A`-`Z` (A is 10, ..., Z is 35),
+    and the output must also use uppercase letters. The value zero is written `"0"`
+    with no leading zeros for any other value. Return the string.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert rebase("0", 10, 2) == "0"
+    assert rebase("101", 2, 10) == "5"
+    assert rebase("255", 10, 16) == "FF"
+    assert rebase("FF", 16, 2) == "11111111"
+    assert rebase("Z", 36, 10) == "35"
+    assert rebase("10", 2, 10) == "2"
+    assert rebase("7", 10, 2) == "111"
+    assert rebase("100", 16, 10) == "256"
+    assert rebase("11111111", 2, 16) == "FF"
+    assert rebase("1010", 2, 8) == "12"
+    assert rebase("0", 16, 36) == "0"
+    assert rebase("ZZ", 36, 10) == "1295"
+  mock_solution: |
+    def rebase(s, from_base, to_base):
+        digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        val = 0
+        for ch in s:
+            val = val * from_base + digits.index(ch)
+        if val == 0:
+            return "0"
+        out = []
+        while val:
+            out.append(digits[val % to_base])
+            val //= to_base
+        return "".join(reversed(out))
+
+- id: coding-longest-common-run
+  domain: coding
+  grader: unit_test
+  entrypoint: longest_common_run
+  prompt: |
+    Write a Python function `longest_common_run(a, b)` that returns the length of the
+    longest contiguous substring that appears in BOTH strings `a` and `b`. A
+    contiguous substring is a run of consecutive characters. If there is no common
+    character, return 0. Either string may be empty.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert longest_common_run("", "") == 0
+    assert longest_common_run("abc", "") == 0
+    assert longest_common_run("abc", "abc") == 3
+    assert longest_common_run("abcdef", "zbcdf") == 3
+    assert longest_common_run("abab", "baba") == 3
+    assert longest_common_run("xyz", "abc") == 0
+    assert longest_common_run("aaa", "aa") == 2
+    assert longest_common_run("banana", "ananas") == 5
+    assert longest_common_run("hello", "world") == 1
+    assert longest_common_run("abcxyz", "xyzabc") == 3
+    assert longest_common_run("aXbXc", "aYbYc") == 1
+  mock_solution: |
+    def longest_common_run(a, b):
+        best = 0
+        prev = [0] * (len(b) + 1)
+        for i in range(1, len(a) + 1):
+            cur = [0] * (len(b) + 1)
+            for j in range(1, len(b) + 1):
+                if a[i - 1] == b[j - 1]:
+                    cur[j] = prev[j - 1] + 1
+                    if cur[j] > best:
+                        best = cur[j]
+            prev = cur
+        return best
+
+- id: coding-schedule-tasks
+  domain: coding
+  grader: unit_test
+  entrypoint: schedule_tasks
+  prompt: |
+    Write a Python function `schedule_tasks(deps)` that produces a valid execution
+    order for tasks. `deps` is a dict mapping each task name (a string) to a list of
+    the task names that must run BEFORE it (its prerequisites). Every task appears as
+    a key, and every prerequisite is also a key. Return a list containing all tasks
+    in an order that respects the prerequisites. When more than one task is eligible
+    to run next, choose the one that is smallest in normal string ordering, so the
+    result is deterministic. If the prerequisites contain a cycle (no valid order
+    exists), return None. An empty dict returns an empty list.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert schedule_tasks({}) == []
+    assert schedule_tasks({"a": []}) == ["a"]
+    assert schedule_tasks({"a": [], "b": ["a"]}) == ["a", "b"]
+    assert schedule_tasks({"b": ["a"], "a": []}) == ["a", "b"]
+    assert schedule_tasks({"a": ["b"], "b": ["a"]}) is None
+    assert schedule_tasks({"a": [], "b": [], "c": ["a", "b"]}) == ["a", "b", "c"]
+    assert schedule_tasks({"c": [], "b": [], "a": []}) == ["a", "b", "c"]
+    assert schedule_tasks({"x": [], "a": ["x"], "b": ["x"]}) == ["x", "a", "b"]
+    assert schedule_tasks({"a": ["a"]}) is None
+    assert schedule_tasks({"a": [], "b": ["a"], "c": ["b"], "d": ["a"]}) == ["a", "b", "c", "d"]
+    assert schedule_tasks({"d": ["b", "c"], "c": ["a"], "b": ["a"], "a": []}) == ["a", "b", "c", "d"]
+  mock_solution: |
+    def schedule_tasks(deps):
+        indeg = {t: 0 for t in deps}
+        adj = {t: [] for t in deps}
+        for t, prereqs in deps.items():
+            for p in prereqs:
+                adj[p].append(t)
+                indeg[t] += 1
+        available = [t for t in deps if indeg[t] == 0]
+        order = []
+        while available:
+            available.sort()
+            t = available.pop(0)
+            order.append(t)
+            for nxt in adj[t]:
+                indeg[nxt] -= 1
+                if indeg[nxt] == 0:
+                    available.append(nxt)
+        return order if len(order) == len(deps) else None
+
+- id: coding-spiral-order
+  domain: coding
+  grader: unit_test
+  entrypoint: spiral_order
+  prompt: |
+    Write a Python function `spiral_order(grid)` that returns a flat list of the
+    elements of a rectangular grid (a list of equal-length rows) read in clockwise
+    spiral order starting at the top-left corner: first the top row left-to-right,
+    then the right column top-to-bottom, then the bottom row right-to-left, then the
+    left column bottom-to-top, spiralling inward until every element is visited. An
+    empty grid, or a grid whose rows are empty, returns an empty list. Do not mutate
+    the input.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert spiral_order([]) == []
+    assert spiral_order([[]]) == []
+    assert spiral_order([[1]]) == [1]
+    assert spiral_order([[1, 2, 3]]) == [1, 2, 3]
+    assert spiral_order([[1], [2], [3]]) == [1, 2, 3]
+    assert spiral_order([[1, 2], [3, 4]]) == [1, 2, 4, 3]
+    assert spiral_order([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [1, 2, 3, 6, 9, 8, 7, 4, 5]
+    assert spiral_order([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]) == [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
+    assert spiral_order([[1, 2], [3, 4], [5, 6]]) == [1, 2, 4, 6, 5, 3]
+    g = [[1, 2], [3, 4]]
+    _ = spiral_order(g)
+    assert g == [[1, 2], [3, 4]]
+  mock_solution: |
+    def spiral_order(grid):
+        if not grid or not grid[0]:
+            return []
+        res = []
+        top, bottom = 0, len(grid) - 1
+        left, right = 0, len(grid[0]) - 1
+        while top <= bottom and left <= right:
+            for c in range(left, right + 1):
+                res.append(grid[top][c])
+            top += 1
+            for r in range(top, bottom + 1):
+                res.append(grid[r][right])
+            right -= 1
+            if top <= bottom:
+                for c in range(right, left - 1, -1):
+                    res.append(grid[bottom][c])
+                bottom -= 1
+            if left <= right:
+                for r in range(bottom, top - 1, -1):
+                    res.append(grid[r][left])
+                left += 1
+        return res
+
+- id: coding-count-regions
+  domain: coding
+  grader: unit_test
+  entrypoint: count_regions
+  prompt: |
+    Write a Python function `count_regions(grid)` that counts the connected regions
+    of 1s in a rectangular grid. `grid` is a list of equal-length rows, each element
+    being the integer 0 or 1. Two cells are in the same region if both are 1 and they
+    are directly adjacent horizontally or vertically (NOT diagonally). Return the
+    number of distinct regions. An empty grid, or one whose rows are empty, returns 0.
+    Do not mutate the input.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert count_regions([]) == 0
+    assert count_regions([[0]]) == 0
+    assert count_regions([[1]]) == 1
+    assert count_regions([[1, 0], [0, 1]]) == 2
+    assert count_regions([[1, 1], [1, 1]]) == 1
+    assert count_regions([[1, 0, 1], [0, 0, 0], [1, 0, 1]]) == 4
+    assert count_regions([[1, 1, 0], [0, 1, 0], [0, 0, 1]]) == 2
+    assert count_regions([[0, 0], [0, 0]]) == 0
+    assert count_regions([[1, 1, 1], [0, 0, 1], [1, 1, 1]]) == 1
+    assert count_regions([[1, 0, 1, 0, 1]]) == 3
+    g = [[1, 1], [0, 1]]
+    _ = count_regions(g)
+    assert g == [[1, 1], [0, 1]]
+  mock_solution: |
+    def count_regions(grid):
+        if not grid or not grid[0]:
+            return 0
+        rows, cols = len(grid), len(grid[0])
+        seen = set()
+        count = 0
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 1 and (r, c) not in seen:
+                    count += 1
+                    stack = [(r, c)]
+                    seen.add((r, c))
+                    while stack:
+                        y, x = stack.pop()
+                        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                            ny, nx = y + dy, x + dx
+                            if 0 <= ny < rows and 0 <= nx < cols and grid[ny][nx] == 1 and (ny, nx) not in seen:
+                                seen.add((ny, nx))
+                                stack.append((ny, nx))
+        return count
+
+- id: coding-wrap-words
+  domain: coding
+  grader: unit_test
+  entrypoint: wrap_words
+  prompt: |
+    Write a Python function `wrap_words(text, width)` that performs greedy word
+    wrapping. Split `text` into words on runs of whitespace (ignore leading, trailing,
+    and repeated spaces). Then pack words into lines: put as many words as possible on
+    the current line so that the line length (words joined by single spaces) does not
+    exceed `width`; when the next word would not fit, start a new line. A word longer
+    than `width` still occupies its own line by itself (exceeding `width`). Return the
+    list of line strings. If there are no words, return an empty list. Assume
+    `width >= 1`.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert wrap_words("", 5) == []
+    assert wrap_words("   ", 5) == []
+    assert wrap_words("hello world", 11) == ["hello world"]
+    assert wrap_words("hello world", 5) == ["hello", "world"]
+    assert wrap_words("a b c", 5) == ["a b c"]
+    assert wrap_words("a b c", 3) == ["a b", "c"]
+    assert wrap_words("aaaaaa", 3) == ["aaaaaa"]
+    assert wrap_words("the quick brown fox", 9) == ["the quick", "brown fox"]
+    assert wrap_words("the quick brown fox", 10) == ["the quick", "brown fox"]
+    assert wrap_words("one two three four", 8) == ["one two", "three", "four"]
+    assert wrap_words("  spaced   out  words ", 100) == ["spaced out words"]
+    assert wrap_words("x y z", 1) == ["x", "y", "z"]
+  mock_solution: |
+    def wrap_words(text, width):
+        words = text.split()
+        if not words:
+            return []
+        lines = []
+        cur = words[0]
+        for w in words[1:]:
+            if len(cur) + 1 + len(w) <= width:
+                cur += " " + w
+            else:
+                lines.append(cur)
+                cur = w
+        lines.append(cur)
+        return lines
+
+- id: coding-compare-versions
+  domain: coding
+  grader: unit_test
+  entrypoint: compare_versions
+  prompt: |
+    Write a Python function `compare_versions(a, b)` that compares two dotted version
+    strings. Each version is one or more decimal segments separated by dots (for
+    example `"1.0.10"`). Compare segment by segment NUMERICALLY (so `"1.10"` is
+    greater than `"1.2"`, and leading zeros do not matter). If one version has fewer
+    segments, treat the missing trailing segments as 0 (so `"1.0"` equals `"1"`).
+    Return -1 if `a` is less than `b`, 1 if `a` is greater than `b`, and 0 if they
+    are equal.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert compare_versions("1", "1") == 0
+    assert compare_versions("1.0", "1") == 0
+    assert compare_versions("1.0.0", "1") == 0
+    assert compare_versions("1.0.1", "1") == 1
+    assert compare_versions("1.2", "1.10") == -1
+    assert compare_versions("1.10", "1.2") == 1
+    assert compare_versions("2.0", "10.0") == -1
+    assert compare_versions("1.01", "1.1") == 0
+    assert compare_versions("1.0.0", "1.0.1") == -1
+    assert compare_versions("0", "0.0") == 0
+    assert compare_versions("1.2.3", "1.2.3") == 0
+    assert compare_versions("1.2.3", "1.2") == 1
+    assert compare_versions("3.4.5", "3.4.5.0.0") == 0
+  mock_solution: |
+    def compare_versions(a, b):
+        pa = [int(x) for x in a.split(".")]
+        pb = [int(x) for x in b.split(".")]
+        n = max(len(pa), len(pb))
+        pa += [0] * (n - len(pa))
+        pb += [0] * (n - len(pb))
+        for x, y in zip(pa, pb):
+            if x < y:
+                return -1
+            if x > y:
+                return 1
+        return 0
+
+- id: coding-cap-occurrences
+  domain: coding
+  grader: unit_test
+  entrypoint: cap_occurrences
+  prompt: |
+    Write a Python function `cap_occurrences(xs, k)` that returns a NEW list in which
+    each distinct value appears at most `k` times, keeping the FIRST `k` occurrences
+    of each value and dropping any later ones, while preserving the original order of
+    the kept elements. `k` is a non-negative int; when `k` is 0 the result is empty.
+    Do not mutate the input.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert cap_occurrences([], 2) == []
+    assert cap_occurrences([1, 1, 1], 2) == [1, 1]
+    assert cap_occurrences([1, 2, 1, 2, 1], 1) == [1, 2]
+    assert cap_occurrences([1, 2, 3], 5) == [1, 2, 3]
+    assert cap_occurrences([1, 1, 1], 0) == []
+    assert cap_occurrences(["a", "a", "b", "a", "b"], 2) == ["a", "a", "b", "b"]
+    assert cap_occurrences([5, 5, 5, 5], 3) == [5, 5, 5]
+    assert cap_occurrences([1, 2, 1, 3, 2, 1], 2) == [1, 2, 1, 3, 2]
+    src = [7, 7, 7]
+    out = cap_occurrences(src, 1)
+    assert out == [7] and src == [7, 7, 7]
+  mock_solution: |
+    def cap_occurrences(xs, k):
+        counts = {}
+        out = []
+        for x in xs:
+            c = counts.get(x, 0)
+            if c < k:
+                out.append(x)
+                counts[x] = c + 1
+        return out
+
+- id: coding-eval-rpn
+  domain: coding
+  grader: unit_test
+  entrypoint: eval_rpn
+  prompt: |
+    Write a Python function `eval_rpn(tokens)` that evaluates an expression in Reverse
+    Polish (postfix) Notation. `tokens` is a list of strings; each token is either an
+    integer literal (which may be negative, e.g. `"-7"`) or one of the operators
+    `"+"`, `"-"`, `"*"`, `"/"`. For each operator, pop the two most recent operands
+    `a` (deeper) and `b` (on top) and apply `a op b`. Division is integer division
+    that TRUNCATES TOWARD ZERO (so `-7 / 2` is `-3`, not `-4`). Assume the input is a
+    valid expression and there is no division by zero. Return the final integer.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert eval_rpn(["3"]) == 3
+    assert eval_rpn(["2", "3", "+"]) == 5
+    assert eval_rpn(["2", "3", "-"]) == -1
+    assert eval_rpn(["5", "1", "2", "+", "4", "*", "+", "3", "-"]) == 14
+    assert eval_rpn(["4", "2", "/"]) == 2
+    assert eval_rpn(["7", "2", "/"]) == 3
+    assert eval_rpn(["-7", "2", "/"]) == -3
+    assert eval_rpn(["7", "-2", "/"]) == -3
+    assert eval_rpn(["-7", "-2", "/"]) == 3
+    assert eval_rpn(["3", "4", "*", "2", "-"]) == 10
+    assert eval_rpn(["10", "2", "-", "3", "*"]) == 24
+    assert eval_rpn(["-3", "-2", "*"]) == 6
+  mock_solution: |
+    def eval_rpn(tokens):
+        stack = []
+        ops = {"+", "-", "*", "/"}
+        for t in tokens:
+            if t in ops:
+                b = stack.pop()
+                a = stack.pop()
+                if t == "+":
+                    stack.append(a + b)
+                elif t == "-":
+                    stack.append(a - b)
+                elif t == "*":
+                    stack.append(a * b)
+                else:
+                    q = abs(a) // abs(b)
+                    if (a < 0) != (b < 0):
+                        q = -q
+                    stack.append(q)
+            else:
+                stack.append(int(t))
+        return stack[0]
+
+- id: coding-brackets-ok
+  domain: coding
+  grader: unit_test
+  entrypoint: brackets_ok
+  prompt: |
+    Write a Python function `brackets_ok(s)` that checks whether the brackets in `s`
+    are balanced and properly nested. The bracket types are `()`, `[]`, and `{}`; a
+    closer must match the most recent still-open bracket of the same type. However,
+    any bracket characters that appear inside a double-quoted section are ignored: a
+    `"` opens a quoted section and the next `"` closes it. Inside a quoted section a
+    backslash `\` escapes the following character, so `\"` does NOT close the quote.
+    Outside quotes a backslash is just an ordinary character. Return True if the
+    brackets (considering only those outside quotes) are balanced, else False. The
+    empty string returns True.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert brackets_ok("") == True
+    assert brackets_ok("()") == True
+    assert brackets_ok("([]{})") == True
+    assert brackets_ok("(]") == False
+    assert brackets_ok("(") == False
+    assert brackets_ok(")") == False
+    assert brackets_ok('("(")') == True
+    assert brackets_ok('["]"]') == True
+    assert brackets_ok('a(b[c]d)e') == True
+    assert brackets_ok('{[(])}') == False
+    assert brackets_ok('"([{"') == True
+    assert brackets_ok('x")"y(') == False
+    assert brackets_ok('a"\\"("') == True
+    assert brackets_ok('\\(') == False
+  mock_solution: |
+    def brackets_ok(s):
+        pairs = {")": "(", "]": "[", "}": "{"}
+        openers = set("([{")
+        stack = []
+        in_quote = False
+        escaped = False
+        for c in s:
+            if in_quote:
+                if escaped:
+                    escaped = False
+                elif c == "\\":
+                    escaped = True
+                elif c == '"':
+                    in_quote = False
+                continue
+            if c == '"':
+                in_quote = True
+            elif c in openers:
+                stack.append(c)
+            elif c in pairs:
+                if not stack or stack.pop() != pairs[c]:
+                    return False
+        return not stack
+
+- id: coding-longest-rising
+  domain: coding
+  grader: unit_test
+  entrypoint: longest_rising
+  prompt: |
+    Write a Python function `longest_rising(xs)` that returns the length of the
+    longest STRICTLY increasing subsequence of the integer list `xs`. A subsequence
+    keeps the original order but need not be contiguous, and every element in it must
+    be strictly greater than the previous one (equal values cannot both be kept). The
+    empty list returns 0.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert longest_rising([]) == 0
+    assert longest_rising([5]) == 1
+    assert longest_rising([1, 2, 3]) == 3
+    assert longest_rising([3, 2, 1]) == 1
+    assert longest_rising([1, 3, 2, 4]) == 3
+    assert longest_rising([10, 9, 2, 5, 3, 7, 101, 18]) == 4
+    assert longest_rising([5, 5, 5]) == 1
+    assert longest_rising([1, 2, 2, 3]) == 3
+    assert longest_rising([-1, -2, 0, 5]) == 3
+    assert longest_rising([4, 10, 4, 3, 8, 9]) == 3
+    assert longest_rising([2, 2, 2, 1, 3]) == 2
+  mock_solution: |
+    def longest_rising(xs):
+        if not xs:
+            return 0
+        dp = [1] * len(xs)
+        for i in range(len(xs)):
+            for j in range(i):
+                if xs[j] < xs[i] and dp[j] + 1 > dp[i]:
+                    dp[i] = dp[j] + 1
+        return max(dp)
+
+- id: coding-min-path-sum
+  domain: coding
+  grader: unit_test
+  entrypoint: min_path_sum
+  prompt: |
+    Write a Python function `min_path_sum(grid)` that finds the minimum possible sum
+    of values along a path from the top-left cell to the bottom-right cell of a
+    rectangular grid of non-negative integers. From any cell you may move only one
+    step right or one step down. The sum includes both the starting and ending cells.
+    `grid` is a non-empty list of equal-length non-empty rows. Return the minimum sum
+    as an integer.
+    Reply with ONLY the function inside a single Python code block.
+  test: |
+    assert min_path_sum([[5]]) == 5
+    assert min_path_sum([[1, 2], [3, 4]]) == 7
+    assert min_path_sum([[1, 3, 1], [1, 5, 1], [4, 2, 1]]) == 7
+    assert min_path_sum([[1, 2, 3]]) == 6
+    assert min_path_sum([[1], [2], [3]]) == 6
+    assert min_path_sum([[1, 2, 3], [4, 5, 6]]) == 12
+    assert min_path_sum([[0, 0], [0, 0]]) == 0
+    assert min_path_sum([[1, 99, 1, 1], [1, 99, 1, 1], [1, 1, 1, 1]]) == 6
+    assert min_path_sum([[3, 1, 1], [1, 5, 1], [4, 2, 1]]) == 7
+  mock_solution: |
+    def min_path_sum(grid):
+        rows, cols = len(grid), len(grid[0])
+        dp = [[0] * cols for _ in range(rows)]
+        for r in range(rows):
+            for c in range(cols):
+                if r == 0 and c == 0:
+                    best = 0
+                else:
+                    cands = []
+                    if r > 0:
+                        cands.append(dp[r - 1][c])
+                    if c > 0:
+                        cands.append(dp[r][c - 1])
+                    best = min(cands)
+                dp[r][c] = best + grid[r][c]
+        return dp[rows - 1][cols - 1]
