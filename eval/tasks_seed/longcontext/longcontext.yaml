@@ -1,0 +1,60 @@
+# Long-context tasks embed a passage in the prompt and ask for a checkable fact,
+# so grading stays objective. Replace these short stand-ins with genuinely long
+# documents (several thousand tokens) before any real run; length is the point of
+# the domain and these seeds are deliberately short so the rig runs cheaply.
+
+- id: longcontext-invoice-total
+  domain: longcontext
+  grader: numeric
+  answer: "451"
+  prompt: |
+    Read the record and answer the question at the end.
+
+    INVOICE 2231. Line items: 3 units of part A at 45 each; 2 units of part B at
+    88 each; 1 unit of part C at 140. A flat shipping fee of 0 applies. A prior
+    credit of 4 was NOT applied to this invoice. Payment terms net 30.
+
+    Question: what is the total of the line items only, in dollars? End with the
+    number on its own line.
+
+- id: longcontext-policy-effective-date
+  domain: longcontext
+  grader: exact
+  answer: "March 3"
+  prompt: |
+    Read the memo and answer the question at the end.
+
+    MEMO. The revised remote-work policy was drafted on February 10, circulated
+    for comment on February 24, approved by the board on February 28, and takes
+    effect on March 3. An earlier draft had proposed February 15 but it was
+    superseded.
+
+    Question: on what date does the revised policy take effect? Answer with just
+    the month and day.
+
+- id: longcontext-who-approved
+  domain: longcontext
+  grader: exact
+  answer: "the board"
+  prompt: |
+    Read the memo and answer the question at the end.
+
+    MEMO. The revised remote-work policy was drafted by the HR lead, reviewed by
+    legal, recommended by the operations committee, and formally approved by the
+    board at its February 28 meeting.
+
+    Question: which body formally approved the policy? Answer in three words or
+    fewer.
+
+- id: longcontext-earliest-event
+  domain: longcontext
+  grader: exact
+  answer: "drafted"
+  prompt: |
+    Read the memo and answer the question at the end.
+
+    MEMO. Timeline: the plan was piloted in Q2, drafted in Q1, approved in Q3, and
+    launched in Q4.
+
+    Question: which single event happened earliest in the year? Answer with one
+    word from the memo.

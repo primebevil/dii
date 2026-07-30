@@ -1,0 +1,25 @@
+# CODING-FOCUSED run. Point the rig at tasks/coding only:
+#   python3 run.py --config config.coding.yaml --tasks tasks/coding --out coding_results.json
+# Fully objective (unit tests). The judge is used ONLY to pick best-of-N among code
+# candidates (you can't majority-vote on code, and you must not peek at the tests).
+# The rig freezes the strongest model on the dev split as the baseline and names it.
+
+node_url: "http://100.118.77.40:8090"   # atlas
+token: ""
+
+pool:
+  - "gemma3:12b"          # Google
+  - "llama3.1:8b"         # Meta
+  - "qwen3:30b"           # Qwen (reasoning)
+  - "qwen2.5-coder:14b"   # code specialist
+
+judge_model: "mistral-small:24b"   # out of pool; only ranks code candidates for S2/S3
+judge_max_tokens: 1024
+
+samples: 0                # 0 = len(pool) = 4
+temperature: 0.7
+eval_fraction: 0.5
+split_seed: 1
+noise_repeats: 3
+max_tokens: 2048          # room for a reasoning model to think AND emit full code
+margin: 0.05

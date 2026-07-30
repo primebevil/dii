@@ -1,0 +1,547 @@
+# Long-context HARD tasks. Each embeds an ORIGINAL synthetic document (800-1500
+# words) with the needed facts buried in the middle/end, then asks a question
+# that requires synthesizing 2+ places in the document. All names, numbers, and
+# facts are invented so answers come only from reading the document, not priors.
+
+- id: longcontext-meridian-q3-domestic-revenue
+  domain: longcontext
+  grader: numeric
+  answer: "21"
+  prompt: |
+    Read the following quarterly report carefully, then answer the question at the very end.
+
+    MERIDIAN FABRICATION WORKS — Q3 FY2027 OPERATING REVIEW (INTERNAL)
+
+    Prepared by the Office of the Chief Financial Officer, Dalia Vroom, and circulated to the operating committee on the seventeenth of the quarter's final month. This review consolidates the performance of Meridian's four revenue-bearing regions and its two non-operating cost centers. It supersedes the preliminary flash estimate distributed three weeks earlier, which had understated freight accruals in two regions and is no longer to be relied upon for any planning purpose.
+
+    Meridian organizes its commercial activity into three domestic regions — Northgate, Vale, and Copperline — and a single overseas region, Tashek, which is reported separately for tax and hedging reasons and is never combined with the domestic figures in board-facing summaries. Analysts frequently confuse the domestic subtotal with the company-wide total, and this review is careful to keep them distinct.
+
+    A note on definitions before the figures. Throughout this document, "gross revenue" means invoiced amounts before returns, allowances, and intercompany eliminations, whereas "net revenue" means the figure after all three adjustments. Meridian's public disclosures and all internal region comparisons use net revenue. Gross figures appear here only to explain variances and should not be summed.
+
+    Northgate, historically the company's anchor region, posted gross revenue of 9.6 million dollars in the quarter. After returns of 0.7 million, allowances of 0.3 million, and intercompany eliminations of 0.2 million, Northgate's net revenue settled at 8.4 million dollars. This was slightly below the region's own plan of 8.9 million, attributed by the regional manager to a delayed rail contract that slipped into the following quarter.
+
+    Vale, the company's newest domestic region, continued its steady climb. Vale's gross revenue reached 7.5 million dollars. Its adjustments were lighter than Northgate's — returns of 0.4 million, allowances of 0.2 million, and eliminations of 0.2 million — leaving Vale with net revenue of 6.7 million dollars. Vale carried no plan variance of note and is expected to overtake Copperline within two quarters if current trends hold.
+
+    Copperline had a more complicated quarter. A single large customer disputed an invoice, which inflated allowances. Copperline's gross revenue was 7.1 million dollars, but after returns of 0.5 million, an unusually high allowance charge of 0.5 million, and eliminations of 0.2 million, its net revenue came to 5.9 million dollars. The dispute has since been resolved and the allowance is expected to partially reverse next quarter.
+
+    Tashek, the overseas region, is reported in the company's functional currency after hedging. On that basis Tashek delivered net revenue of 4.1 million dollars, its strongest result in six quarters, driven by a favorable movement in the currency corridor and a one-time equipment resale. As a reminder, Tashek is excluded from the domestic regional subtotal and appears in company-wide totals only.
+
+    The two non-operating cost centers — Corporate Shared Services and the Legacy Warranty Pool — generated no external revenue and are therefore omitted from all revenue subtotals. Corporate Shared Services absorbed 2.2 million dollars of cost in the quarter; the Legacy Warranty Pool absorbed 0.6 million dollars. These figures matter for margin analysis but never enter any revenue line.
+
+    Looking ahead, management expects the Northgate rail contract to close early next quarter, which should lift Northgate's net revenue back above plan. Vale's momentum is expected to continue. Copperline's allowance reversal, if it materializes as anticipated, would provide roughly 0.3 million dollars of tailwind. Tashek's outlook is deliberately conservative given currency uncertainty, and no repeat of the one-time equipment resale is assumed.
+
+    Margin commentary, provided for completeness and not to be confused with the revenue figures above, is as follows. Gross margin at the company level compressed by roughly one and a half points versus the prior quarter, driven mostly by the Copperline allowance charge and by input-cost inflation in Northgate's rail-adjacent product family. Vale's margin expanded on volume, and Tashek's reported margin benefited from the currency movement. None of these margin observations alter any revenue figure; they are offered so the committee does not misattribute a margin change to a revenue change, an error that appeared in a prior quarter's discussion.
+
+    A reconciliation aid. Readers assembling their own totals are reminded of three rules that this office applies without exception. First, only net revenue figures are ever summed; gross figures are diagnostic. Second, the domestic subtotal comprises exactly Northgate, Vale, and Copperline, and nothing else. Third, cost centers and the overseas region never enter the domestic subtotal, though the overseas region does enter the company-wide total. A total that mixes these categories is, by definition, wrong under this office's conventions, and any such total should be returned for correction rather than acted upon.
+
+    The operating committee is asked to review these figures and to note in particular the distinction between the domestic regional subtotal and the company-wide total, a distinction that has caused reporting errors in prior quarters. Final audited figures will follow in the statutory pack, and any discrepancy between this review and that pack should be resolved in favor of the audited pack once it is issued.
+
+    QUESTION: Using net revenue only, what is the combined Q3 net revenue of Meridian's three DOMESTIC regions (Northgate, Vale, and Copperline), expressed in millions of dollars? Do not include the overseas region or any cost center. Show no work in your final line — end your response with just the number (in millions) on its own line.
+  mock_solution: |
+    "Northgate's net revenue settled at 8.4 million dollars."
+    "leaving Vale with net revenue of 6.7 million dollars."
+    "its net revenue came to 5.9 million dollars." (Copperline)
+    Tashek (4.1M) is overseas and explicitly excluded from the domestic subtotal.
+    Cost centers earn no revenue.
+    8.4 + 6.7 + 5.9 = 21.0 million.
+
+- id: longcontext-veltris-trial-completers
+  domain: longcontext
+  grader: numeric
+  answer: "332"
+  prompt: |
+    Read the following research-study abstract and methods note, then answer the question at the very end.
+
+    THE VELTRIS-9 STUDY: A THREE-ARM EVALUATION OF A SYNTHETIC ENZYME MODULATOR ON GRIP-ENDURANCE IN ADULTS
+
+    Registered under protocol number KX-4471. Principal investigator: Dr. Ansel Broome, Kestrel Applied Physiology Institute. This abstract summarizes enrollment, retention, and primary-endpoint results. All quantities are reported as prespecified in the statistical analysis plan, which was locked before the blind was broken.
+
+    Background. Veltris-9 is an investigational enzyme modulator hypothesized to extend sustained grip endurance by delaying local metabolic fatigue. Prior first-in-human work established tolerability but was not powered for efficacy. The present study was designed as a three-arm, parallel-group, double-blind comparison against both a low-dose active comparator and an inert placebo.
+
+    Arms and enrollment. Participants were randomized in a 4:3:4 ratio across three arms. Arm A received Veltris-9 at the target dose. Arm B received the low-dose active comparator. Arm C received placebo. Randomization was stratified by baseline grip strength and by site. Enrollment proceeded across four sites over eleven weeks and closed once the prespecified target was reached.
+
+    Arm A enrolled 128 participants. Over the twelve-week treatment period, 11 participants withdrew: 6 for personal reasons unrelated to the study drug, 3 for protocol-defined adverse events, and 2 who were lost to follow-up after relocating. The remaining participants in Arm A completed all scheduled visits and contributed to the primary analysis.
+
+    Arm B enrolled 96 participants. Retention in Arm B was the highest of the three arms; only 7 participants withdrew, comprising 4 for personal reasons, 2 for adverse events, and 1 lost to follow-up. The investigators attributed the strong retention in part to the shorter clinic visits required by the comparator schedule.
+
+    Arm C, the placebo arm, enrolled 141 participants — the largest arm by design because of anticipated higher dropout in an unblinded-expectation-of-no-benefit scenario. In the event, 15 participants withdrew from Arm C: 9 for personal reasons, 1 for an adverse event, and 5 lost to follow-up. As with the other arms, only participants who completed all scheduled visits were included in the primary analysis.
+
+    A methodological note on the analysis population. The statistical analysis plan defined the primary analysis population as "completers" — that is, every randomized participant who completed all scheduled visits, with no imputation for withdrawals. A separate sensitivity analysis used a modified intention-to-treat population that retained all randomized participants and imputed missing endpoints by last-observation-carried-forward; that secondary population is not the subject of this abstract and its counts differ. Readers comparing this study to others should be careful to note that the headline efficacy results below are drawn from the completer population, not the randomized population.
+
+    Primary endpoint. The primary endpoint was change from baseline in seconds of sustained grip at sixty percent of maximal voluntary contraction, measured at week twelve. Arm A completers showed a mean improvement of 41.6 seconds; Arm B completers, 18.9 seconds; Arm C completers, 6.2 seconds. The difference between Arm A and Arm C was statistically significant at the prespecified threshold; the difference between Arm B and Arm C was not.
+
+    Safety. No serious adverse events were judged related to Veltris-9. The adverse events prompting withdrawal were, in the investigators' assessment, consistent with the background rate in this population and were distributed across arms without a discernible dose relationship.
+
+    Limitations. The study was single-country and its participants skewed younger than the eventual target population. The eleven-week enrollment window may have introduced seasonal effects on baseline activity. The completer-only primary analysis, while prespecified, is vulnerable to attrition bias, which the sensitivity analysis was designed to probe.
+
+    Blinding and randomization integrity. The blind was maintained through database lock, and an independent statistician confirmed that the randomization sequence had not been compromised at any site. Site-level enrollment was monitored weekly, and no site was permitted to exceed its allocation cap, which prevented any single site from dominating a given arm. A protocol amendment early in the study clarified the definition of a "scheduled visit" to resolve ambiguity about an optional interim assessment; the amendment did not change any arm's target enrollment and did not retroactively reclassify any withdrawal.
+
+    Reconciliation of counts. For the avoidance of doubt, the completer count for each arm equals that arm's enrolled count minus its withdrawals, and the trial-wide completer count is the sum of the three arm-level completer counts. Withdrawals include, for each arm, every category enumerated above — personal reasons, adverse events, and losses to follow-up — with no other withdrawal category present in this study. The abstract deliberately reports the withdrawal breakdown so that reviewers can reconstruct the completer counts independently and confirm that no participant was counted in more than one category.
+
+    Secondary endpoints, reported briefly, included self-rated fatigue on a standard scale and a timed sit-to-stand test; both trended in the same direction as the primary endpoint but were not formally powered and are reported as supportive only. Adherence to the assigned regimen, measured by returned-capsule counts, exceeded ninety percent in each arm among completers.
+
+    Conclusion. Veltris-9 at the target dose produced a clinically meaningful and statistically significant improvement in grip endurance relative to placebo among study completers, while the low-dose comparator did not separate from placebo. A larger, longer, multi-country confirmatory trial is planned.
+
+    QUESTION: According to the prespecified primary analysis population (completers = enrolled minus withdrawals), how many participants COMPLETED the study across all three arms combined? End your response with just the number on its own line.
+  mock_solution: |
+    Arm A: enrolled 128, withdrew 11 -> 117 completers.
+    Arm B: enrolled 96, withdrew 7 -> 89 completers.
+    Arm C: enrolled 141, withdrew 15 -> 126 completers.
+    117 + 89 + 126 = 332.
+
+- id: longcontext-harborline-largest-membership-drop
+  domain: longcontext
+  grader: exact
+  answer: "Q4"
+  prompt: |
+    Read the following meeting minutes, then answer the question at the very end.
+
+    HARBORLINE MUTUAL COOPERATIVE — MINUTES OF THE ANNUAL MEMBERSHIP REVIEW
+
+    Present: the seven-member stewardship council, the membership registrar, and two guest auditors. Chair: Councilor Petra Yaw. These minutes record the council's review of membership counts across the four quarters of the review year, along with related decisions. Membership figures below are the registrar's certified counts as of the last business day of each quarter.
+
+    Opening remarks. The chair reminded the council that the cooperative's bylaws require a formal review of any quarter in which membership declines by more than three hundred, and that the purpose of this session is both to certify the annual figures and to determine whether any such review is triggered. The registrar confirmed that all figures had been reconciled against the dues ledger.
+
+    First quarter. The registrar reported that the cooperative began the review year with 4,200 members. This figure includes the 96 members reinstated during the winter amnesty and excludes 18 applications still pending verification at quarter's end. The council accepted the first-quarter count of 4,200 without amendment.
+
+    Second quarter. Membership at the close of the second quarter stood at 3,980. The registrar noted that this reflected the expiry of a block of introductory memberships sold two years earlier, partially offset by 140 new joins during the spring drive. The chair observed that the quarter-over-quarter movement, while negative, did not by itself trigger the bylaw review, and the council concurred.
+
+    Third quarter. The third quarter saw a rebound. Certified membership at the close of the third quarter was 4,310, the highest point of the year. The registrar attributed the increase to a successful summer festival membership booth and to a corporate affiliation agreement that brought in a cohort of new members mid-quarter. The council noted the recovery with satisfaction and moved on.
+
+    Fourth quarter. The fourth-quarter count told a different story. Certified membership at year-end was 3,760. The registrar explained that the corporate affiliation agreement recognized in the third quarter had lapsed after the affiliated employer restructured, that the usual autumn renewal cycle underperformed, and that a data-cleanup exercise removed a number of duplicate records that had inflated prior counts by a small amount. The chair asked the registrar to state, for the record, the size of the quarter-over-quarter movement into the fourth quarter, and the registrar confirmed it was the largest single-quarter decline of the year.
+
+    Bylaw-trigger determination. Having reviewed all four certified counts, the council turned to the question of whether the mandatory bylaw review was triggered in any quarter. The registrar walked through each quarter-over-quarter change in turn. The council determined that exactly one quarter's decline exceeded the three-hundred-member threshold set in the bylaws, and that this decline occurred at the close of the year rather than earlier. Accordingly, the council voted to open the mandatory review for that quarter and to defer its substantive findings to a special session.
+
+    Action items. The registrar was directed to prepare a member-retention analysis for the triggered quarter. The treasurer was asked to model the dues impact of the year-end figure. The communications lead was asked to draft a member note that reports the annual figures transparently without alarm. The chair scheduled the special review session for early in the new year.
+
+    Historical context. The registrar offered brief historical context so the council could judge whether the year's movements were unusual. In the prior review year, the cooperative had ended each quarter within a narrow band, never moving by more than one hundred fifty members in either direction, so the current year's swings were larger than the recent norm. The registrar cautioned, however, that the prior year had also included an unusually stable membership base because of a multi-year corporate agreement that has since been the very agreement that lapsed in the fourth quarter under review. In other words, part of the current year's volatility is the unwinding of a stability that was itself somewhat artificial.
+
+    Method note on comparing quarters. The chair asked the registrar to state plainly how the council should compare quarters when deciding which decline was largest. The registrar explained that each quarter should be compared only to the immediately preceding quarter, using the certified end-of-quarter counts, and that the magnitude of a decline is simply the drop from the previous quarter's certified count to the current quarter's certified count. Increases are not declines and are set to zero for the purpose of the comparison. The registrar noted that a quarter can only be evaluated against the one before it, so the first quarter, having no predecessor within the review year, is not itself a candidate for a within-year decline.
+
+    Treasurer's remark. The treasurer added that the dues impact of a decline depends not only on its size but on the mix of membership tiers lost, and that a small decline concentrated in premium tiers could matter more financially than a larger decline in basic tiers. The council acknowledged this but agreed that, for the bylaw-trigger question specifically, only the headcount movement matters, not its financial weight.
+
+    Other business. A guest auditor raised a question about the timing of the duplicate-record cleanup and whether it should be restated across prior quarters; the council decided to leave prior certified counts unchanged and to footnote the cleanup instead. There being no further business, the meeting adjourned.
+
+    QUESTION: Considering the certified end-of-quarter membership counts, in which quarter did the cooperative record its LARGEST decline relative to the immediately preceding quarter? Answer with just the quarter label (for example, Q1, Q2, Q3, or Q4) on its own line.
+  mock_solution: |
+    Q1: 4200. Q2: 3980 (decline of 220 from Q1).
+    Q3: 4310 (an increase from Q2).
+    Q4: 3760 (decline of 550 from Q3).
+    Declines: Q2 = 220, Q4 = 550. Q3 rose. Largest decline is at Q4 (550).
+    Text also states Q4 was "the largest single-quarter decline of the year."
+
+- id: longcontext-nimbus-shipped-fixes
+  domain: longcontext
+  grader: numeric
+  answer: "21"
+  prompt: |
+    Read the following product changelog, then answer the question at the very end.
+
+    NIMBUS RENDERING ENGINE — CONSOLIDATED RELEASE NOTES (MAINTENANCE BRANCH 2.x → 3.x)
+
+    This document consolidates the release notes for the maintenance line of the Nimbus rendering engine. Each entry lists the version, its status, and a bug-fix count. Please read the status of each release carefully: a release marked YANKED was published and then withdrawn because of a regression, and its changes were re-delivered in a later shipped release. Yanked releases must not be counted when tallying delivered fixes, because doing so would double-count fixes that were re-shipped.
+
+    Version 2.8 — SHIPPED. This release closed 7 bug fixes. Highlights included a correction to the tile-cache eviction order that had caused occasional flicker on wide viewports, a fix to the color-space conversion for a rarely used profile, and five smaller corrections to text-shaping edge cases. Version 2.8 was in general availability for the full support window and remains supported.
+
+    Version 2.9 — YANKED. This release attempted to deliver 5 bug fixes but was withdrawn four days after publication when it was discovered that the changes introduced a severe memory regression under a common animation workload. Because the release was yanked, all 5 of its intended fixes were carried forward and re-delivered in Version 3.0. The 5 fixes attributed to 2.9 therefore also appear inside the 3.0 total described below and must not be counted twice.
+
+    Version 3.0 — SHIPPED. This was the branch-transition release and the largest of the set, closing 11 bug fixes. Of these 11, five were the fixes originally intended for the yanked 2.9 release, now delivered cleanly without the memory regression; the other six were new. Version 3.0 also introduced a new public API surface, but API additions are tracked separately and are not bug fixes. Version 3.0 is the current recommended release for users on the maintenance branch.
+
+    Version 3.1 — SHIPPED. This point release closed 3 bug fixes, all of them small: two related to subpixel positioning at fractional zoom levels, and one that addressed an off-by-one error in glyph atlas packing. No features were added in 3.1.
+
+    A note on counting. Some downstream dashboards have historically summed every number that appears in these notes, including the yanked release, and have therefore reported an inflated fix count. The correct methodology, per the release-engineering handbook, is to count fixes only from releases whose status is SHIPPED, since yanked releases either delivered nothing to users or had their fixes re-shipped elsewhere. The re-shipped fixes are already included in the shipped total of the release that superseded the yanked one.
+
+    Support policy. Versions 2.8, 3.0, and 3.1 are all currently supported. Version 2.9, being yanked, was never eligible for support. Users still running 2.9 in any environment are urged to upgrade immediately to 3.0 or later because of the known memory regression.
+
+    Worked example of the correct tally. Suppose an engineer opens this document and wants the delivered-fix count. They would first exclude Version 2.9 entirely, because its status is YANKED and its fixes were re-shipped inside 3.0. They would then add the fix counts of the three SHIPPED releases. They would deliberately NOT add the yanked release's number, and they would NOT try to subtract the five re-shipped fixes from 3.0, because those five are legitimately part of what 3.0 delivered to users — 3.0's total already represents real fixes that reached users, whether or not some had been attempted earlier. The methodology is: include SHIPPED totals as stated; exclude YANKED entirely; do not adjust SHIPPED totals for re-shipped content.
+
+    Common mistakes. Three mistakes recur in downstream tooling. The first is summing every number in the document, including the yanked release, which over-counts. The second is, having correctly excluded the yanked release, then also subtracting the re-shipped fixes from 3.0, which under-counts by removing fixes that genuinely shipped. The third is counting API additions as bug fixes; API additions are tracked in a separate register and never appear in a fix tally. The correct approach avoids all three: take the SHIPPED releases at face value, drop the yanked one, and leave the SHIPPED totals unadjusted.
+
+    Historical note. Earlier maintenance lines used a different notation in which yanked releases were omitted from the document entirely rather than listed with a status. The current practice of listing yanked releases explicitly, with their intended fix counts shown but flagged, was adopted precisely so that the re-ship relationship could be documented; it was not adopted to invite those counts into the tally.
+
+    Forward look. A 3.2 release is in development and is expected to close several additional fixes, but its notes are not yet finalized and are out of scope for this consolidated document. Any tally computed from this document should reflect only the versions described above.
+
+    Status legend, restated. To remove any doubt about which releases count, the status of each release described here is restated once more: Version 2.8 is SHIPPED; Version 2.9 is YANKED; Version 3.0 is SHIPPED; Version 3.1 is SHIPPED. Three of the four releases are SHIPPED and one is YANKED. The delivered-fix tally draws from the three SHIPPED releases only. Anyone reproducing the tally should list the SHIPPED releases, read off their fix counts as stated in each release's entry, add those counts together, and report the sum, having first confirmed that the yanked release has been left out.
+
+    QUESTION: Following the document's own stated counting methodology, how many bug fixes were delivered to users across all SHIPPED releases described here (excluding the yanked release to avoid double-counting)? End your response with just the number on its own line.
+  mock_solution: |
+    SHIPPED releases: 2.8 = 7, 3.0 = 11, 3.1 = 3. 2.9 is YANKED (excluded).
+    7 + 11 + 3 = 21.
+    (The 2.9 fixes were re-shipped inside 3.0's 11, so counting 2.9 separately would double-count.)
+
+- id: longcontext-orlan-retention-months
+  domain: longcontext
+  grader: numeric
+  answer: "33"
+  prompt: |
+    Read the following data-retention policy, then answer the question at the very end.
+
+    ORLAN TRUST SERVICES — RECORDS RETENTION AND DISPOSAL STANDARD (VERSION 4)
+
+    Section 1. Purpose and scope. This standard governs how long Orlan Trust Services retains categories of records and when they must be disposed of. It applies to all business units and supersedes Version 3 in its entirety. Where a specific contractual or statutory obligation requires a longer period, that obligation controls; this standard sets the default floors and the internal maximums.
+
+    Section 2. Definitions. A "customer account record" is any document or data element created in the ordinary course of maintaining a customer's account. A "disputed account" is one for which a formal complaint has been logged and not yet resolved. An "audit log" is a system-generated record of access and change events; audit logs are governed separately from customer account records and are never merged with them for retention purposes.
+
+    Section 3. Standard retention for customer account records. The default retention period for a customer account record is 24 months, measured from the date the account is closed. During this period the records are held in active storage for the first 6 months and in cold storage thereafter, but the storage tier does not change the retention clock. At the end of the standard period, records are queued for disposal unless an exception in Section 4 applies.
+
+    Section 4. Extension for disputed accounts. When an account is classified as disputed at any point before its standard retention period expires, the retention period for that account's customer account records is extended. Under Section 4.2, the extension adds 9 months beyond the standard 24-month period, measured from the same account-closure date. This extension exists so that records remain available throughout the typical complaint-resolution timeline. The extension does not stack with itself: an account that is disputed, resolved, and disputed again receives only a single 9-month extension, not two.
+
+    Section 5. Audit logs. Audit logs are retained for 36 months regardless of the status of any related account, because they serve an independent security and compliance function. The audit-log period is not added to, and does not add to, the customer-account-record period; the two clocks run in parallel and are reported separately. Personnel calculating the retention of a disputed account's customer records must not fold the audit-log period into that calculation.
+
+    Section 6. Legal holds. A legal hold, when issued by the Office of the General Counsel, suspends all disposal for the records named in the hold for as long as the hold remains in force, without limit. A legal hold overrides every period in this standard, including the disputed-account extension and the audit-log period. Legal holds are rare and are logged in the hold register.
+
+    Section 7. Disposal procedure. When a retention period expires and no hold or extension applies, records are disposed of using the approved cryptographic-erasure procedure. Disposal is performed in monthly batches and is certified by the records officer.
+
+    Section 8. Worked reminder. Consider a closed account with no legal hold. If the account is never disputed, its customer account records are retained for the standard 24 months and then disposed of. If the account is disputed before that period expires, the disputed-account extension applies on top of the standard period. The audit logs for that same account continue on their own separate 36-month clock and are neither shortened nor lengthened by the account's disputed status.
+
+    Section 9. Interaction of periods. This section exists because personnel have historically confused which periods add together and which run in parallel. There are three distinct clocks that may apply to a single account: the customer-account-record clock, which is 24 months by default and 24 plus 9 for a disputed account; the audit-log clock, which is a fixed 36 months; and, if issued, a legal hold, which suspends disposal indefinitely. The customer-account-record clock and the audit-log clock run in parallel and are never summed with each other. The disputed-account extension is the only quantity that is added to the customer-account-record clock, and it is added only once. Therefore, absent a legal hold, the customer-account-record retention for a disputed account is exactly the standard period plus the single extension, and nothing else is folded in.
+
+    Section 10. Examples of incorrect calculations, provided as a caution. It would be incorrect to compute a disputed account's customer-record retention as the standard period plus the extension plus the audit-log period, because the audit-log period belongs to a different clock. It would also be incorrect to apply the extension twice for an account disputed on two separate occasions. And it would be incorrect to shorten the audit-log period merely because the related account's records were disposed of earlier; the audit-log clock is independent and runs its full course.
+
+    Section 11. Review and ownership. This standard is owned by the records officer and is reviewed annually. Any proposed change to a retention period requires sign-off from the Office of the General Counsel, because retention periods have legal implications. The periods stated in this version are effective immediately upon publication and apply to all accounts closed on or after the publication date, as well as to open accounts going forward.
+
+    QUESTION: For a closed customer account that becomes disputed (with no legal hold in force), what is the maximum retention period, in months, for that account's CUSTOMER ACCOUNT RECORDS? Base your answer only on the customer-account-record clock, not the separate audit-log clock. End your response with just the number of months on its own line.
+  mock_solution: |
+    Standard customer account record retention = 24 months (Section 3).
+    Disputed-account extension = adds 9 months beyond the 24 (Section 4.2), single extension only.
+    Audit logs (36 months) are a SEPARATE clock, explicitly not to be folded in (Section 5).
+    24 + 9 = 33 months.
+
+- id: longcontext-calterra-largest-decline-line
+  domain: longcontext
+  grader: exact
+  answer: "Cirrus"
+  prompt: |
+    Read the following annual product-line report, then answer the question at the very end.
+
+    CALTERRA INSTRUMENTS — ANNUAL PRODUCT-LINE PERFORMANCE SUMMARY
+
+    This summary compares each of Calterra's four product lines against the prior year. All figures are annual net sales in millions of dollars, rounded to one decimal place, and are stated after the same adjustments in both years so that year-over-year comparisons are valid. The four lines are Aegis, Borea, Cirrus, and Delta. Two of the four lines grew or held roughly steady; two declined. Management's discussion below is deliberately narrative, so the reader must extract each pair of figures to compare magnitudes.
+
+    Aegis. The Aegis line, Calterra's oldest, faced a difficult year as a competitor undercut it on price. Aegis recorded net sales of 12.0 million dollars in the prior year. In the current year, Aegis fell to 9.5 million dollars. Management noted that the decline, while material, was partially arrested in the second half after a repricing, and that Aegis remains cash-generative despite the drop.
+
+    Borea. The Borea line was essentially flat. Borea posted 7.4 million dollars in the prior year and 7.1 million dollars in the current year, a small decline that management characterized as within normal fluctuation and driven by the timing of a single large order that slipped past year-end. No corrective action was deemed necessary for Borea.
+
+    Cirrus. The Cirrus line had the most eventful year. Cirrus had been Calterra's growth engine, reaching 15.2 million dollars in the prior year. In the current year, however, a supply interruption in a key component forced Calterra to ration Cirrus shipments for two quarters, and Cirrus net sales fell sharply to 11.9 million dollars. Management stated that the interruption has since been resolved and that Cirrus demand remains strong, so the decline is expected to reverse, but for the year under review Cirrus absorbed the steepest dollar decline of any line.
+
+    Delta. The Delta line, Calterra's newest, grew. Delta rose from 4.0 million dollars in the prior year to 5.2 million dollars in the current year, aided by entry into two adjacent markets. Delta is not yet profitable on a fully loaded basis but is expected to cross into profit next year.
+
+    Company view. Taken together, the four lines produced lower net sales than the prior year, with the Cirrus supply interruption and the Aegis price pressure the two main causes. Management emphasized that both declines are viewed as temporary: the Cirrus component supply has normalized, and the Aegis repricing is expected to stabilize volumes. Delta's growth and Borea's stability provide a partial offset. The board asked management to identify, for planning purposes, which single line contributed the largest absolute-dollar decline in the year, so that recovery resources could be prioritized there first.
+
+    Methodological note. When comparing declines, the board directed that magnitudes be measured in absolute dollars of change, not in percentage terms, because a small percentage move on a large line can exceed a large percentage move on a small line. The reader should therefore compute each line's dollar change and compare the declines directly.
+
+    Illustration of why percentage and dollar rankings can differ. Consider that Aegis fell by a larger fraction of its own base than Borea did, yet the board is not interested in fractions here; it is interested in the raw dollars that must be recovered. A line that starts large can shed more dollars while shedding a smaller fraction of itself, and that is exactly the situation the board wants surfaced, because recovery planning is denominated in dollars, not percentages. The reader is therefore cautioned not to rank the lines by percentage change and then report the top of that ranking; the required ranking is by dollars of decline.
+
+    Segment detail, for context only. Within each line, the company tracks a hardware sub-segment and a services sub-segment, but the figures above are already the combined line totals, and the sub-segment split does not need to be unwound to answer the board's question. The services sub-segment grew across most lines even where the line total fell, because hardware volumes drove the declines; this is context and does not change any line total stated above.
+
+    Forward guidance. Management expects the current year to be the trough for both declining lines. Cirrus is expected to recover the fastest once component supply, already normalized, translates into restored shipments; Aegis is expected to recover more slowly as the repricing works through the installed base. Delta is expected to keep growing, and Borea is expected to remain approximately flat. None of this forward guidance alters the historical figures the board asked to be compared.
+
+    Auditor's cross-check. The external auditors independently recomputed each line's year-over-year change from the same prior-year and current-year net-sales figures and confirmed that the figures in this summary tie to the audited ledger. The auditors noted no reclassification between lines during the year, so a decline in any line reflects a genuine contraction in that line rather than a shift of revenue to a different line. They further confirmed that the prior-year figures used here are the restated prior-year figures already published, so the comparison is on a like-for-like basis and no adjustment is needed before ranking the declines.
+
+    Board resolution. The board resolved that recovery resources for the coming year should be directed first to the single line bearing the largest absolute-dollar decline, and asked management to return next quarter with a dedicated recovery plan for that line specifically. The identity of that line is to be determined strictly by the dollar-decline comparison set out above, not by percentage change and not by management's narrative emphasis.
+
+    QUESTION: Measured in absolute dollars of change from prior year to current year, which single product line had the LARGEST decline? Answer with just the product line's name on its own line.
+  mock_solution: |
+    Aegis: 12.0 -> 9.5 = decline of 2.5.
+    Borea: 7.4 -> 7.1 = decline of 0.3.
+    Cirrus: 15.2 -> 11.9 = decline of 3.3.
+    Delta: 4.0 -> 5.2 = increase of 1.2.
+    Largest decline = Cirrus (3.3). Text confirms Cirrus "absorbed the steepest dollar decline of any line."
+
+- id: longcontext-brightpath-departmental-total
+  domain: longcontext
+  grader: numeric
+  answer: "615"
+  prompt: |
+    Read the following budget memorandum, then answer the question at the very end.
+
+    BRIGHTPATH FOUNDATION — FY2028 OPERATING BUDGET MEMORANDUM (ADOPTED)
+
+    To: The finance and audit committee. From: the treasurer, Idris Kane. This memorandum records the adopted operating budget for the coming fiscal year. It distinguishes carefully among three categories of line items: departmental allocations, which fund the day-to-day operations of the foundation's departments; the board contingency reserve, which is a central pool and is NOT a departmental allocation; and struck items, which were proposed but removed by amendment during adoption and carry a zero adopted amount.
+
+    Please read each line's category before including it in any total. The committee has, in prior years, mistakenly folded the contingency reserve into departmental totals and reported an inflated departmental figure. This memorandum states each figure once and labels it clearly to prevent a recurrence.
+
+    Departmental allocations. The foundation operates three departments this year. The Engineering department received an adopted allocation of 340 thousand dollars, funding two program teams and the shared toolchain. The Marketing department received an adopted allocation of 180 thousand dollars, covering outreach, the annual report, and donor communications. The Facilities department received an adopted allocation of 95 thousand dollars, covering the lease, utilities, and maintenance of the single office. These three departmental allocations are the only departmental allocations in the adopted budget.
+
+    Board contingency reserve. Separately, the board established a contingency reserve of 60 thousand dollars. This reserve is held centrally by the board and is released only by board vote to cover unforeseen needs. It is expressly NOT a departmental allocation and must not be added to the departmental total. It is reported on its own line in the adopted budget and is included only in the grand total, never in the departmental subtotal.
+
+    Struck items. During adoption, the committee considered a Travel line proposed at 45 thousand dollars. By amendment, the Travel line was struck in full; its adopted amount is zero. Because it was struck, it contributes nothing to any total, departmental or otherwise. A second proposed line, an equipment upgrade at 30 thousand dollars, was likewise struck by the same amendment and also carries a zero adopted amount. Neither struck line is part of the departmental allocations.
+
+    Grand total for reference. For completeness, the adopted grand total of the operating budget equals the sum of the three departmental allocations plus the contingency reserve, since the struck items are zero. The treasurer notes this figure in the full budget packet, but the committee's immediate question concerns the departmental allocations alone.
+
+    Governance note. The distinction drawn in this memorandum — departmental allocations versus the central contingency reserve versus struck items — is not merely cosmetic. Departmental allocations are delegated to department heads to spend within policy; the contingency reserve is not delegated and requires a board vote to access; struck items were removed entirely and may not be spent at all. Any report that blurs these categories misstates what department heads are authorized to spend.
+
+    History of the amendment. During the adoption meeting, the Travel line and the equipment-upgrade line were proposed together as a "growth package." The committee debated whether either should survive. A motion to retain Travel at a reduced 20 thousand dollars failed for want of a second. A separate motion to strike both lines in full carried unanimously. As a result, both lines were struck, and neither the originally proposed amounts (45 thousand for Travel, 30 thousand for the equipment upgrade) nor the failed reduced amount (20 thousand) appears anywhere in the adopted budget. The proposed and failed figures are recorded in these minutes solely to document the deliberation and must never be treated as adopted amounts.
+
+    Reconciliation instructions for the audit file. When the audit file is assembled, the reviewer should verify three subtotals independently: the departmental subtotal, which sums only the three departmental allocations; the reserve line, which stands alone; and the adopted grand total, which is the departmental subtotal plus the reserve, given that struck items are zero. The reviewer should confirm that no struck or proposed-but-failed figure has leaked into any subtotal. Historically, the single most common audit finding at this foundation has been the erroneous inclusion of the contingency reserve inside the departmental subtotal, which inflates the apparent delegated spending authority; the reviewer should specifically test for that error.
+
+    Closing. The treasurer certifies that the figures in this memorandum reflect the budget as adopted by amendment at the adoption meeting, and that the departmental allocations, the contingency reserve, and the struck items are stated in their correct categories. Questions should be directed to the treasurer's office.
+
+    Appendix: category legend. For clarity, each budget line in the adopted packet carries a one-letter category code. Code D denotes a departmental allocation, of which there are exactly three: Engineering, Marketing, and Facilities. Code R denotes the board contingency reserve, of which there is exactly one line. Code S denotes a struck line carrying a zero adopted amount, of which there are two: Travel and the equipment upgrade. Only code-D lines belong in the departmental subtotal. Code-R and code-S lines are excluded from that subtotal by definition. Any reviewer computing the departmental subtotal should filter to code-D lines only and sum their adopted amounts, ignoring all other codes entirely.
+
+    QUESTION: What is the total of the DEPARTMENTAL ALLOCATIONS only, in thousands of dollars? Exclude the board contingency reserve and all struck items. End your response with just the number (in thousands) on its own line.
+  mock_solution: |
+    Departmental allocations: Engineering 340 + Marketing 180 + Facilities 95 = 615 (thousand).
+    Contingency reserve (60) is NOT departmental and is excluded.
+    Struck items (Travel 45, Equipment 30) are zero adopted and excluded.
+    340 + 180 + 95 = 615.
+
+- id: longcontext-fennwick-satisfied-total
+  domain: longcontext
+  grader: numeric
+  answer: "475"
+  prompt: |
+    Read the following survey results report, then answer the question at the very end.
+
+    FENNWICK CIVIC SURVEY — SERVICE SATISFACTION RESULTS, AUTUMN WAVE
+
+    Conducted by the Fennwick Office of Civic Analytics. This report summarizes the autumn wave of the biannual service-satisfaction survey. A total of 640 residents responded across three geographic segments — Riverside, Hillcrest, and Old Quarter. Each respondent was placed in exactly one segment based on their registered address, so the three segment counts sum to the total respondent count. Within each segment, respondents were classified as "satisfied," "neutral," or "dissatisfied" based on a validated composite score; every respondent falls into exactly one of these three classes.
+
+    A note on interpretation before the numbers. Prior waves have been misreported by readers who conflated the "satisfied" count with the "satisfied or neutral" count. In this report, "satisfied" means only those respondents whose composite score met the satisfied threshold; neutral respondents are counted separately and are never included in the satisfied count. Read each segment's breakdown carefully.
+
+    Riverside segment. Riverside contributed 268 respondents. Of these, 210 were classified as satisfied, 38 as neutral, and 20 as dissatisfied. Riverside's high satisfaction was attributed by analysts to the recent completion of the riverfront path and improved refuse collection. These three subclasses (210 + 38 + 20) sum to Riverside's 268 respondents.
+
+    Hillcrest segment. Hillcrest contributed 232 respondents. Of these, 168 were classified as satisfied, 41 as neutral, and 23 as dissatisfied. Hillcrest's satisfaction was slightly lower than Riverside's, which analysts linked to ongoing road works on the main arterial. The three subclasses (168 + 41 + 23) sum to Hillcrest's 232 respondents.
+
+    Old Quarter segment. Old Quarter contributed 140 respondents, the smallest segment. Of these, 97 were classified as satisfied, 26 as neutral, and 17 as dissatisfied. Old Quarter's results were the most polarized, with strong praise for heritage preservation offset by complaints about parking. The three subclasses (97 + 26 + 17) sum to Old Quarter's 140 respondents.
+
+    Cross-segment observations. Analysts noted that the neutral class was fairly stable across segments in proportional terms, while the dissatisfied class was concentrated in areas with active construction. The office cautioned against comparing raw satisfied counts across segments of different sizes and recommended that any cross-segment comparison use proportions rather than counts. Nonetheless, for the city-wide service dashboard, the office is required to report a single city-wide count of satisfied respondents summed across all three segments.
+
+    Data quality. Response rates met the office's threshold in all three segments. No segment required weighting adjustments beyond the standard design weights, which do not alter the raw classification counts reported above. The raw counts in this report are the counts to be used for the required city-wide satisfied total.
+
+    Methodology detail. The composite satisfaction score combines four sub-items — responsiveness of services, cleanliness of shared spaces, communication from the office, and value for taxes paid — each rated on a five-point scale. A respondent is classified as satisfied only if the composite meets a fixed threshold established two waves ago and held constant since, so that satisfied counts are comparable across waves. Respondents below a lower threshold are classified as dissatisfied, and those between the two thresholds are classified as neutral. Because the thresholds are fixed, a respondent's class does not depend on how other respondents scored; the classification is absolute, not relative. This is why the three subclass counts within a segment always sum exactly to that segment's respondent count, with no rounding residue.
+
+    Comparison with the spring wave, for context. In the spring wave, the city-wide satisfied count had been lower than this autumn wave's, though the office cautions that the spring wave used a slightly smaller sample and covered a different construction season. The office does not restate prior waves and reports each wave on its own raw counts. Readers who wish to compare waves should request the office's longitudinal file, which aligns the samples; the single autumn satisfied total requested here is computed only from this wave's segment counts.
+
+    Non-response analysis. The office examined whether non-responders differed systematically from responders and found no evidence of a satisfaction skew large enough to warrant adjustment beyond the standard design weights already applied. Reminder mailings were sent once to each segment, and the modest bump in responses they produced did not change any segment's class proportions materially.
+
+    Reporting requirement. Per the civic-analytics charter, the office must publish, on the city-wide service dashboard, a single number for total satisfied residents this wave, obtained by summing the satisfied counts of Riverside, Hillcrest, and Old Quarter. Neutral and dissatisfied counts are published separately and are never rolled into the satisfied number. The dashboard's satisfied tile is therefore exactly the sum of the three segment satisfied counts and nothing else.
+
+    Audit note. An internal reviewer independently re-added the three subclass counts within each segment and confirmed that each segment's subclasses sum exactly to that segment's respondent count, and that the three segment respondent counts sum to the total of 640. The reviewer also confirmed that no respondent appears in two segments and that no respondent is counted in two subclasses, so the satisfied, neutral, and dissatisfied counts are mutually exclusive and jointly exhaustive within each segment. This means the city-wide satisfied total can be obtained equivalently by summing the three segment satisfied counts directly, which is the method the charter prescribes and the method the reviewer verified.
+
+    QUESTION: Summing across all three segments, what is the total number of respondents classified as SATISFIED (not neutral, not dissatisfied)? End your response with just the number on its own line.
+  mock_solution: |
+    Satisfied by segment: Riverside 210, Hillcrest 168, Old Quarter 97.
+    210 + 168 + 97 = 475.
+    (Neutral and dissatisfied are explicitly excluded from the satisfied count.)
+
+- id: longcontext-trellon-sellable-units
+  domain: longcontext
+  grader: numeric
+  answer: "3705"
+  prompt: |
+    Read the following inventory report, then answer the question at the very end.
+
+    TRELLON DISTRIBUTION — WEEKLY SELLABLE-INVENTORY REPORT
+
+    Prepared by the inventory control desk. This report reconciles physical stock across Trellon's three regional warehouses and states the sellable-unit position for the week. "On-hand units" means every unit physically present in a warehouse, regardless of condition. "Sellable units" means on-hand units that are in good condition and available for immediate fulfillment; damaged, quarantined, and reserved-hold units are on-hand but are NOT sellable and must be deducted to reach the sellable figure.
+
+    The three warehouses are North, East, and South. Each warehouse's on-hand count and its non-sellable deductions are stated below. The desk reminds readers that a common error is to report total on-hand units as if they were all sellable; the sellable position is always lower by the amount of non-sellable stock.
+
+    North warehouse. North reported 1,240 on-hand units this week. Of these, the desk flagged 0 units as damaged, 0 as quarantined, and 0 on reserved hold — North's entire on-hand position is sellable this week, an unusually clean result the desk attributed to a recent cycle count and cleanup. So North contributes 1,240 sellable units.
+
+    East warehouse. East reported 980 on-hand units. East had no damaged or quarantined stock this week either; its non-sellable deductions were zero. East therefore contributes 980 sellable units. The desk noted East had been carrying quarantined stock in prior weeks but cleared it during the period.
+
+    South warehouse. South reported 1,615 on-hand units, the largest position of the three. Unlike North and East, South carried non-sellable stock this week: 84 units were flagged as damaged pending write-off, 31 units were in quarantine awaiting inspection, and 15 units were on a reserved hold for a pending customer claim. These deductions total 130 units, all of which are on-hand but not sellable. South therefore contributes its on-hand count less the 130 non-sellable units.
+
+    Reconciliation guidance. To compute the company-wide sellable position, sum the on-hand units of all three warehouses and then subtract all non-sellable units company-wide. In this week's report, only South carried non-sellable stock, so the only deduction is South's 130 units; North and East each have a zero deduction. The desk stresses that the deduction is applied once, at the company level, and equals the sum of every warehouse's non-sellable units.
+
+    Definitions applied consistently. The desk restates its definitions because they are the source of most reporting confusion. "On-hand" is a physical count and includes damaged, quarantined, and reserved-hold units. "Non-sellable" is the union of damaged, quarantined, and reserved-hold units. "Sellable" is on-hand minus non-sellable. These three definitions hold identically for every warehouse; there is no warehouse-specific exception. A warehouse with zero non-sellable units has a sellable position equal to its on-hand count, which is the case for North and East this week.
+
+    How the company total is built. The company-wide sellable position is not computed warehouse-by-warehouse and then adjusted; it is computed by first summing every warehouse's on-hand count into a single company on-hand figure, then subtracting the single company-wide non-sellable figure, which is itself the sum of every warehouse's non-sellable units. Because only South carries non-sellable stock this week, the company-wide non-sellable figure equals South's 130 units exactly. North and East contribute zero to the deduction. This ordering — sum first, deduct once — is mandated so that the deduction is never accidentally applied twice or omitted.
+
+    Reserved-hold clarification. Some readers ask why reserved-hold units are treated as non-sellable when they are, in a sense, already committed to a customer. The desk's convention is that a reserved hold tied to a pending claim is not an ordinary sale commitment; the units are frozen pending resolution and cannot be fulfilled against normal demand, so they are excluded from the sellable position exactly like damaged and quarantined units. Ordinary allocated-to-order units, by contrast, are not on reserved hold and remain in the sellable count until they actually ship; there were no such complications this week beyond the single claim hold at South.
+
+    Audit trail. Each non-sellable flag at South is backed by a ticket: the 84 damaged units by a write-off request, the 31 quarantined units by an inspection ticket, and the 15 reserved-hold units by the customer claim reference. The desk retains these tickets so that the 130-unit deduction can be substantiated line by line if audited. North and East have no such tickets open this week, consistent with their zero deductions.
+
+    Cross-check of the company figure. As a final control, the desk computes the company sellable position two ways and requires the two to agree before the report is released. The first way sums each warehouse's already-computed sellable position: North's sellable equals its on-hand, East's sellable equals its on-hand, and South's sellable equals its on-hand minus its 130 non-sellable units. The second way sums all three on-hand counts into a single company on-hand figure and then subtracts the single company-wide non-sellable figure of 130. Both methods must yield the identical company sellable position; if they disagree, the report is held and the discrepancy investigated before publication. This week the two methods agreed, and the report was released on schedule.
+
+    Notes for next week. South's quarantined units are expected to clear inspection and return to sellable status next week; the damaged units are expected to be written off and removed from on-hand entirely; the reserved-hold units will either ship against the claim or return to sellable stock. Readers should therefore expect South's sellable position to rise next week even if its on-hand count falls, because the write-off removes non-sellable units.
+
+    QUESTION: What is the company-wide SELLABLE-unit position this week, across all three warehouses, after deducting all non-sellable units? End your response with just the number on its own line.
+  mock_solution: |
+    On-hand: North 1240, East 980, South 1615. Total on-hand = 3835.
+    Non-sellable deductions: North 0, East 0, South 130 (84 damaged + 31 quarantine + 15 hold). Total = 130.
+    3835 - 130 = 3705.
+
+- id: longcontext-ostara-summary
+  domain: longcontext
+  grader: judge
+  rubric: |
+    A faithful summary must correctly convey the document's main points and must
+    NOT fabricate facts. To score well the summary should include ALL of the
+    following, each of which is explicit in the document: (1) Ostara Botanicals'
+    verdict pilot in the two named markets (Larkfield and Dunmore) INCREASED
+    average order value but DECREASED order volume; (2) the pilot ran for eight
+    weeks; (3) the decision reached was to EXTEND the pilot to a third market
+    (Ashby) rather than to roll it out company-wide, because the net revenue
+    effect was roughly flat and needed more data. The summary MUST NOT claim the
+    pilot was a clear success or failure, MUST NOT claim a company-wide rollout
+    was approved, MUST NOT invent specific dollar figures that the document does
+    not state, and MUST NOT name markets other than Larkfield, Dunmore, and
+    Ashby. Penalize any fabricated numbers or invented outcomes heavily; reward
+    faithful, hedged phrasing that matches the document's ambivalent conclusion.
+  prompt: |
+    Read the following internal review, then write a faithful summary as instructed at the end.
+
+    OSTARA BOTANICALS — SUBSCRIPTION "VERDICT" PILOT REVIEW (INTERNAL, PRE-DECISION)
+
+    This review evaluates the eight-week "Verdict" pricing pilot run in two of Ostara's regional markets and records the decision the leadership team reached at the close of the pilot. It is an internal, pre-decision document; nothing here should be read as a public commitment.
+
+    Background. Ostara Botanicals sells subscription boxes of plant-care products. For roughly two years the company charged a single flat subscription price in every market. The "Verdict" pilot tested a redesigned pricing page that nudged subscribers toward a higher-priced tier through framing and default selection, without changing the underlying products. The hypothesis was that better framing would raise the average order value enough to justify the redesign, even if some price-sensitive subscribers dropped out.
+
+    Pilot design. The pilot ran for eight weeks in exactly two markets, Larkfield and Dunmore, chosen because they are mid-sized, demographically representative, and operationally independent from one another. All other markets continued on the flat price and served as an informal control. The team tracked two headline metrics: average order value per subscriber, and order volume (the count of orders placed).
+
+    Results on average order value. In both pilot markets, average order value rose. The framing worked as intended in the sense that subscribers who stayed tended to select the higher tier more often than under the flat price. The team described the lift in average order value as "clear and consistent across both markets," though it deliberately did not attach a single headline percentage in this pre-decision memo, pending finance's reconciliation.
+
+    Results on order volume. Order volume, however, fell in both markets. Some price-sensitive subscribers cancelled rather than accept the nudge toward the higher tier, and new-subscriber conversion softened on the redesigned page. The decline in volume was, in the team's words, "enough to offset much of the value gain."
+
+    Net effect. Putting the two metrics together, the team assessed that the net revenue effect of the pilot was "roughly flat" — the higher average order value was largely cancelled out by the lower order volume. The pilot neither clearly succeeded nor clearly failed on the metric that ultimately matters, total revenue.
+
+    The decision. Faced with an ambiguous result, the leadership team decided NOT to roll Verdict out company-wide, and also decided NOT to abandon it. Instead, the team decided to EXTEND the pilot to a single additional market, Ashby, for a further period, in order to gather more data before making a company-wide call. Ashby was chosen because it differs from Larkfield and Dunmore in one key respect — a higher share of long-tenured subscribers — which the team wants to test, since long-tenured subscribers may respond to the nudge differently than the newer subscriber base in the first two markets.
+
+    Risks and cautions. The team flagged two risks. First, extending the pilot prolongs a period in which three markets run on different pricing, which complicates reporting and support. Second, there is a reputational risk if subscribers in different markets discover they are paying under different pricing structures for the same products. The team judged both risks acceptable for a time-limited extension but not for an indefinite one.
+
+    Why not decide now. Two board members initially pressed for an immediate company-wide rollout on the strength of the average-order-value lift, and one pressed for immediate abandonment on the strength of the volume loss. The pilot lead resisted both, arguing that a roughly flat net effect is precisely the situation in which more evidence is most valuable, because a small, hard-to-detect true effect in either direction could be swamped by noise in only two markets over only eight weeks. The board accepted this reasoning. The decision to extend is therefore explicitly a decision to reduce uncertainty, not a verdict on Verdict.
+
+    Why Ashby specifically. Ashby was not chosen at random. Larkfield and Dunmore both skew toward newer subscribers, who may be more price-sensitive and more likely to abandon at a nudge. Ashby's subscriber base is older in tenure, and long-tenured subscribers may have a higher willingness to pay and a lower propensity to cancel over a framing change. If the volume loss in Ashby is materially smaller than in the first two markets while the value lift persists, that would tilt the eventual company-wide decision toward rollout; if the volume loss is just as large, that would tilt it toward abandonment. Ashby is thus chosen as a discriminating test, not a confirmatory one.
+
+    Operational guardrails during the extension. Support staff in all three pilot markets will be briefed so they can answer subscriber questions consistently, and the pricing page's framing will be held identical to the first two markets so that the only new variable is the market's subscriber tenure. No other pricing experiment will run concurrently in the three pilot markets, to avoid confounding. The extension is time-boxed; if the data are still ambiguous at its end, the default is to revert all pilot markets to the flat price rather than to extend indefinitely.
+
+    Next steps. Finance will reconcile the value lift into a firm percentage. The pilot team will instrument the Ashby extension identically to the first two markets. A company-wide decision will be revisited after the Ashby data is in. Until then, the flat price remains the default everywhere except the three pilot markets.
+
+    INSTRUCTION: Write a faithful summary of this review in 4 to 7 sentences. Capture the pilot's design, its mixed results, the net effect, and the actual decision that was reached. Do not invent numbers or outcomes that the document does not state.
+  mock_solution: |
+    Ostara Botanicals ran an eight-week "Verdict" pricing pilot in two markets,
+    Larkfield and Dunmore, testing a redesigned pricing page that nudged
+    subscribers toward a higher-priced tier. Average order value rose clearly and
+    consistently in both markets, but order volume fell as price-sensitive
+    subscribers cancelled and conversion softened. The two effects largely
+    cancelled out, leaving the net revenue impact roughly flat, so the result was
+    ambiguous rather than a clear success or failure. Rather than roll Verdict out
+    company-wide or abandon it, leadership decided to extend the pilot to one more
+    market, Ashby, to gather more data — choosing Ashby for its higher share of
+    long-tenured subscribers. Finance will firm up the value-lift figure and a
+    company-wide decision will be revisited after the Ashby data arrives.
+
+- id: longcontext-marrow-minutes-summary
+  domain: longcontext
+  grader: judge
+  rubric: |
+    A faithful summary must convey the meeting's key decisions and action items
+    without fabrication. To score well it should include ALL of the following,
+    each explicit in the document: (1) the committee APPROVED the migration to
+    the new ticketing platform (Cindersoft) but CONDITIONED approval on a
+    successful 30-day parallel-run before decommissioning the old system;
+    (2) the committee DEFERRED the office-relocation decision to the next meeting
+    pending a cost estimate; (3) the two named action-item owners and their
+    tasks: Priya owns the parallel-run plan, and Marcus owns obtaining the
+    relocation cost estimate. The summary MUST NOT state that the office
+    relocation was approved (it was deferred), MUST NOT state that the old
+    ticketing system was decommissioned or approved for immediate
+    decommissioning (a 30-day parallel run is required first), and MUST NOT
+    invent attendees, dates, or dollar figures not present in the document.
+    Reward correct attribution of who owns which action item.
+  prompt: |
+    Read the following meeting minutes, then write a faithful summary as instructed at the end.
+
+    MARROW & KESTLE OPERATIONS COMMITTEE — MINUTES
+
+    Attendance. Present: committee chair Priya Ovid, operations lead Marcus Bell, support lead Tomas Reyes, and finance liaison Wen Alcott. The chair confirmed a quorum and opened the meeting. Two agenda items were scheduled for decision: the ticketing-platform migration and the proposed office relocation. A third item, a routine budget acknowledgment, was handled without discussion.
+
+    Item one: ticketing-platform migration. The support lead presented the case for migrating from the firm's aging in-house ticketing system to a commercial platform, Cindersoft. He reported that the current system suffers frequent outages during peak load and that maintenance consumes a disproportionate share of the support team's time. Cindersoft, he argued, would reduce outages and free the team to focus on customer issues rather than firefighting.
+
+    Discussion of item one. The finance liaison asked about migration risk, specifically the danger of losing historical ticket data or disrupting live support during cutover. The support lead acknowledged the risk and proposed a mitigation: rather than switching over all at once, the firm would run both systems in parallel for a period, routing new tickets to Cindersoft while keeping the old system live and readable, and only decommission the old system once the parallel run proved successful. The committee found this persuasive but wanted the parallel run to be of a defined, non-trivial length.
+
+    Decision on item one. The committee APPROVED the migration to Cindersoft, but explicitly CONDITIONED that approval on a successful 30-day parallel run. The old in-house system is NOT to be decommissioned until the 30-day parallel run has completed successfully and the support lead has certified data integrity. The committee was clear that approval of the migration is not approval to decommission the old system immediately; decommissioning is gated on the parallel run.
+
+    Item two: office relocation. The operations lead presented a proposal to relocate the firm's office to a larger space two districts away, citing headcount growth. He noted that the new space would accommodate projected growth for at least three years but that he did not yet have a firm cost estimate, including fit-out and moving costs, from the landlord and vendors.
+
+    Discussion of item two. The finance liaison stated plainly that the committee could not responsibly approve a relocation without a cost estimate, and that the headcount case, while real, did not by itself justify committing to a lease of unknown total cost. The chair agreed. There was no dissent.
+
+    Decision on item two. The committee DEFERRED the office-relocation decision to the next meeting, pending a firm cost estimate. No approval was given; the item remains open. The committee asked that a complete estimate — lease, fit-out, and moving — be available before the next meeting so a decision can be made then.
+
+    Action items. The chair recorded two action items. First, Priya Ovid, the chair, will personally own the ticketing parallel-run plan, defining the 30-day run's success criteria and reporting back. Second, Marcus Bell, the operations lead, will obtain the complete relocation cost estimate from the landlord and vendors and circulate it before the next meeting. Tomas Reyes and Wen Alcott were not assigned action items at this meeting.
+
+    Further discussion of the parallel run. The committee spent some time on what "successful" should mean for the 30-day parallel run, since approval to decommission the old system hinges on that word. The support lead proposed three success criteria: no unplanned data loss during the run, ticket-routing accuracy at or above the current system's, and a support-team sign-off that historical tickets remain fully searchable in the old system throughout. The finance liaison added a fourth: that the run surface no cost surprise large enough to change the business case. The committee did not finalize the criteria at this meeting but directed that they be defined in the parallel-run plan and brought back for confirmation. Until the criteria are met and certified, the old system stays live.
+
+    Discussion of sequencing. A question arose about whether the relocation and the migration should be sequenced to avoid doing both at once. The operations lead noted that the migration is time-sensitive because of the current system's outages, whereas the relocation is not yet even costed, so in practice the migration will proceed first regardless of the relocation timeline. The committee agreed that the two projects are independent and that the migration's conditional approval does not wait on the relocation.
+
+    Record of the third item. The routine budget acknowledgment, the third agenda item, was accepted as presented with no changes and no discussion. It is noted here only for completeness; it carried no decision requiring a condition and generated no action item. The chair confirmed that nothing in the budget acknowledgment altered the two substantive decisions.
+
+    Adjournment. With both decision items resolved for the day — one approved with a condition, one deferred — and action items assigned, the chair adjourned the meeting and set the next session for the following month.
+
+    INSTRUCTION: Write a faithful summary of these minutes in 4 to 7 sentences. Capture both decisions accurately (including the condition on the migration and the deferral of the relocation) and correctly attribute the two action items to their owners. Do not fabricate attendees, dates, or figures.
+  mock_solution: |
+    The Marrow & Kestle operations committee took up two decision items. It
+    approved migrating from the firm's aging in-house ticketing system to
+    Cindersoft, but conditioned that approval on a successful 30-day parallel run,
+    during which the old system stays live and is not decommissioned until data
+    integrity is certified. The proposed office relocation to a larger space was
+    deferred to the next meeting because no firm cost estimate (lease, fit-out,
+    and moving) was yet available. Two action items were assigned: chair Priya
+    Ovid will own the ticketing parallel-run plan and its success criteria, and
+    operations lead Marcus Bell will obtain and circulate the complete relocation
+    cost estimate before the next meeting. The relocation was not approved, and
+    the old ticketing system was not cleared for immediate decommissioning.
+
+- id: longcontext-quill-policy-summary
+  domain: longcontext
+  grader: judge
+  rubric: |
+    A faithful summary must convey the policy's core rules without fabrication.
+    To score well it should include ALL of the following, each explicit in the
+    document: (1) Quillmark's refund policy gives a FULL refund only within 14
+    days of delivery AND only if the item is unopened; (2) between 15 and 45 days,
+    or if the item is opened but unused, only a PARTIAL refund of 70% (a 30%
+    restocking fee) is available; (3) after 45 days, NO refund is available except
+    for verified manufacturing defects, which are handled under a separate
+    warranty with no time limit; (4) digital items are NEVER refundable once the
+    access code has been revealed. The summary MUST NOT state that full refunds
+    are available after 14 days, MUST NOT misstate the restocking fee or the
+    partial-refund percentage, MUST NOT claim digital items can be refunded, and
+    MUST NOT invent time windows or percentages not in the document. Reward
+    correct handling of the defect/warranty exception as distinct from the
+    ordinary refund windows.
+  prompt: |
+    Read the following returns-and-refunds policy, then write a faithful summary as instructed at the end.
+
+    QUILLMARK SUPPLY CO. — RETURNS AND REFUNDS POLICY (CUSTOMER-FACING)
+
+    This policy explains when and how you can return items purchased from Quillmark Supply Co. and what refund, if any, you are entitled to. Please read it in full; the refund you receive depends on how much time has passed since delivery, whether the item has been opened, and whether the item is physical or digital. Different rules apply to each situation, and a claim of a manufacturing defect is handled under a separate process described near the end.
+
+    Definitions. "Delivery date" is the date the carrier records the item as delivered to your address. "Unopened" means the manufacturer's seal is intact and the item shows no sign of use. "Opened but unused" means the seal is broken but the item has not been put into service and is in resalable condition. "Digital item" means any product delivered as a code, license, or download rather than a physical good.
+
+    Full-refund window. You are entitled to a FULL refund of the purchase price only if BOTH of two conditions are met: the return is initiated within 14 days of the delivery date, AND the item is unopened, with its manufacturer's seal intact. If either condition is not met — if more than 14 days have passed, or if the seal is broken — you do not qualify for a full refund, though you may qualify for a partial refund as described next.
+
+    Partial-refund window. A PARTIAL refund is available in two situations. The first is when the return is initiated after the 14-day full-refund window but within 45 days of delivery. The second is when the item is opened but unused and in resalable condition, regardless of whether you are inside or outside the 14-day window. In either of these partial-refund situations, Quillmark refunds 70 percent of the purchase price and retains a 30 percent restocking fee. The restocking fee covers inspection, repackaging, and the loss of "as-new" status. You cannot combine conditions to increase the refund above 70 percent; the partial refund is a flat 70 percent whenever it applies.
+
+    No-refund window. After 45 days from the delivery date, NO refund is available for physical items under the ordinary returns process, regardless of the item's condition. The only exception is a verified manufacturing defect, which is not governed by the day-count windows above at all.
+
+    Manufacturing defects. If a physical item has a genuine manufacturing defect, it is covered by Quillmark's separate limited warranty, which has NO time limit tied to the 14-day or 45-day windows. A defect claim requires verification by Quillmark's returns team, who may request photographs or the return of the item. If the defect is verified, Quillmark will, at its option, replace the item or refund it in full, even if the 45-day ordinary-refund window has closed. A defect claim that is not verified falls back to the ordinary windows above.
+
+    Digital items. Digital items follow a stricter rule. Once the access code, license key, or download link has been revealed or used, the digital item is NOT refundable under any circumstances, including within the 14-day window, because the value cannot be returned. If a digital item's code has never been revealed, it may be refunded in full within 14 days like an unopened physical item. This digital rule overrides the ordinary physical-item windows.
+
+    Worked scenarios. To make the rules concrete, consider four cases. First, a sealed physical item returned on day ten qualifies for a full refund, because it is both unopened and within 14 days. Second, the same item returned on day thirty qualifies only for the 70 percent partial refund, because it is outside the 14-day window even though it is unopened. Third, an opened-but-unused item returned on day five qualifies for the 70 percent partial refund, not a full refund, because the seal is broken, even though it is within 14 days. Fourth, any physical item returned on day fifty qualifies for no ordinary refund at all, unless it has a verified manufacturing defect, in which case the separate warranty applies without regard to the day count.
+
+    Shipping and condition on partial refunds. For partial refunds, the customer is responsible for return shipping, and the item must arrive in resalable condition; an item that arrives damaged in transit due to inadequate packaging may have its refund reduced or denied, at Quillmark's discretion, separate from the 30 percent restocking fee. Full refunds within the 14-day unopened window include a prepaid return label at Quillmark's expense.
+
+    Interaction of the rules. Where more than one rule could apply, the stricter digital rule always governs digital items, and for physical items the item's condition (opened versus unopened) and the elapsed time together determine the outcome. The defect exception sits outside the ordinary windows entirely: a verified defect can produce a full refund or replacement even past 45 days, while an unverified defect claim simply falls back to whatever the ordinary windows would have granted. No rule stacks to exceed a full refund, and no combination of conditions raises a partial refund above 70 percent.
+
+    Contact. Questions about a specific return can be directed to Quillmark's support team through the account portal. Support can explain which category applies but cannot override the policy; exceptions are granted only in cases of documented carrier error, which are handled as a separate claim against the carrier rather than as a refund under this policy.
+
+    How to initiate a return. Log in to your account, select the order, and choose "Start a return." The system will tell you which category your return falls into and the refund you can expect before you confirm.
+
+    INSTRUCTION: Write a faithful summary of this refund policy in 4 to 7 sentences. Capture the full-refund conditions, the partial-refund conditions and percentage, the no-refund rule after 45 days, the defect/warranty exception, and the digital-item rule. Do not invent windows or percentages.
+  mock_solution: |
+    Quillmark gives a full refund only if the return is started within 14 days of
+    delivery AND the item is unopened with its seal intact. If more than 14 days
+    (but within 45 days) have passed, or if the item is opened but unused and
+    resalable, only a partial refund of 70 percent applies, with a 30 percent
+    restocking fee; this partial refund is a flat 70 percent and cannot be
+    combined upward. After 45 days no ordinary refund is available for physical
+    items. The sole exception is a verified manufacturing defect, handled under a
+    separate limited warranty with no time limit, which can yield a replacement or
+    full refund even after 45 days. Digital items are never refundable once the
+    access code has been revealed, though an unrevealed digital code can be
+    refunded in full within 14 days.

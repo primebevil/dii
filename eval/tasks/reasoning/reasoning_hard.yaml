@@ -1,0 +1,204 @@
+- id: reasoning-defective-widgets-discard
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A stamping machine produces exactly 14 parts every hour. However, every 6th part it produces (the 6th, 12th, 18th, and so on) comes out defective and is immediately discarded; all other parts are kept. The machine runs continuously for 9 hours. How many good (non-discarded) parts does it produce in total?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "105"
+  mock_solution: |
+    Total parts produced = 14 parts/hour x 9 hours = 126 parts.
+    Defective parts are every 6th one produced: 6, 12, ..., 126. Count = floor(126 / 6) = 21.
+    Good parts = 126 - 21 = 105.
+
+- id: reasoning-acid-add-pure
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A tank holds 60 liters of a solution that is 25% acid by volume (the rest is water). You want to raise the concentration to exactly 40% acid by adding pure acid only (no water is removed). How many liters of pure acid must you add?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "15"
+  mock_solution: |
+    Initial acid = 25% of 60 = 15 liters. Let x = liters of pure acid added.
+    New acid = 15 + x, new total volume = 60 + x.
+    Require (15 + x) / (60 + x) = 0.40.
+    15 + x = 0.40(60 + x) = 24 + 0.4x.
+    x - 0.4x = 24 - 15 -> 0.6x = 9 -> x = 15.
+    Check: (15+15)/(60+15) = 30/75 = 0.40. Correct.
+
+- id: reasoning-mother-daughter-ages
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    The current ages of a mother and her daughter add up to 66 years. Twelve years from now, the mother will be exactly twice as old as the daughter. What is the daughter's current age in years?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "18"
+  mock_solution: |
+    Let d = daughter's age now, m = mother's age now. Then m + d = 66.
+    In 12 years: m + 12 = 2(d + 12) -> m + 12 = 2d + 24 -> m = 2d + 12.
+    Substitute: (2d + 12) + d = 66 -> 3d = 54 -> d = 18.
+    Check: m = 48, sum = 66. In 12 years: mother 60, daughter 30, and 60 = 2 x 30. Correct.
+
+- id: reasoning-committee-refuse-together
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A committee of exactly 4 people must be chosen from a group of 7 people. Two of the seven, Ana and Ben, dislike each other and refuse to serve on the committee together (so any committee containing BOTH Ana and Ben is not allowed). How many different valid committees of 4 can be formed?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "25"
+  mock_solution: |
+    Total committees of 4 from 7 with no restriction = C(7,4) = 35.
+    Committees that DO contain both Ana and Ben: those two are fixed, so choose the remaining 2 members from the other 5 people = C(5,2) = 10.
+    Valid committees = 35 - 10 = 25.
+
+- id: reasoning-two-dice-multiple-of-three
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Two ordinary fair six-sided dice (faces 1 through 6) are rolled, and the two numbers shown are multiplied together. Considering all 36 equally likely ordered outcomes, in how many of them is the product a multiple of 3?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "20"
+  mock_solution: |
+    The product is a multiple of 3 exactly when at least one die shows a multiple of 3 (a 3 or a 6).
+    It is NOT a multiple of 3 only when neither die shows 3 or 6, i.e. both dice show a value from {1, 2, 4, 5} (4 choices each).
+    Outcomes with no multiple of 3 = 4 x 4 = 16.
+    Outcomes with a multiple of 3 = 36 - 16 = 20.
+
+- id: reasoning-race-finish-order
+  domain: reasoning
+  grader: exact
+  prompt: |
+    Four runners named P, Q, R, and S finished a race in some order, with no ties (positions 1st through 4th). You are told:
+    - P finished somewhere ahead of Q.
+    - R finished in the position immediately after P (that is, directly behind P with no one between them).
+    - S did not finish last.
+    Determine which single runner finished last (4th). Answer with just the letter p, q, r, or s.
+    Show your reasoning, then give the final answer on its own line.
+  answer: "q"
+  mock_solution: |
+    "R immediately after P" means P and R occupy consecutive positions as the block (P, R). Possible block placements: positions (1,2), (2,3), or (3,4).
+    Case (3,4): P is 3rd, R is 4th. Then Q must be 1st or 2nd, but that puts Q ahead of P, violating "P ahead of Q." Rejected.
+    Case (1,2): P=1, R=2. Q and S fill 3 and 4. S is not last, so S=3, Q=4. Order: P, R, S, Q. Last = Q.
+    Case (2,3): P=2, R=3. Positions 1 and 4 remain for Q and S. Q must be after P (position 2), so Q must be 4th and S=1st. Order: S, P, R, Q. Last = Q.
+    In every valid arrangement, Q finishes last.
+
+- id: reasoning-two-digit-reverse
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A two-digit whole number has a tens digit that is 3 greater than its units digit. When the two digits are swapped, the reversed number is 27 less than the original number, and the original number plus the reversed number equals 121. What is the original two-digit number?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "74"
+  mock_solution: |
+    Let t = tens digit, u = units digit, with t = u + 3.
+    Original = 10t + u, reversed = 10u + t. Their sum = 11(t + u) = 121, so t + u = 11.
+    With t = u + 3: (u + 3) + u = 11 -> 2u = 8 -> u = 4, t = 7.
+    Original = 74. Check: reversed = 47; 74 - 47 = 27 and 74 + 47 = 121. Correct.
+
+- id: reasoning-printer-cooling-pauses
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A printer prints at a steady rate of 8 pages per minute. After every 40 pages it prints, it must pause for exactly 30 seconds to cool down before continuing; however, once the entire job is finished it does not pause again. Starting from cold (no initial pause), how many total seconds does it take to print a job of exactly 300 pages?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "2460"
+  mock_solution: |
+    Printing time: 300 pages at 8 pages/min = 37.5 minutes = 2250 seconds.
+    Cooling pauses occur after pages 40, 80, 120, 160, 200, 240, and 280 (each a multiple of 40 with printing still remaining). That is 7 pauses.
+    After page 280, the printer prints the final 20 pages to reach 300 and the job ends, so there is no pause at 300 (300 is not a multiple of 40 anyway).
+    Pause time = 7 x 30 = 210 seconds.
+    Total = 2250 + 210 = 2460 seconds.
+
+- id: reasoning-arithmetic-sequence-sum
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    An arithmetic sequence has a first term of 7, and its 5th term is 27. What is the sum of the first 20 terms of this sequence?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "1090"
+  mock_solution: |
+    First term a = 7. The 5th term is a + 4d = 27, so 7 + 4d = 27 -> 4d = 20 -> d = 5.
+    Sum of first n terms = (n/2)(2a + (n-1)d). For n = 20:
+    S = (20/2)(2*7 + 19*5) = 10 * (14 + 95) = 10 * 109 = 1090.
+
+- id: reasoning-grid-paths-avoid-point
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    On a grid, a token starts at point (0,0) and must reach point (4,3), moving only one unit right (increasing x by 1) or one unit up (increasing y by 1) at each step. How many such shortest paths from (0,0) to (4,3) do NOT pass through the point (2,2)?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "17"
+  mock_solution: |
+    Every shortest path uses 4 rights and 3 ups, so total paths = C(7,3) = 35.
+    Paths through (2,2): from (0,0) to (2,2) uses 2 rights and 2 ups = C(4,2) = 6; from (2,2) to (4,3) uses 2 rights and 1 up = C(3,1) = 3. So paths through (2,2) = 6 x 3 = 18.
+    Paths avoiding (2,2) = 35 - 18 = 17.
+
+- id: reasoning-marbles-same-color
+  domain: reasoning
+  grader: exact
+  prompt: |
+    A bag contains 5 red marbles and 3 blue marbles, all otherwise identical. Three marbles are drawn at random without replacement. What is the probability that all three drawn marbles are the same color? Give your answer as a fraction in lowest terms, written in the form a/b (for example, 3/7).
+    Show your reasoning, then give the final answer on its own line.
+  answer: "11/56"
+  mock_solution: |
+    Total ways to choose 3 of the 8 marbles = C(8,3) = 56.
+    All red: C(5,3) = 10 ways. All blue: C(3,3) = 1 way.
+    Favorable = 10 + 1 = 11.
+    Probability = 11/56, which is already in lowest terms (56 = 8x7; 11 is prime and does not divide 56).
+
+- id: reasoning-repeated-dilution
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A 40-liter vat is completely filled with a salt solution that is 30% salt by volume. You perform this operation twice: remove 10 liters of the (well-mixed) solution and replace it with 10 liters of pure water, then stir thoroughly. After the second replacement, what is the salt concentration of the solution, as a percentage? Round to two decimal places.
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number (the percentage value, without a percent sign).
+  answer: "16.88"
+  mock_solution: |
+    Initial salt = 30% of 40 L = 12 L.
+    Each operation removes 10 L out of 40 L (one quarter of the mixture), so it removes one quarter of the salt present and leaves three quarters; the water added dilutes but adds no salt, and total volume returns to 40 L.
+    After 1st replacement: salt = 12 x (3/4) = 9 L.
+    After 2nd replacement: salt = 9 x (3/4) = 6.75 L.
+    Concentration = 6.75 / 40 = 0.16875 = 16.875%, which rounds to 16.88.
+
+- id: reasoning-two-trains-staggered
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Two towns are 300 km apart along a straight track. Train 1 leaves the first town at 9:00 heading toward the second town at a constant 60 km/h. Train 2 leaves the second town at 9:40 heading toward the first town at a constant 90 km/h. They travel toward each other on parallel tracks. How many minutes after 9:00 do the two trains meet (i.e., pass each other)?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "144"
+  mock_solution: |
+    From 9:00 to 9:40 is 40 minutes = 2/3 hour. In that time Train 1 covers 60 x (2/3) = 40 km alone.
+    Remaining gap at 9:40 = 300 - 40 = 260 km.
+    After 9:40 both move toward each other at a combined 60 + 90 = 150 km/h.
+    Time to close 260 km = 260 / 150 hours = 1.73333... hours = 104 minutes.
+    Meeting time after 9:00 = 40 + 104 = 144 minutes.
+    Check: Train 1 travels 144 min = 2.4 h x 60 = 144 km; Train 2 travels 104 min = 1.73333 h x 90 = 156 km; 144 + 156 = 300 km. Correct.
+
+- id: reasoning-crt-remainders
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    Find the smallest positive whole number that leaves a remainder of 2 when divided by 5, a remainder of 3 when divided by 7, and a remainder of 4 when divided by 9.
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "157"
+  mock_solution: |
+    We need x with x = 2 (mod 5), x = 3 (mod 7), x = 4 (mod 9).
+    Start with x = 4 (mod 9): x = 9k + 4.
+    Impose x = 3 (mod 7): 9k + 4 = 3 (mod 7) -> 2k + 4 = 3 (mod 7) -> 2k = -1 = 6 (mod 7) -> k = 3 (mod 7) (since inverse of 2 mod 7 is 4, k = 4x6 = 24 = 3). So k = 7m + 3, giving x = 63m + 31.
+    Impose x = 2 (mod 5): 63m + 31 = 3m + 1 = 2 (mod 5) -> 3m = 1 (mod 5) -> m = 2 (mod 5) (inverse of 3 mod 5 is 2). So m = 5n + 2, giving x = 315n + 157.
+    Smallest positive value: 157. Check: 157 = 31x5 + 2, = 22x7 + 3, = 17x9 + 4. Correct.
+
+- id: reasoning-self-referential-tank-fill
+  domain: reasoning
+  grader: numeric
+  prompt: |
+    A tank with a capacity of 480 liters starts empty. Pipe A adds water at 12 liters per minute and runs the entire time. Pipe B adds water at 8 liters per minute but runs only during the first half of the total filling time. A drain removes water at 4 liters per minute and is open the entire time. All rates are constant. How many minutes does it take to fill the tank completely?
+    Show your reasoning, then give the final answer on its own line. The last line must be just the number.
+  answer: "40"
+  mock_solution: |
+    Let T = total filling time in minutes.
+    During the first half (T/2 minutes), A, B, and the drain all act: net rate = 12 + 8 - 4 = 16 L/min.
+    During the second half (T/2 minutes), B is off: net rate = 12 - 4 = 8 L/min.
+    Total volume = 16(T/2) + 8(T/2) = (16 + 8)(T/2) = 12T.
+    Set 12T = 480 -> T = 40 minutes.
+    Check: first 20 min at 16 L/min = 320 L; next 20 min at 8 L/min = 160 L; total 480 L. Correct.

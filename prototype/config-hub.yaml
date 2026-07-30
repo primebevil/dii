@@ -1,0 +1,10 @@
+listen: ":8080"                              # all interfaces, so atlas can reach back over Tailscale
+node_id: "laptop"
+model_server: "http://localhost:11434/v1"    # local Ollama (fine if it's down; node starts with no local models)
+consumer_token: "dev-secret"
+advertise: "http://100.94.5.71:8080"         # this laptop's Tailscale IP, published to peers
+peers:
+  - "http://100.118.77.40:8090"              # atlas over Tailscale
+startup_timeout: "20s"                        # give a cold Tailscale peer time to answer /manifest at boot
+response_header_timeout: "0s"                 # no first-byte limit: big/reasoning models served
+                                              # non-streaming can take minutes on a cold VRAM load

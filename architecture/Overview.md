@@ -1,10 +1,18 @@
 # DII Architecture Overview: Local-First, Network-as-Overflow
 
-Status: RFC v0.1 (2026-07-02), updated 2026-07-03 with the router ingress model and prototype scope from ADR-0003 and ADR-0004. Depends on Why DII Exists and The Case Against DII.
+Status: RFC v0.1 (2026-07-02), updated 2026-07-03 with the router ingress model and prototype scope from ADR-0003 and ADR-0004, and 2026-07-27 with the access-distribution reframe (ADR-0015). Depends on Why DII Exists and The Case Against DII.
 
 ## What changed
 
 DII is now scoped as a free, open-source RFC project with no commercial model behind it. Its goal is a dependable baseline of open-model intelligence that anyone can run and that stays beyond the reach of any single off-switch. It is a mission-driven volunteer effort on the model of Tor, non-commercial by commitment: monetization is retired, not paused, and the network itself assumes no funding path, since there is nothing to price (ADR-0005). Sustaining the nonprofit steward and offsetting operators' bare-minimum costs to break-even does assume a funding path, held strictly distinct from monetizing the network (ADR-0008). This reframing removes a whole problem class, since there is no token, tradable credit, marketplace to clear, or compute to price. The old slogan "the scheduler is the product" now means only that the router and scheduler are the core engineering contribution.
+
+## What changed, 2026-07-27 (ADR-0015)
+
+The thesis is access distribution, not capability aggregation. DII exists to put a capable floor model (ADR-0006) into the hands of people who lack access, under conditions they can accept: no counterparty who can switch them off, no gating beyond the hard legal lines, and no data leaving a boundary they trust. That is the load-bearing reason the network exists, alongside the mission motivation (ADR-0005). Model diversity, a pod reaching many models, is a feature and not the reason to exist. The Week-4 variety experiment came back inconclusive-to-null on that question and it is settled enough to act on (docs/Variety_Experiment_Findings.md, ADR-0015).
+
+This reframes the "Network-as-Overflow" emphasis in the title above. The load-bearing primitive is the consumer ingress (ADR-0004): a person with no node reaching a willing node that serves them. Node-to-node aggregation, the overflow path where one node borrows a model a peer holds, is reclassified from core mechanism to optional optimization, validated and available (ADR-0011) but not something the network's guarantee depends on. A node serving a single model within its capability is a full participant. What the coordination layer still owes is availability, not variety: enough nodes serving the floor, and a directory that finds an available one (ADR-0009). The next load-bearing decision is therefore consumer admission and abuse resistance, who can use them, promoted from a loose end to the center (docs/Identity_Note_From_Prototype.md, docs/Governance_And_Abuse_Resistance.md).
+
+The sections below still describe overflow as the spine; read them through this reframe until they are rewritten. The engineering is unchanged and validated. What changed is which part is the reason to exist.
 
 ## The idea in one sentence
 

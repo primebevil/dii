@@ -1,0 +1,3 @@
+# The rig's only dependency. Everything else is Python 3 stdlib, so on a pod
+# machine `pip install pyyaml` is the whole setup.
+pyyaml>=6.0

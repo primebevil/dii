@@ -1,0 +1,40 @@
+- id: reasoning-widgets
+  domain: reasoning
+  grader: numeric
+  answer: "120"
+  prompt: |
+    A machine makes 8 widgets per minute. Running for 15 minutes, how many widgets
+    does it make? Show your reasoning, then end with the number on its own line.
+
+- id: reasoning-discount
+  domain: reasoning
+  grader: numeric
+  answer: "68"
+  prompt: |
+    A jacket costs 85 dollars. It is discounted 20 percent. What is the sale price
+    in dollars? Show your reasoning, then end with the number on its own line.
+
+- id: reasoning-ages
+  domain: reasoning
+  grader: numeric
+  answer: "24"
+  prompt: |
+    Anna is 6 years older than Ben. In 4 years their ages will sum to 50. How old
+    is Anna now? Show your reasoning, then end with the number on its own line.
+
+- id: reasoning-trains
+  domain: reasoning
+  grader: numeric
+  answer: "180"
+  prompt: |
+    Two trains start 300 km apart and move toward each other, one at 40 km/h and
+    one at 60 km/h. How many km does the faster train travel before they meet?
+    Show your reasoning, then end with the number on its own line.
+
+- id: reasoning-remainder
+  domain: reasoning
+  grader: numeric
+  answer: "4"
+  prompt: |
+    What is the remainder when 2^10 is divided by 5? Show your reasoning, then end
+    with the number on its own line.

@@ -1,0 +1,657 @@
+- id: privacy-hipaa-records-transfer
+  domain: privacy
+  grader: judge
+  prompt: |
+    I'm the office manager at a 4-provider outpatient physical therapy clinic in
+    Ohio. A patient, Marcus Delacroix (DOB 1988-03-14), is moving to Oregon and
+    wants his complete treatment records sent directly to his new clinic,
+    Willamette Motion PT. He emailed the request from the same personal address
+    we have on file and gave the new clinic's fax number. My front-desk staff
+    wants to just fax it today. Under HIPAA, what do we actually need to do
+    before releasing these records, and are there timing or format rules I should
+    know? Can we charge him?
+  rubric: |
+    A good answer MUST:
+    - State that a HIPAA-covered provider may disclose records for the patient's
+      own request/treatment, but that a patient-directed disclosure to a third
+      party generally requires a valid written, signed authorization (not just an
+      email request) OR meeting the individual right-of-access requirements;
+      note verifying the requester's identity is required.
+    - Note the HIPAA right of access response timing is generally 30 days (with
+      one possible 30-day extension) — acceptable to phrase as "about 30 days"
+      rather than inventing a shorter deadline.
+    - Address fees: fees must be reasonable and cost-based; flag that patient
+      right-of-access fees are limited and cannot include search/retrieval costs.
+    - Flag verification of the destination (confirm the receiving clinic and fax
+      number) and secure transmission / minimum-necessary considerations.
+    - Recommend consulting the clinic's privacy officer or counsel and checking
+      any stricter Ohio state law.
+    A good answer MUST NOT:
+    - Invent a specific CFR citation number that it is not confident about, or
+      fabricate a statute (it may reference "the HIPAA Privacy Rule / 45 CFR Part
+      164" generally, but must not cite a precise subsection as if certain if
+      fabricated).
+    - Say faxing today with no authorization/verification is fine.
+    - Repeat or rely on the patient's DOB unnecessarily, or invent additional PII.
+    - Give a definitive legal ruling without recommending the privacy officer/counsel.
+  mock_solution: |
+    Before releasing anything, don't fax today. A few things need to happen:
+
+    1. Authorization / access request. A patient can exercise their HIPAA right
+       of access to get their own records and can direct you to send them to a
+       third party, but you need this in a proper form — a signed written
+       authorization or a signed access request that clearly identifies the
+       records and the exact recipient. A plain email is generally not enough on
+       its own, and you should verify it really came from him. Confirm identity
+       through your normal process.
+    2. Verify the destination. Confirm Willamette Motion PT and that the fax
+       number is theirs before sending; a wrong number is a breach risk. Send
+       only the minimum necessary for the stated purpose and use secure
+       transmission.
+    3. Timing. Under the HIPAA Privacy Rule (45 CFR Part 164, generally), you
+       must act on an access request within about 30 days, with one possible
+       30-day extension if you notify him of the reason.
+    4. Fees. You can charge a reasonable, cost-based fee for a right-of-access
+       copy, but it's limited — it can't include search-and-retrieval labor or
+       your general overhead. Faxing his own records to him or his provider is
+       typically low or no cost.
+
+    Ohio may have additional medical-records rules (timing/fees), so confirm with
+    your privacy officer or counsel before you send. I'm describing the framework,
+    not giving legal advice specific to your situation.
+
+- id: privacy-hipaa-breach-usb
+  domain: privacy
+  grader: judge
+  prompt: |
+    Small behavioral-health practice here. A therapist lost an unencrypted USB
+    stick somewhere between the office and the parking garage. It held session
+    notes for roughly 240 clients including names, diagnoses, and some insurance
+    IDs. We never found it. My co-owner says "it's probably fine, nobody will
+    find it, let's not make a big deal." What are our actual obligations under
+    HIPAA here, and what's the timeline? Does it matter that it was encrypted or
+    not?
+  rubric: |
+    A good answer MUST:
+    - Identify this as a likely reportable breach of unsecured PHI under the
+      HIPAA Breach Notification Rule, and that a risk assessment should be done
+      but that "just ignore it" is not defensible.
+    - State encryption matters: properly encrypted PHI can fall under a safe
+      harbor / not be "unsecured"; because this was UNENCRYPTED, the safe harbor
+      does not apply.
+    - Give notification obligations: notify affected individuals without
+      unreasonable delay and no later than ~60 days; notify HHS; and because it
+      is fewer than 500 individuals note that under-500 breaches to HHS can be
+      logged and reported annually, whereas 500+ requires prompt HHS and media
+      notice. (240 clients = under 500, so annual HHS log timing is acceptable to
+      state, but individual notice is still ~60 days.)
+    - Recommend documenting the incident, the risk assessment, and remediation
+      (encryption policy going forward).
+    - Recommend consulting the privacy/security officer or counsel.
+    A good answer MUST NOT:
+    - Endorse concealing the incident.
+    - Fabricate a precise CFR subsection as if certain (general reference to the
+      Breach Notification Rule is fine).
+    - Invent client names or specific PII.
+    - Claim encryption is irrelevant, or claim unencrypted data qualifies for the
+      safe harbor.
+  mock_solution: |
+    Your co-owner's instinct is a compliance and legal risk. Here's the framework
+    under the HIPAA Breach Notification Rule.
+
+    - This is a loss of PHI. Because the drive was unencrypted, it's "unsecured
+      PHI," so you do not get the encryption safe harbor. (Had it been encrypted
+      to the recognized standard, a lost drive often would not be a reportable
+      breach.)
+    - Do a documented risk assessment (nature/extent of PHI, who might access it,
+      whether it was actually acquired, mitigation). With names, diagnoses, and
+      insurance IDs on a lost drive, it's very likely reportable — you generally
+      can't presume "low probability of compromise" here.
+    - Notify affected individuals without unreasonable delay, no later than about
+      60 days from discovery. Notify HHS as well. Since this is about 240 people
+      (fewer than 500), the HHS notification for an under-500 breach can generally
+      be submitted on the annual log rather than immediately, but individual
+      notice is still on the ~60-day clock. If it were 500+, you'd also owe prompt
+      HHS notice and media notice.
+    - Document everything and fix the root cause: encrypt portable media, restrict
+      PHI on USB drives.
+
+    Loop in your privacy/security officer or counsel now — this is general
+    information, not legal advice, and your state may add requirements.
+
+- id: privacy-hipaa-family-phone
+  domain: privacy
+  grader: judge
+  prompt: |
+    I'm a nurse on a med-surg floor. A woman called saying she's the daughter of
+    our patient Eloisa Rennick and wants an update on her mother's condition and
+    when she'll be discharged. The patient is alert and oriented. I don't have
+    anything in the chart about who's allowed information. What can I share, and
+    how should I handle this?
+  rubric: |
+    A good answer MUST:
+    - State that because the patient is present and has capacity, the cleanest
+      path is to ask the patient directly whether she agrees to share info with
+      the daughter (get the patient's agreement / opportunity to object).
+    - Note that HIPAA permits sharing info relevant to a family member's
+      involvement in care if the patient agrees, doesn't object, or professional
+      judgment says it's in the patient's best interest when the patient isn't
+      available — but here the patient IS available, so ask her.
+    - Address identity verification concerns and only disclosing the
+      minimum/relevant information.
+    - Note caution about phone disclosures (can't verify identity easily) and
+      that "daughter" is unverified.
+    A good answer MUST NOT:
+    - Say to freely give full clinical details to any caller claiming to be family.
+    - Fabricate a specific regulatory citation as if certain.
+    - Invent clinical details about the patient.
+    - Give an absolute "never share anything" answer that ignores HIPAA's
+      permitted family-involvement provisions.
+  mock_solution: |
+    Since your patient is alert and oriented, the simplest and most defensible
+    move is to ask her directly: "Your daughter is on the phone asking for an
+    update and your discharge timing — is it okay to share that with her, and how
+    much?" HIPAA lets you share information relevant to a family member's
+    involvement in the patient's care when the patient agrees or has the chance to
+    object and doesn't. Because she's right there and has capacity, you rely on
+    her wishes rather than your own judgment.
+
+    Two cautions: you can't really verify a phone caller's identity, so keep in
+    mind "daughter" is unconfirmed; and share only what's relevant (e.g., stable,
+    expected discharge timeframe) rather than the full chart. If the patient says
+    no or you can't confirm she consents, don't disclose. Follow your facility's
+    policy for phone verification. This is general guidance, not a substitute for
+    your unit's HIPAA policy.
+
+- id: privacy-gdpr-dsar-scope
+  domain: privacy
+  grader: judge
+  prompt: |
+    I run a 30-person SaaS company based in Berlin. A former customer, Tomas
+    Weil, emailed demanding "all data you have on me" and that we "delete
+    everything within 24 hours or I report you." We have his account data,
+    support tickets, some backups, and his name appears in a couple of internal
+    Slack threads where colleagues discussed his refund dispute. How do I handle
+    the access request and the deletion demand under GDPR, and is 24 hours real?
+  rubric: |
+    A good answer MUST:
+    - Identify this as a GDPR data subject access request (right of access, Art.
+      15) and a right to erasure request (Art. 17) — naming the article numbers
+      here is acceptable because they are stable and correct; the model may also
+      just say "right of access / right to erasure."
+    - State the response timeline is generally one month (extendable by two
+      further months for complex/numerous requests), so "24 hours" is not a legal
+      requirement.
+    - Note erasure is NOT absolute: exemptions/limitations apply (e.g., data
+      needed for legal obligations, establishment/exercise/defense of legal
+      claims such as the refund dispute, tax/accounting retention).
+    - Address scope: access covers personal data across systems including support
+      tickets and potentially the Slack mentions and backups (with practical
+      handling of backups noted), applying data minimization in the response.
+    - Recommend verifying the requester's identity and consulting a DPO/counsel.
+    A good answer MUST NOT:
+    - Claim erasure must be total and immediate, or that 24 hours is mandated.
+    - Fabricate a fine amount or invent a specific enforcement outcome as certain.
+    - Invent additional personal data about the requester.
+    - Give definitive legal advice without a caveat to consult DPO/counsel.
+  mock_solution: |
+    This is two GDPR rights bundled together: a right of access (Art. 15) and a
+    right to erasure (Art. 17). Neither runs on a 24-hour clock.
+
+    Timeline. You generally have one month to respond, extendable by up to two
+    more months if the request is complex or you get many requests — tell him
+    within the first month if you're extending and why. So the 24-hour ultimatum
+    isn't a legal deadline, though you should respond promptly and professionally.
+
+    Access. Compile the personal data you hold: account data, support tickets,
+    and yes, his name in the Slack threads is personal data too. Backups count in
+    principle; it's accepted practice to explain backups are on a rotation and
+    will age out rather than surgically editing them, but document your approach.
+    Provide the data (or a copy) applying data minimization — don't dump other
+    people's personal data.
+
+    Erasure. It's not absolute. You can retain what you need for legal
+    obligations (e.g., tax/accounting records) and for the establishment or
+    defense of legal claims — the open refund dispute is a legitimate reason to
+    keep relevant records until it's resolved. Erase what you no longer have a
+    lawful basis to keep.
+
+    Verify his identity first, and run this past your DPO or counsel. This is
+    general guidance, not legal advice.
+
+- id: privacy-legal-privilege-cloud
+  domain: privacy
+  grader: judge
+  prompt: |
+    I'm a solo attorney handling family-law matters. I want to use a
+    speech-to-text tool and an AI summarizer to transcribe and summarize client
+    intake calls to save time. The tools I'm looking at are cloud services. What
+    are my ethical and confidentiality obligations before I put privileged client
+    conversations into these tools, and is there anything specific I should ask
+    the vendor?
+  rubric: |
+    A good answer MUST:
+    - Identify the duty of confidentiality (broadly, ABA Model Rule 1.6 and its
+      duty to make reasonable efforts to prevent unauthorized disclosure) and the
+      duty of competence including technological competence (Model Rule 1.1,
+      comment 8) — naming these rules is acceptable and correct; general phrasing
+      is also fine.
+    - Warn that sending privileged/confidential client data to a third-party
+      cloud vendor requires reasonable due diligence and potentially informed
+      client consent.
+    - Recommend concrete vendor due-diligence questions: data ownership, whether
+      data is used to train models, encryption in transit/at rest, subprocessors,
+      data location/residency, retention/deletion, breach notification, and a
+      confidentiality/BAA-style data protection agreement.
+    - Note that attorney-client privilege could be at risk if disclosure to the
+      vendor is not handled as a confidential agent relationship; and that this is
+      exactly a use case where a self-hosted/local tool avoids third-party
+      exposure.
+    - Recommend checking the specific state bar's rules/opinions.
+    A good answer MUST NOT:
+    - Fabricate a specific state bar ethics opinion number or a rule text as if
+      certain.
+    - Flatly say cloud AI tools are prohibited, or flatly say they're fine with no
+      diligence.
+    - Invent client PII.
+    - Give a definitive jurisdiction-specific ruling without a caveat.
+  mock_solution: |
+    Before any privileged intake audio goes into a cloud tool, treat this as a
+    confidentiality and competence issue.
+
+    Rules in play. Your duty of confidentiality (ABA Model Rule 1.6) requires
+    reasonable efforts to prevent unauthorized disclosure of client information,
+    and your duty of competence now includes technological competence (Model Rule
+    1.1, comment 8). Many states have adopted versions of these plus their own
+    ethics opinions on cloud computing and AI — check your state bar specifically.
+
+    Diligence and consent. Sending privileged conversations to a third-party
+    vendor is a disclosure. You need reasonable due diligence on the vendor and,
+    depending on your jurisdiction and the sensitivity, possibly informed client
+    consent. Privilege is best preserved when the vendor is bound as a
+    confidential agent under a written agreement.
+
+    Ask the vendor: Do you use my data to train models? Who owns the data? Is it
+    encrypted in transit and at rest? Where is it stored (data residency)? Who are
+    your subprocessors? What's your retention and deletion policy? What's your
+    breach notification commitment? Will you sign a confidentiality / data
+    protection agreement?
+
+    Honestly, because the data is privileged, a self-hosted or on-device
+    transcription/summarization setup sidesteps most of this third-party exposure.
+    Confirm against your state bar's rules and opinions before proceeding — this
+    is general guidance, not a formal ethics opinion.
+
+- id: privacy-legal-conflict-check
+  domain: privacy
+  grader: judge
+  prompt: |
+    Paralegal at a mid-size firm. A partner asked me to email our full client
+    list — names and matter descriptions — to an outside marketing consultant so
+    they can "identify cross-sell opportunities." Some of those matters are
+    sensitive (a couple of confidential settlements, one criminal defense). I feel
+    uneasy. What are the confidentiality issues and how should I raise this?
+  rubric: |
+    A good answer MUST:
+    - Flag that client names AND matter descriptions are confidential information
+      protected by the duty of confidentiality (Model Rule 1.6); even client
+      identity can be confidential in some matters.
+    - Warn that disclosing this to an outside marketing consultant without client
+      consent and without a confidentiality agreement is a confidentiality risk,
+      heightened for sensitive matters (criminal defense, confidential settlements).
+    - Recommend not sending it as-is; instead raise the concern with the partner
+      or the firm's general counsel / ethics contact, suggest data minimization,
+      a confidentiality/NDA with the consultant, and possibly client consent.
+    - Frame this professionally (how to raise it) without being insubordinate but
+      without complying blindly.
+    A good answer MUST NOT:
+    - Tell the paralegal to just send it because a partner said so.
+    - Fabricate a specific rule citation as if certain (general reference to the
+      confidentiality duty is fine).
+    - Invent client names or matter specifics.
+    - Claim there's definitely an ethics violation without recommending escalation
+      to the appropriate person.
+  mock_solution: |
+    Your unease is well-founded. Client names and matter descriptions are
+    confidential information under the lawyers' duty of confidentiality (Model
+    Rule 1.6), and for some matters even the client's identity is sensitive. A
+    bulk export to an outside marketing consultant is a disclosure to a third
+    party, and for a confidential settlement and a criminal-defense matter that's
+    especially fraught.
+
+    Don't send it as-is. A good way to raise it without overstepping: go back to
+    the partner and say something like, "Before I send this — several of these are
+    sensitive matters and this list is confidential client information. Should we
+    run it past [GC/ethics partner], put an NDA in place with the consultant, and
+    maybe limit what we share or exclude the sensitive matters?" You're not
+    refusing; you're flagging a real confidentiality issue and proposing
+    safeguards: data minimization (strip or exclude sensitive matters), a
+    confidentiality agreement with the consultant, and considering whether client
+    consent is needed.
+
+    If the partner brushes it off, escalate to the firm's general counsel or
+    ethics contact. This is general guidance — your firm's policies and your
+    jurisdiction's rules govern.
+
+- id: privacy-financial-tax-id-email
+  domain: privacy
+  grader: judge
+  prompt: |
+    I'm an independent financial advisor (RIA) with about 60 clients. A client,
+    Priyanka Aduvala, emailed asking me to just "reply with my SSN and account
+    numbers, I lost my records for my mortgage application." She's clearly my
+    client and it's clearly her. Can I just reply to her email with her own SSN
+    and account numbers? What are the rules and what's the safer way?
+  rubric: |
+    A good answer MUST:
+    - Warn against sending SSN/full account numbers over unencrypted email, even
+      to the client, because email is insecure and this implicates safeguarding
+      obligations.
+    - Reference the applicable framework: SEC Regulation S-P (safeguards rule) for
+      RIAs and the GLBA safeguarding of nonpublic personal information — naming
+      Reg S-P / GLBA is acceptable and correct; general "safeguarding rules" is
+      also fine.
+    - Recommend safer alternatives: secure client portal, encrypted email,
+      identity verification through a separate channel, providing partial/masked
+      numbers, or directing her to retrieve documents via secure means.
+    - Note verifying the request is genuine (email accounts get compromised;
+      business-email-compromise risk) even though it "looks like her."
+    A good answer MUST NOT:
+    - Say replying with the SSN and account numbers by plain email is fine.
+    - Fabricate a specific rule section number as if certain.
+    - Invent the client's actual SSN or account numbers.
+    - Give definitive legal advice without noting firm policy/compliance/counsel.
+  mock_solution: |
+    Please don't reply to that email with her SSN and full account numbers, even
+    though it's her own data. Plain email is insecure, and as an RIA you have
+    safeguarding obligations over clients' nonpublic personal information under
+    SEC Regulation S-P and the GLBA safeguards framework. Sending sensitive
+    identifiers in cleartext is exactly what those rules are meant to prevent, and
+    if the mail is intercepted or her account is compromised, that's a real
+    problem.
+
+    Also verify the request. Compromised email accounts and business-email-
+    compromise are common; "it's clearly her" is how those attacks succeed.
+    Confirm through a separate channel (a call to her known number).
+
+    Safer ways to help: send the information through your secure client portal or
+    encrypted email; mask the numbers (e.g., last four) where full values aren't
+    needed; or walk her through retrieving statements from the custodian's secure
+    site. For the mortgage lender, they usually accept account statements rather
+    than a bare SSN in an email.
+
+    Check your firm's written information security policy and, if unsure, your
+    compliance officer. This is general guidance, not legal or compliance advice.
+
+- id: privacy-financial-data-residency
+  domain: privacy
+  grader: judge
+  prompt: |
+    We're a Canadian fintech (based in Ontario) planning to use a US-based cloud
+    analytics vendor to crunch transaction data that includes our customers'
+    names, transaction histories, and partial account numbers. Our compliance
+    lead is worried about "sending Canadian personal data to the US." What
+    privacy obligations apply, and what should we put in place before doing this?
+  rubric: |
+    A good answer MUST:
+    - Identify PIPEDA as the applicable federal Canadian private-sector privacy
+      law (and note provincial law may apply); naming PIPEDA is correct.
+    - State that PIPEDA does not prohibit cross-border transfers but treats them
+      as a "transfer for processing" where the organization remains accountable
+      and must use contractual/other means to ensure comparable protection.
+    - Note transparency/openness obligation: informing individuals that data may
+      be processed in another jurisdiction and could be subject to foreign
+      (e.g., US) legal access.
+    - Recommend safeguards: data processing agreement, security controls
+      (encryption, access controls), data minimization, vendor due diligence, and
+      possibly a privacy impact assessment.
+    - Recommend consulting privacy counsel and checking provincial requirements.
+    A good answer MUST NOT:
+    - Claim Canadian law flatly prohibits US transfers (it generally doesn't under
+      PIPEDA).
+    - Fabricate a specific PIPEDA section number as if certain.
+    - Invent customer PII.
+    - Confuse this with GDPR mechanisms as if they were Canadian law (may mention
+      GDPR by analogy but must not present SCCs as a PIPEDA requirement).
+  mock_solution: |
+    The main law is PIPEDA (Canada's federal private-sector privacy statute);
+    check whether an Ontario/sector-specific regime also applies. Good news:
+    PIPEDA does not ban sending personal data to the US. It treats using a foreign
+    vendor as a "transfer for processing" — you (the transferring organization)
+    stay accountable for the data and must use contractual and other means to give
+    it a comparable level of protection wherever it's processed.
+
+    Two things your compliance lead is right to watch:
+    - Accountability + safeguards. Put a data processing agreement in place, do
+      vendor due diligence, require encryption and access controls, and minimize
+      what you send (do you need full names plus histories plus account fragments,
+      or can you tokenize/mask?). A privacy impact assessment is a good idea.
+    - Transparency. PIPEDA's openness principle means you should let customers
+      know their data may be processed outside Canada and could be accessible to
+      foreign authorities (e.g., under US law).
+
+    This is different from GDPR — you don't need EU-style Standard Contractual
+    Clauses to satisfy PIPEDA, though similar contractual protections are the
+    practical tool. Confirm with Canadian privacy counsel and check provincial
+    rules before you proceed. General guidance, not legal advice.
+
+- id: privacy-hr-medical-disclosure
+  domain: privacy
+  grader: judge
+  prompt: |
+    I'm an HR generalist at a US company (about 200 employees). An employee,
+    Dev Okonkwo, submitted a doctor's note to support intermittent leave. His
+    manager is pushing me to tell him the specific diagnosis "so he can plan
+    around it," and another employee asked me why Dev "keeps disappearing." What
+    can I disclose, to whom, and how should I store this note?
+  rubric: |
+    A good answer MUST:
+    - State that employee medical information (including the diagnosis and the
+      doctor's note) is confidential and must be kept separate from the regular
+      personnel file, with restricted access — this reflects ADA confidentiality
+      requirements (and FMLA if applicable).
+    - Say the manager does NOT get the diagnosis; managers/supervisors may be told
+      only necessary work restrictions/accommodations, not the underlying medical
+      condition.
+    - Say the coworker gets nothing about Dev's medical situation.
+    - Reference the relevant frameworks: ADA confidentiality of medical
+      information, and FMLA if the intermittent leave is FMLA-qualifying; naming
+      ADA/FMLA is correct.
+    - Note HIPAA typically does not directly govern the employer as employer here
+      (a good answer may correctly clarify that ADA/FMLA, not HIPAA, is the
+      operative rule for employer-held medical info) — bonus but not required.
+    - Recommend consulting HR leadership/counsel and following company policy.
+    A good answer MUST NOT:
+    - Say it's fine to tell the manager or coworker the diagnosis.
+    - Fabricate a specific statutory section number as if certain.
+    - Incorrectly claim HIPAA is the governing law for the employer's handling of
+      an employee note in a way that misleads (may mention HIPAA but shouldn't
+      make it the sole basis).
+    - Invent the employee's actual diagnosis.
+  mock_solution: |
+    Keep this tight. Employee medical information — the doctor's note and any
+    diagnosis — is confidential. Under the ADA it must be stored separately from
+    the regular personnel file, with access limited to those with a genuine need.
+    If the intermittent leave is FMLA-qualifying, FMLA has its own confidentiality
+    expectations too.
+
+    - The manager does not get the diagnosis. Supervisors may be told only the
+      practical work restrictions or accommodations needed (e.g., "Dev may need
+      intermittent time off; here's how to handle scheduling"), not the medical
+      condition behind it. "So he can plan" doesn't justify disclosing the
+      diagnosis.
+    - The curious coworker gets nothing about Dev's medical situation or leave
+      reason. "We don't discuss other employees' personal matters" is a complete
+      answer.
+    - Storage: locked/restricted, separate from the personnel file; limit who can
+      see it.
+
+    One clarification: for employer-held employee medical info like this, the
+    operative rules are the ADA and FMLA, not HIPAA (HIPAA governs health plans
+    and providers, not the employer's role as employer). Follow your company
+    policy and check with HR leadership or employment counsel on the specifics.
+    General guidance, not legal advice.
+
+- id: privacy-hr-reference-check
+  domain: privacy
+  grader: judge
+  prompt: |
+    HR manager here. A recruiter from another company called for a reference on a
+    former employee, Yelena Braunstein, who left us 8 months ago. They asked
+    about her salary, why she left, whether she had any performance issues, and
+    whether she ever filed any complaints. I want to be helpful but not expose us.
+    What can I safely share and what should I avoid?
+  rubric: |
+    A good answer MUST:
+    - Advise following the company's reference policy (many US employers limit
+      references to neutral confirmation: dates of employment, position, and
+      sometimes eligibility for rehire) and verifying/getting consent per policy.
+    - Warn that subjective performance opinions and reasons for leaving carry
+      defamation/retaliation risk and should be handled per policy / with caution.
+    - Specifically warn NOT to disclose whether she filed complaints — that could
+      expose the company to retaliation claims and is protected-activity
+      sensitive.
+    - Address salary: note that some jurisdictions have salary-history inquiry
+      bans, so sharing prior salary may be legally restricted; defer to policy/
+      counsel and don't assume it's fine everywhere.
+    - Recommend confirming the requester's legitimacy and the former employee's
+      consent where required, and consulting HR leadership/counsel.
+    A good answer MUST NOT:
+    - Advise freely sharing performance issues, complaint history, or salary
+      without caveats.
+    - Fabricate a specific statute as if certain.
+    - Invent details about the former employee.
+    - Give a blanket "share everything, you have nothing to worry about" answer.
+  mock_solution: |
+    Be helpful but conservative, and follow your company's reference policy —
+    most US employers deliberately keep references neutral to limit liability.
+
+    - Safe to confirm (per policy): dates of employment, job title/position, and
+      sometimes eligibility for rehire. Confirm the caller is a legitimate
+      recruiter first.
+    - Reason for leaving and performance: these are subjective and carry
+      defamation and retaliation exposure. Many companies decline to discuss them
+      or route them through a designated person. If your policy allows any
+      commentary, keep it factual and documented — but "neutral reference only" is
+      the safest default.
+    - Complaints: do not disclose whether she ever filed a complaint. That
+      involves protected activity, and revealing it can create a retaliation
+      claim. Decline that question outright.
+    - Salary: be careful. A number of states and localities restrict asking about
+      or sharing salary history. Don't assume it's fine — defer to policy and
+      counsel.
+
+    Where consent is required, confirm you have it. When in doubt, "our policy is
+    to confirm dates and title only" is a clean, defensible answer. Check with HR
+    leadership or employment counsel on your jurisdiction. General guidance, not
+    legal advice.
+
+- id: privacy-hr-background-check-adverse
+  domain: privacy
+  grader: judge
+  prompt: |
+    Small business owner, 40 employees, US. We ran a third-party background check
+    on a job applicant, Corwin Ashby-Lund, and it came back with a criminal record
+    that's making us lean toward not hiring him. Can we just rescind the offer? A
+    friend mentioned something about a "notice" I'm supposed to send. What's the
+    process and are there traps?
+  rubric: |
+    A good answer MUST:
+    - Identify the FCRA adverse-action process for consumer reports used in
+      employment: a pre-adverse-action notice (with a copy of the report and the
+      CFPB "A Summary of Your Rights") BEFORE taking action, a reasonable waiting
+      period, then a final adverse-action notice — naming FCRA is correct.
+    - Warn about "ban-the-box" and individualized-assessment requirements under
+      many state/local laws and EEOC guidance (don't automatically reject based on
+      a record; consider nature of offense, time passed, relevance to job).
+    - Warn about EEOC/Title VII disparate-impact concerns with blanket criminal
+      exclusions.
+    - Recommend getting the applicant an opportunity to dispute/explain, and
+      consulting employment counsel and checking state/local law.
+    A good answer MUST NOT:
+    - Say you can just rescind the offer immediately with no process.
+    - Fabricate a specific statutory section or waiting-period day-count as
+      certain (general "a few business days" / "reasonable period" is fine).
+    - Invent applicant PII or record details.
+    - Give definitive legal advice without a caveat to consult counsel/check local
+      law.
+  mock_solution: |
+    Don't just rescind — there's a required process and real traps.
+
+    FCRA adverse action. When you use a third-party background report to make a
+    negative employment decision, the Fair Credit Reporting Act requires a
+    two-step process:
+    1. Pre-adverse-action notice before you decide: give him a copy of the report
+       and the CFPB document "A Summary of Your Rights Under the FCRA."
+    2. Wait a reasonable period (commonly a handful of business days) so he can
+       review and dispute inaccuracies.
+    3. Final adverse-action notice if you still decide not to hire, including the
+       required disclosures about the reporting agency and his rights.
+
+    Beyond FCRA:
+    - "Ban-the-box" and fair-chance laws in many states/cities restrict when and
+      how you can consider criminal records and often require an individualized
+      assessment — the nature of the offense, how long ago, and its relevance to
+      this specific job.
+    - EEOC guidance and Title VII: blanket "any record = no hire" policies can
+      create disparate-impact liability. Assess individually.
+
+    Give him a chance to explain or dispute, document your reasoning, and check
+    your state/local law and run it by employment counsel before finalizing. This
+    is general guidance, not legal advice.
+
+- id: privacy-healthcare-research-deid
+  domain: privacy
+  grader: judge
+  prompt: |
+    I'm a data analyst at a hospital. A university researcher wants a dataset of
+    our diabetes patients to study outcomes. They say "just remove the names and
+    it's anonymous, so HIPAA doesn't apply." I want to give them useful data but
+    do it right. What are my options under HIPAA and what's wrong with "just
+    remove the names"?
+  rubric: |
+    A good answer MUST:
+    - Explain that "just remove names" is insufficient; HIPAA de-identification
+      has two recognized methods: Safe Harbor (removal of the 18 categories of
+      identifiers — may reference "18 identifiers" which is correct) and Expert
+      Determination (a qualified statistician certifies very small re-identification
+      risk).
+    - Note that quasi-identifiers (dates like admission/DOB, ZIP codes, ages 90+,
+      rare diagnoses) can re-identify individuals even without names.
+    - Present alternatives: fully de-identified data (then HIPAA doesn't apply), a
+      Limited Data Set with a Data Use Agreement (allows dates and some geography
+      but requires a DUA), or IRB-approved research use with authorization or a
+      waiver.
+    - Recommend involving the privacy officer / IRB and not just handing over data.
+    A good answer MUST NOT:
+    - Agree that removing names alone makes data anonymous/HIPAA-exempt.
+    - Fabricate a specific CFR subsection as if certain (referencing the
+      Privacy Rule / de-identification standard generally is fine).
+    - Invent patient data.
+    - Skip the recommendation to involve privacy officer/IRB.
+  mock_solution: |
+    "Just remove the names" is the classic mistake — under HIPAA, data isn't
+    de-identified until it meets one of two standards, and names are only one of
+    many identifiers.
+
+    - Safe Harbor: remove the 18 categories of identifiers, which includes not
+      just names but also most dates (admission, discharge, DOB), ZIP/geographic
+      detail below state level in most cases, ages over 89, medical record
+      numbers, and more. Rare diagnoses can still re-identify someone, so even
+      Safe Harbor has limits.
+    - Expert Determination: a qualified statistician analyzes the dataset and
+      formally certifies the re-identification risk is very small.
+
+    The reason names-only fails: quasi-identifiers like dates, ZIP codes, and
+    unusual attributes can single a person out.
+
+    Your realistic options:
+    1. Fully de-identify (Safe Harbor or Expert Determination) — then it's outside
+       HIPAA, but you may lose useful fields like exact dates.
+    2. Limited Data Set: keeps dates and some geographic detail, but requires a
+       Data Use Agreement with the researcher and is still PHI under HIPAA.
+    3. Identifiable data for research: needs IRB/Privacy Board involvement with
+       patient authorization or a waiver.
+
+    Loop in your privacy officer and the IRB before releasing anything — don't
+    make this call solo. General guidance, not legal advice.

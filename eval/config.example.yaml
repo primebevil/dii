@@ -1,0 +1,29 @@
+# Variety experiment config. Copy to config.yaml and fill in your pod's roster.
+# The protocol (docs/Variety_Experiment_Plan.md) is fixed; this file is the part
+# that ages as models change.
+
+node_url: "http://localhost:8080"   # the pod hub's OpenAI endpoint (same one ask.sh hits)
+token: ""                            # consumer-door bearer token, if the hub requires one
+
+# The diverse pool under test: floor-class open-weight models (ADR-0006), named
+# as the pod advertises them. Spread across base families so the diversity is
+# real, not five fine-tunes of one base. Pull these on your nodes first.
+pool:
+  - "qwen3:14b"
+  - "gemma3:12b"
+  - "mistral-small:24b"
+  - "llama3.3:8b"
+  - "qwen2.5-coder:14b"
+
+# The judge scores open-ended answers. It MUST NOT be in the pool (no model grades
+# its own family). Use the strongest model you can run, ideally a class above the
+# pool; a hosted frontier judge is acceptable here since the judge is measurement,
+# not part of the network under test.
+judge_model: "qwen3:32b"
+
+samples: 0            # stochastic samples for the same-model baseline; 0 = len(pool), so S2 and S3 spend equal budget
+temperature: 0.7      # sampling temperature for the stochastic baseline and ensemble diversity
+eval_fraction: 0.5    # fraction of tasks held out for scoring; the rest is dev (baseline + router)
+split_seed: 1         # change only to reshuffle the dev/eval split
+noise_repeats: 5      # baseline re-runs used to estimate the run-to-run noise floor
+max_tokens: 1024      # per-answer cap
