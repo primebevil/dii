@@ -1,2 +1,6 @@
 .DS_Store
 *.stale-*
+
+# A node's live container config: real addresses and a real consumer token.
+# config-docker.example.yaml is the one that ships; you copy it and edit.
+prototype/deploy/config-docker.yaml

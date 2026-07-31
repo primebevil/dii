@@ -1,0 +1,40 @@
+# Config for a containerized node. Copy to config-docker.yaml and edit.
+#
+# With the default host networking, this is just an ordinary host config — the
+# container sees the host's network, so localhost is the host and `listen` can bind
+# a specific interface. That is the point: one config shape, not two that drift.
+
+# Bind a specific interface to keep the node off the others. ":8090" binds all.
+listen: "100.118.77.40:8090"
+node_id: "atlas"
+
+# The host's Ollama. Under host networking this is plain localhost, exactly as it
+# would be without a container.
+model_server: "http://localhost:11434/v1"
+
+# Stub shared token for the consumer door. M2 replaces this with per-consumer
+# credentials that can be issued and revoked independently.
+consumer_token: "dev-secret"
+
+# The address peers and consumers dial.
+advertise: "http://100.118.77.40:8090"
+
+# Overflow is optional now (ADR-0015); an empty list is a perfectly good node.
+peers: []
+
+# Drain deadline for in-flight streams on SIGTERM. Keep it under the compose
+# stop_grace_period (30s) so the drain finishes before the runtime SIGKILLs.
+shutdown_timeout: "15s"
+
+# No first-byte limit: a big model on a cold VRAM load can take minutes.
+response_header_timeout: "0s"
+
+# Other optional tuning (defaults shown):
+# startup_timeout: "5s"
+# max_body_bytes: 1048576
+
+# --- If you bridged instead (macOS/Docker Desktop) ----------------------------
+# model_server must reach the host by name rather than localhost, and listen must
+# bind inside the container while compose publishes it:
+#   listen: ":8090"
+#   model_server: "http://host.docker.internal:11434/v1"

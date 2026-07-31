@@ -1,0 +1,16 @@
+# Keep the build context to source. The image builds the binary itself, so a
+# locally built one must not leak in — and a stale host binary silently shadowing
+# a fresh build is exactly the kind of confusion worth designing out.
+node
+node-linux-*
+harness
+*.log
+
+# Local configs carry real addresses and tokens; the image gets its config mounted.
+config-*.yaml
+deploy/config-docker.yaml
+
+# Nothing the compiler needs.
+*.md
+.git
+.DS_Store
