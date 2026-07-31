@@ -3,7 +3,7 @@
 One binary is a node; a pod is several nodes that know each other. This guide
 covers the *topology* of running nodes on separate machines: addressing,
 reachability, and start order. For a single-machine two-node run see `README.md`,
-and to run a node as a managed service — container, systemd, or launchd — see
+and to run a node as a managed service — a container, or systemd — see
 `deploy/README.md`, which is the preferred way to run a node now.
 
 ## Build
@@ -88,9 +88,8 @@ two networks.
 
 ## Run a node (Linux, detached)
 
-For anything long-lived, run the node as a managed service instead — a container,
-systemd, or launchd — so it restarts on failure and drains cleanly on stop. See
-`deploy/README.md`. For a quick manual run:
+For anything long-lived, run the node as a container instead, so it restarts on
+failure and drains cleanly on stop. See `deploy/README.md`. For a quick manual run:
 
 ```sh
 mkdir -p ~/dii

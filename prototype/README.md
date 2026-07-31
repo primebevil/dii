@@ -30,8 +30,8 @@ actually depend on rather than a demo:
 - `/readyz` alongside `/healthz`, so a node that is up but whose backend is down is
   visible instead of looking healthy.
 - One JSON accounting line per request, including which node actually served it.
-- Container image, compose file, and systemd/launchd units in `deploy/`, plus a
-  `DII_CONFIG` env var so nothing depends on the working directory.
+- Container image and compose files in `deploy/` (plus an untested systemd unit),
+  and a `DII_CONFIG` env var so nothing depends on the working directory.
 - `/v1/models` advertises the whole pod, not just this node's shelf — added during
   M1 testing, when a real GUI client turned out to be unable to discover overflow
   at all. See "What the model list advertises" below.
@@ -53,7 +53,7 @@ internal/modelserver    Backend interface + Ollama client (+ mock, from M1)
 internal/manifest       node self-description; build own, fetch/cache peers'
 internal/peer           call a peer node's OpenAI endpoint + /manifest (implements Backend)
 internal/usage          per-request accounting record, JSON-line writer, token metering
-deploy/                 Dockerfile, compose, systemd unit, launchd plist
+deploy/                 Dockerfile, compose (+ macOS and GUI overlays), systemd unit
 ```
 
 ## Run it (one machine, two nodes)

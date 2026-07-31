@@ -16,5 +16,5 @@ shutdown_timeout: "15s"                      # drain deadline for in-flight stre
                                              # node gets SIGKILLed part-way through a drain.
 
 # The config path can also come from DII_CONFIG instead of -config, which is how
-# the container image and the systemd/launchd units point at a mounted config
-# without depending on a working directory. See deploy/.
+# the container image and the systemd unit point at a mounted config without
+# depending on a working directory. See deploy/.

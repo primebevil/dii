@@ -1,15 +1,27 @@
 # Running a node as a service
 
-Three ways to keep a node running, in the order you should reach for them. All
-three send `SIGTERM` to stop, which is what the node's graceful drain expects, and
-all three point at the config through `DII_CONFIG` so nothing depends on a working
-directory.
+Two ways to keep a node running. Both stop with `SIGTERM`, which is what the node's
+graceful drain expects, and both point at the config through `DII_CONFIG` so nothing
+depends on a working directory.
 
-| | Use it when | Files |
-|---|---|---|
-| **Docker** | the default, and the preferred way to run a node on atlas | `Dockerfile`, `docker-compose.yaml`, `config-docker.example.yaml` |
-| **systemd** | Linux without a container runtime | `dii-node.service` |
-| **launchd** | macOS, where Ollama must be native anyway | `com.dii.node.plist` |
+| | Use it when | Files | Status |
+|---|---|---|---|
+| **Docker** | the default, on any platform | `Dockerfile`, `docker-compose.yaml`, `config-docker.example.yaml` | in use on Linux and macOS |
+| **systemd** | Linux without a container runtime | `dii-node.service` | **written but never run** |
+
+Take that status column literally. Docker is the path with evidence behind it: it is
+what runs today on both a Linux server and a Mac. The systemd unit is offered
+because a Linux box without a container runtime is a perfectly reasonable way to run
+a node, but nobody has yet started it in anger, so treat it as a starting point
+rather than a tested recipe.
+
+**On macOS**, use Docker. It is verified there, and it changes nothing about
+Ollama, which has to run natively either way because a container cannot reach the
+GPU. If you specifically want the node itself native on a Mac, `launchd` is the
+mechanism — a user agent in `~/Library/LaunchAgents` invoking the binary with
+`DII_CONFIG` set. `launchctl unload` sends `SIGTERM`, so the drain behaves exactly
+as it does everywhere else. We do not ship a plist for this, because it would be one
+more untested file to keep honest.
 
 ## The one hard rule
 
@@ -68,20 +80,20 @@ per-consumer node identity. Behind one shared token, every GUI user looks like a
 single consumer to the node. That is fine for personal use; mapping GUI users to
 distinct node consumers is M2 work.
 
-## systemd
+## systemd (untested)
 
 Header comments in `dii-node.service` carry the install commands. Two settings
 matter: `KillSignal=SIGTERM` and `TimeoutStopSec=30s`, for the same drain reason as
 the Docker grace period. `After=ollama.service` is ordering only — the node starts
 fine without its backend and reports not-ready on `/readyz` until it answers.
 
-## launchd (macOS)
+To be plain about it: this unit has never been started. It is written from the same
+understanding of the node's lifecycle that the container path proves, so the drain
+and readiness behaviour should carry over — but the install steps, the `dii` user,
+and the sandboxing directives have not been exercised. Run `m1-check.sh` against it
+before trusting it, and fix this file if anything is off.
 
-Header comments in `com.dii.node.plist` carry the install commands. Edit the
-binary and config paths first. `launchctl unload` sends `SIGTERM`, so the drain
-behaves exactly as it does elsewhere.
-
-## Verifying any of them
+## Verifying either of them
 
 ```sh
 curl -s localhost:8090/healthz    # liveness: the process is up
@@ -93,6 +105,6 @@ curl -s localhost:8090/manifest   # what this node can serve
 that is up but whose backend is down answers `200` on `/healthz` and `503` on
 `/readyz`. That distinction is the whole point of having both.
 
-Every request also writes one JSON accounting line to stdout — `docker compose
-logs`, `journalctl -u dii-node`, or the launchd log file. See the usage-accounting
-section in `../README.md` for the fields and what the token counts mean.
+Every request also writes one JSON accounting line to stdout — `docker compose logs`
+or `journalctl -u dii-node`. See the usage-accounting section in `../README.md` for
+the fields and what the token counts mean.
