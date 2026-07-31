@@ -10,3 +10,11 @@ peers:
 startup_timeout: "5s"                        # boot-time model-list and peer-manifest fetches
 response_header_timeout: "30s"               # max wait for first byte from an upstream ("0s" = no limit)
 max_body_bytes: 1048576                      # request body cap, in bytes
+shutdown_timeout: "15s"                      # drain deadline for in-flight streams on SIGINT/SIGTERM.
+                                             # Keep it under any supervisor's stop grace period
+                                             # (Docker's default is 10s, so raise that one) or the
+                                             # node gets SIGKILLed part-way through a drain.
+
+# The config path can also come from DII_CONFIG instead of -config, which is how
+# the container image and the systemd/launchd units point at a mounted config
+# without depending on a working directory. See deploy/.

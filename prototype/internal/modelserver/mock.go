@@ -70,6 +70,25 @@ func (m *Mock) ChatCompletionStream(ctx context.Context, req ChatRequest) (io.Re
 	return pr, nil
 }
 
+// Embeddings returns a canned vector in the OpenAI shape, including a usage
+// block so the accounting path can be exercised without a real model server.
+func (m *Mock) Embeddings(ctx context.Context, req EmbeddingsRequest) ([]byte, error) {
+	model := req.Model
+	if model == "" {
+		model = "mock-embed"
+	}
+	return json.Marshal(map[string]any{
+		"object": "list",
+		"model":  model,
+		"data": []map[string]any{{
+			"object":    "embedding",
+			"index":     0,
+			"embedding": []float64{0.1, 0.2, 0.3, 0.4},
+		}},
+		"usage": map[string]int{"prompt_tokens": 1, "total_tokens": 1},
+	})
+}
+
 // OpenAI chat.completion.chunk shapes, minimal subset.
 type chunk struct {
 	ID      string        `json:"id"`
