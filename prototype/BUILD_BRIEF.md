@@ -4,6 +4,8 @@ Handoff doc for building the Week-3 prototype in Go. Read this first, then build
 
 **Status (2026-07-12):** M1–M4 are all built and verified — see prototype/README.md, prototype/DEPLOY.md, and journal/2026-07-12-week3-m4-findings.md. This brief is retained as the original handoff.
 
+**Superseded (2026-07-30):** the POC has been promoted to the functional node, so this brief is now history rather than the current spec — read docs/Functional_Node_Plan.md for the live plan and prototype/README.md for what exists. The *hard constraints* below all still hold and are still enforced. The *non-goals* are what has moved: they were correct for a POC and are being retired one milestone at a time. Persistence and lifecycle hardening are done as of M1; real identity is M2; fair-use quotas are M3. Federation, discovery, and clever load balancing remain out of scope, and node-to-node overflow itself has been reclassified from core to optional (ADR-0015).
+
 ## Read these first (sources of truth)
 
 - architecture/Sketchbook.md, the settled mental model: model server vs. node, the router, two doors, the manifest, the full workflow, the Go package layout, and backend portability.

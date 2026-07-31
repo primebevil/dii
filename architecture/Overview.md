@@ -1,6 +1,6 @@
 # DII Architecture Overview: Local-First, Network-as-Overflow
 
-Status: RFC v0.1 (2026-07-02), updated 2026-07-03 with the router ingress model and prototype scope from ADR-0003 and ADR-0004, and 2026-07-27 with the access-distribution reframe (ADR-0015). Depends on Why DII Exists and The Case Against DII.
+Status: RFC v0.1 (2026-07-02), updated 2026-07-03 with the router ingress model and prototype scope from ADR-0003 and ADR-0004, 2026-07-27 with the access-distribution reframe (ADR-0015), and 2026-07-30 with the functional-node M1 build. Depends on Why DII Exists and The Case Against DII.
 
 ## What changed
 
@@ -13,6 +13,18 @@ The thesis is access distribution, not capability aggregation. DII exists to put
 This reframes the "Network-as-Overflow" emphasis in the title above. The load-bearing primitive is the consumer ingress (ADR-0004): a person with no node reaching a willing node that serves them. Node-to-node aggregation, the overflow path where one node borrows a model a peer holds, is reclassified from core mechanism to optional optimization, validated and available (ADR-0011) but not something the network's guarantee depends on. A node serving a single model within its capability is a full participant. What the coordination layer still owes is availability, not variety: enough nodes serving the floor, and a directory that finds an available one (ADR-0009). The next load-bearing decision is therefore consumer admission and abuse resistance, who can use them, promoted from a loose end to the center (docs/Identity_Note_From_Prototype.md, docs/Governance_And_Abuse_Resistance.md).
 
 The sections below still describe overflow as the spine; read them through this reframe until they are rewritten. The engineering is unchanged and validated. What changed is which part is the reason to exist.
+
+## What changed, 2026-07-30 (functional node M1)
+
+The node runtime stopped being a demonstration. The Week-3 prototype proved the loop but, by its own non-goals, skipped everything that makes a node dependable rather than illustrative. M1 of the functional-node plan (docs/Functional_Node_Plan.md) closes the first part of that gap, and three of its results matter at this level rather than only in the code.
+
+The reliable-floor bundle is now actually served, not just specified. ADR-0006 and the Reliable Floor Definition describe the floor as a bundle of a general model, a coder, and an embedding model; until M1 the node served only the chat shape, so the third of the bundle existed on paper. It is now a real endpoint on the same backend seam. A useful detail fell out of building it: the standard model-list call the capability manifest is built from reports every model a backend serves and carries no type field, so an embedding model is simply another name in the same list and the single model-name capability match covers both. Capability tags remain a later layer, and this is one more piece of evidence that they are not yet needed.
+
+Degrading honestly now includes degrading *visibly*. "Graceful degradation, never to zero" was stated as a routing property — fall back to local, report honestly when nobody can serve. M1 adds the operational half: a node reports liveness and readiness separately, so a node that is up but whose model server has died is detectable rather than looking healthy to every supervisor and directory that asks. That distinction is what a directory promising availability (ADR-0009) will eventually need to consume, since "a node is reachable" and "a node can serve" are different facts.
+
+Fair-use has a substrate rather than a plan. The participation model notes that because access does not require contribution, fair-use quotas are what keep a single actor from posing as many consumers and draining a pod's donated capacity. Quotas need accounting to enforce, and accounting is now built: one structured record per request, carrying which node served it and what it cost, keyed on an opaque handle and never on prompt text. That last property is not incidental — it is the data-minimization seam ADR-0016 describes, and building the counters this way now is what keeps a later fair-use mechanism from quietly becoming a behavioral reputation store.
+
+What M1 deliberately does not do: per-consumer identity, fair-use enforcement, and moderation are M2 through M4, and serving the unaffiliated public stays gated on the ADR-0016 legal review regardless of what the code can do.
 
 ## The idea in one sentence
 
@@ -82,7 +94,7 @@ The final step always returns the best the local node can do, which is the resil
 
 ## Build order
 
-- Phase 0, the atom. A solid local-first node runtime with a capable open model, offline capability, and a capability manifest. This alone delivers the core promise to a single user and is worth shipping on its own.
+- Phase 0, the atom. A solid local-first node runtime with a capable open model, offline capability, and a capability manifest. This alone delivers the core promise to a single user and is worth shipping on its own. Underway as the functional node (docs/Functional_Node_Plan.md): M1 completed the floor bundle including embeddings, graceful lifecycle, separate liveness and readiness, per-request usage accounting, and a container image, which is what turns the atom into something a person can actually depend on daily. Per-consumer identity, fair-use, and the moderation seam are M2 through M4.
 - Phase 1, two nodes and a consumer in one pod. The Week-3 proof of concept, written in Go (ADR-0003), where node A routes a capability request to node B and back, and a consumer C with no local model borrows from the pod through the remote ingress (ADR-0004). Each node exposes an OpenAI-compatible endpoint so existing clients work unchanged. Built and validated (prototype/, extended to a live three-node pod): all four kill-criteria passed, with overflow throughput about 100 percent of the peer's own local and only 20 to 43 milliseconds of added time-to-first-token, so borrowing a peer's capability is effectively free, and the overhead is transport-bound and model-independent so it carries to the 30B floor (journal/2026-07-12-week3-m4-findings.md). The inter-node transport is the reused OpenAI-compatible HTTP call (ADR-0011). What remains unsettled is durability, not feasibility (docs/Pod_Aggregation_Red_Team.md).
 - Phase 2, pod overflow and policy. The router honors sovereignty and trust policy, reciprocity accounting comes online, and graceful degradation paths are exercised.
 - Phase 3, federation. Signed discovery across pods, cross-pod trust with optional verification, and the "Fediverse for inference" topology.

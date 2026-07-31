@@ -1,0 +1,112 @@
+<svg viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title>Inside a functional node — one request's path, and what the operator can see</title>
+  <desc>A request enters one of two doors, selected by bearer token. Chat streams as SSE; embeddings are a single JSON request and response, completing the reliable-floor bundle. The router picks local-first for the owner and peer-first for a consumer, then brokers to a model server or a peer node. Every request writes one JSON accounting line keyed on an opaque handle and never on prompt text. Separately, healthz reports liveness while readyz pings the model server so a live-but-degraded node is visible.</desc>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#6b7280"/>
+    </marker>
+    <marker id="arwBack" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#9aa3b2"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="640" fill="#ffffff"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1a1f2b">Inside a functional node — one request's path</text>
+  <text x="450" y="54" text-anchor="middle" font-size="13" fill="#4a5160">M1: the floor bundle complete, honest readiness, and one accounting line per request</text>
+
+  <!-- callers -->
+  <text x="88" y="90" text-anchor="middle" font-size="11" fill="#6b7280">who is asking</text>
+  <rect x="20" y="100" width="136" height="52" rx="8" fill="#eef2fb" stroke="#3b6ef5"/>
+  <text x="88" y="122" text-anchor="middle" font-size="13" font-weight="700" fill="#2b5fe0">Owner</text>
+  <text x="88" y="139" text-anchor="middle" font-size="11" fill="#4a5160">no token</text>
+
+  <rect x="20" y="168" width="136" height="52" rx="8" fill="#eef2fb" stroke="#3b6ef5"/>
+  <text x="88" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="#2b5fe0">Consumer</text>
+  <text x="88" y="207" text-anchor="middle" font-size="11" fill="#4a5160">bearer token</text>
+
+  <!-- the node -->
+  <rect x="196" y="80" width="512" height="212" rx="10" fill="#fbfcfe" stroke="#c9d3e6" stroke-dasharray="4 3"/>
+  <text x="206" y="99" font-size="11" fill="#6b7280">the DII node — control plane only, never runs inference</text>
+
+  <!-- front door -->
+  <rect x="212" y="110" width="152" height="110" rx="8" fill="#eef2fb" stroke="#3b6ef5"/>
+  <text x="288" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#2b5fe0">Front door</text>
+  <text x="288" y="150" text-anchor="middle" font-size="11" fill="#4a5160">token picks the door</text>
+  <text x="288" y="174" text-anchor="middle" font-size="11" fill="#1a1f2b">/v1/chat/completions</text>
+  <text x="288" y="190" text-anchor="middle" font-size="11" fill="#1a1f2b">/v1/embeddings</text>
+  <text x="288" y="208" text-anchor="middle" font-size="10" fill="#6b7280">unknown token → 401</text>
+
+  <!-- router -->
+  <rect x="400" y="110" width="152" height="110" rx="8" fill="#eef2fb" stroke="#3b6ef5"/>
+  <text x="476" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#2b5fe0">Router</text>
+  <text x="476" y="150" text-anchor="middle" font-size="11" fill="#4a5160">where does this run?</text>
+  <text x="476" y="173" text-anchor="middle" font-size="11" fill="#1a1f2b">owner: local first</text>
+  <text x="476" y="189" text-anchor="middle" font-size="11" fill="#1a1f2b">consumer: peers first</text>
+  <text x="476" y="208" text-anchor="middle" font-size="10" fill="#6b7280">nobody has it → 503</text>
+
+  <!-- backend seam label -->
+  <text x="630" y="132" text-anchor="middle" font-size="10" fill="#6b7280">modelserver.Backend</text>
+  <text x="630" y="145" text-anchor="middle" font-size="10" fill="#6b7280">standard OpenAI subset</text>
+
+  <!-- targets -->
+  <rect x="572" y="155" width="124" height="30" rx="6" fill="#ffffff" stroke="#3b6ef5"/>
+  <text x="634" y="175" text-anchor="middle" font-size="12" font-weight="600" fill="#2b5fe0">local model server</text>
+
+  <rect x="572" y="195" width="124" height="30" rx="6" fill="#ffffff" stroke="#9aa3b2"/>
+  <text x="634" y="215" text-anchor="middle" font-size="12" font-weight="600" fill="#4a5160">a peer node</text>
+
+  <rect x="742" y="140" width="138" height="60" rx="8" fill="#f3f5f9" stroke="#9aa3b2"/>
+  <text x="811" y="163" text-anchor="middle" font-size="12" font-weight="700" fill="#4a5160">Ollama</text>
+  <text x="811" y="180" text-anchor="middle" font-size="10" fill="#6b7280">runs where the GPU is,</text>
+  <text x="811" y="192" text-anchor="middle" font-size="10" fill="#6b7280">outside the node image</text>
+
+  <!-- flow arrows -->
+  <line x1="156" y1="126" x2="208" y2="140" stroke="#6b7280" marker-end="url(#arw)"/>
+  <line x1="156" y1="194" x2="208" y2="180" stroke="#6b7280" marker-end="url(#arw)"/>
+  <line x1="364" y1="165" x2="396" y2="165" stroke="#6b7280" marker-end="url(#arw)"/>
+  <line x1="552" y1="160" x2="568" y2="167" stroke="#6b7280" marker-end="url(#arw)"/>
+  <line x1="552" y1="196" x2="568" y2="206" stroke="#6b7280" marker-end="url(#arw)"/>
+  <line x1="696" y1="170" x2="738" y2="170" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <!-- two response shapes -->
+  <text x="450" y="320" text-anchor="middle" font-size="11" fill="#6b7280">two response shapes, both relayed byte-for-byte</text>
+
+  <rect x="196" y="332" width="244" height="66" rx="8" fill="#ffffff" stroke="#3b6ef5"/>
+  <text x="318" y="353" text-anchor="middle" font-size="12" font-weight="700" fill="#2b5fe0">chat — streaming</text>
+  <text x="318" y="371" text-anchor="middle" font-size="11" fill="#4a5160">SSE, flushed per read</text>
+  <text x="318" y="388" text-anchor="middle" font-size="10" fill="#6b7280">text/event-stream</text>
+
+  <rect x="464" y="332" width="244" height="66" rx="8" fill="#ffffff" stroke="#3b6ef5"/>
+  <text x="586" y="353" text-anchor="middle" font-size="12" font-weight="700" fill="#2b5fe0">embeddings — single reply</text>
+  <text x="586" y="371" text-anchor="middle" font-size="11" fill="#4a5160">one request, one JSON object</text>
+  <text x="586" y="388" text-anchor="middle" font-size="10" fill="#6b7280">application/json</text>
+
+  <line x1="318" y1="292" x2="318" y2="328" stroke="#9aa3b2" stroke-dasharray="3 3" marker-end="url(#arwBack)"/>
+  <line x1="586" y1="292" x2="586" y2="328" stroke="#9aa3b2" stroke-dasharray="3 3" marker-end="url(#arwBack)"/>
+
+  <!-- accounting -->
+  <rect x="196" y="424" width="512" height="86" rx="8" fill="#eef2fb" stroke="#3b6ef5"/>
+  <text x="452" y="446" text-anchor="middle" font-size="13" font-weight="700" fill="#2b5fe0">One JSON accounting line per request</text>
+  <text x="452" y="466" text-anchor="middle" font-size="11" fill="#1a1f2b">door · consumer handle · model · served_by · status · latency · tokens</text>
+  <text x="452" y="484" text-anchor="middle" font-size="10" fill="#4a5160">keyed on an opaque handle, never on prompt or completion text</text>
+  <text x="452" y="500" text-anchor="middle" font-size="10" fill="#6b7280">the substrate M3 fair-use reads, and what offload sizing needs today</text>
+
+  <line x1="452" y1="398" x2="452" y2="420" stroke="#6b7280" marker-end="url(#arw)"/>
+
+  <!-- ops panel -->
+  <rect x="196" y="534" width="512" height="86" rx="8" fill="#fbfcfe" stroke="#c9d3e6" stroke-dasharray="4 3"/>
+  <text x="452" y="555" text-anchor="middle" font-size="11" fill="#6b7280">separately, for whoever is keeping the node alive</text>
+
+  <rect x="212" y="564" width="238" height="44" rx="6" fill="#ffffff" stroke="#9aa3b2"/>
+  <text x="331" y="582" text-anchor="middle" font-size="12" font-weight="700" fill="#4a5160">/healthz — liveness</text>
+  <text x="331" y="599" text-anchor="middle" font-size="10" fill="#6b7280">the process is up and answering</text>
+
+  <rect x="458" y="564" width="238" height="44" rx="6" fill="#ffffff" stroke="#3b6ef5"/>
+  <text x="577" y="582" text-anchor="middle" font-size="12" font-weight="700" fill="#2b5fe0">/readyz — readiness</text>
+  <text x="577" y="599" text-anchor="middle" font-size="10" fill="#6b7280">pings the model server; 503 if it is down</text>
+
+  <text x="790" y="590" font-size="10" fill="#6b7280">up but degraded</text>
+  <text x="790" y="603" font-size="10" fill="#6b7280">is now visible</text>
+</svg>
