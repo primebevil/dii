@@ -97,6 +97,20 @@ Build one milestone at a time and stop for review between each. Each milestone
 should leave the node runnable and the existing owner/consumer/overflow behavior
 intact.
 
+Two deployment paths, checked at different rates. Day to day the pod runs on
+containers, because that is the lowest-friction way to iterate: atlas as the
+serving node and the laptop as a spoke. But the node must also run as a plain
+supervised service with no container runtime at all — that is a real way people
+will run one, and it is the only thing keeping the node honest about being a single
+static binary that depends on nothing.
+
+So at each milestone boundary, before review, run the node under systemd once and
+put `prototype/scripts/m1-check.sh` against it. It takes a few minutes and it
+catches the class of regression a container hides: a new dependency on a mounted
+path, an env var only compose sets, a signal only Docker delivers. Steps are in
+`prototype/deploy/README.md`. Whichever path is not in daily use is the one that
+rots, which is exactly why this is a gate and not a good intention.
+
 ### M1 — Floor bundle and reliability
 
 Status: built and verified 2026-07-30, awaiting review. All five tasks landed, plus

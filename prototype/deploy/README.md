@@ -7,13 +7,19 @@ depends on a working directory.
 | | Use it when | Files | Status |
 |---|---|---|---|
 | **Docker** | the default, on any platform | `Dockerfile`, `docker-compose.yaml`, `config-docker.example.yaml` | in use on Linux and macOS |
-| **systemd** | Linux without a container runtime | `dii-node.service` | **written but never run** |
+| **systemd** | Linux without a container runtime | `dii-node.service` | lifecycle verified; root install path not |
 
-Take that status column literally. Docker is the path with evidence behind it: it is
-what runs today on both a Linux server and a Mac. The systemd unit is offered
-because a Linux box without a container runtime is a perfectly reasonable way to run
-a node, but nobody has yet started it in anger, so treat it as a starting point
-rather than a tested recipe.
+Take that status column literally. Docker is what runs today on both a Linux server
+and a Mac. The systemd path was validated on atlas by running this unit's directives
+as a user unit against the real binary and config: the service started and served
+(`m1-check.sh` 12/12), restarted cleanly, came back by itself after the process was
+`SIGKILL`ed, and drained on `systemctl stop` rather than being killed mid-stream.
+`ProtectSystem=strict` and the other sandboxing directives did not interfere.
+
+What that run could **not** cover, because it was unprivileged: `User=`/`Group=`,
+`ProtectHome=true` (the test config sat in `$HOME`, where this unit uses
+`/etc/dii`), the `After=ollama.service` ordering, and the `/opt/dii` + `/etc/dii`
+install steps. Those are the parts to watch the first time you install it for real.
 
 **On macOS**, use Docker. It is verified there, and it changes nothing about
 Ollama, which has to run natively either way because a container cannot reach the
@@ -80,18 +86,54 @@ per-consumer node identity. Behind one shared token, every GUI user looks like a
 single consumer to the node. That is fine for personal use; mapping GUI users to
 distinct node consumers is M2 work.
 
-## systemd (untested)
+## systemd
 
 Header comments in `dii-node.service` carry the install commands. Two settings
 matter: `KillSignal=SIGTERM` and `TimeoutStopSec=30s`, for the same drain reason as
 the Docker grace period. `After=ollama.service` is ordering only — the node starts
 fine without its backend and reports not-ready on `/readyz` until it answers.
 
-To be plain about it: this unit has never been started. It is written from the same
-understanding of the node's lifecycle that the container path proves, so the drain
-and readiness behaviour should carry over — but the install steps, the `dii` user,
-and the sandboxing directives have not been exercised. Run `m1-check.sh` against it
-before trusting it, and fix this file if anything is off.
+The lifecycle half of this unit was exercised on atlas (see the status column
+above): start, serve, restart, recover from a `SIGKILL`, and drain on stop all
+behave. The install half — the `dii` user, `/opt/dii`, `/etc/dii`, and
+`ProtectHome=true` — has not been, since that needs root. Run `m1-check.sh` against
+the node after installing and fix this file if anything is off.
+
+If you would rather not install system-wide, the same unit works as a user unit in
+`~/.config/systemd/user/` with `User=`/`Group=` dropped and paths under `%h`; pair
+it with `loginctl enable-linger` so it survives logout and starts at boot.
+
+### The per-milestone check
+
+The pod runs on containers day to day, so this path is the one that will rot. At
+each milestone boundary, run it once and check it. On a Linux node:
+
+```sh
+# 1. build the binary the unit runs (from prototype/, on any machine)
+GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o node-linux-amd64 ./cmd/node
+scp node-linux-amd64 <host>:/tmp/node
+
+# 2. swap the container out for the service
+ssh <host> 'cd ~/dii-node/deploy && docker compose stop'
+ssh <host> 'sudo install -o dii -g dii /tmp/node /opt/dii/node && sudo systemctl restart dii-node'
+
+# 3. check it, from anywhere that can reach the node
+DII_CHAT_MODEL=<a model it serves> prototype/scripts/m1-check.sh http://<host>:8090
+
+# 4. exercise the things a container otherwise hides
+ssh <host> 'sudo systemctl restart dii-node'                    # restarts clean
+ssh <host> 'sudo kill -9 $(systemctl show dii-node -p MainPID --value)'  # Restart=on-failure
+ssh <host> 'sudo systemctl stop dii-node'                       # drains, not killed
+ssh <host> 'sudo journalctl -u dii-node -n 5'                   # "draining..." then "stopped"
+
+# 5. put the container back
+ssh <host> 'sudo systemctl stop dii-node && cd ~/dii-node/deploy && docker compose start'
+```
+
+What this catches that the container hides: a new dependency on a path only a
+volume mount provides, an environment variable only compose sets, a signal only
+Docker delivers, or a libc dependency creeping into what is supposed to be a static
+binary.
 
 ## Verifying either of them
 
