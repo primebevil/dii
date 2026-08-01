@@ -37,7 +37,7 @@ type Config struct {
 	StartupTimeout        time.Duration // boot-time model-list and peer-manifest fetches
 	ResponseHeaderTimeout time.Duration // max wait for first byte from an upstream (0 = no limit)
 	MaxBodyBytes          int64         // request body cap
-	ShutdownTimeout       time.Duration // drain deadline for in-flight requests on shutdown
+	ShutdownTimeout       time.Duration // drain deadline for in-flight requests on shutdown (0 = no deadline)
 }
 
 // rawConfig mirrors the YAML on disk before defaulting and duration parsing.

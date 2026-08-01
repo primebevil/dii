@@ -153,6 +153,13 @@ should graduate to `docs/ADR/`.
   the gap is real. Likely fix is an opt-in config flag injecting
   `stream_options.include_usage`. Blocks precise M3 budgets. Owner has flagged usage as
   important.
+- [ ] **Five error-handling defects carried from the M1 review into M2**, listed in
+  full in `docs/Functional_Node_Plan.md` under "Carried into M2 from the M1 code
+  review": mid-stream failures logged as `200`, oversized request bodies truncated
+  into a wrong `503` instead of a `413`, oversized embeddings responses truncated and
+  served as `200`, upstream errors leaking internal topology to the consumer door, and
+  `ServedBy` attributed to peers that never ran the work. Three of the five corrupt
+  the accounting record, which M3 budgets depend on, so they should land before M3.
 - [ ] **Periodic manifest refresh.** Would fix both "restart a node to notice its peer"
   and the stale-model-list staleness above. Currently the highest-value small addition.
 - [ ] **M2 shape, to settle before starting:** consumer store as a single JSON file with

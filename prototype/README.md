@@ -141,8 +141,8 @@ cached peers' — with `owned_by` saying where each would run:
 $ curl -s localhost:8080/v1/models | jq -r '.data[] | "\(.id)\t-> \(.owned_by)"'
 all-minilm:l6-v2      -> local
 llama3.2:1b           -> local
-qwen2.5:7b            -> http://100.118.77.40:8090
-deepseek-r1:32b       -> http://100.118.77.40:8090
+qwen2.5:7b            -> http://100.100.100.100:8090
+deepseek-r1:32b       -> http://100.100.100.100:8090
 ```
 
 The reason it is the pod and not just this node: a caller cannot discover overflow
@@ -222,5 +222,5 @@ sends the consumer-door bearer token. `m1-check.sh` also takes `DII_CHAT_MODEL` 
 
 ```sh
 DII_CHAT_MODEL=qwen2.5:7b DII_EMBED_MODEL=all-minilm:l6-v2 \
-  scripts/m1-check.sh http://100.118.77.40:8090
+  scripts/m1-check.sh http://100.100.100.100:8090
 ```

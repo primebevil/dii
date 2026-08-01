@@ -23,7 +23,7 @@ services:
 
     # Bound to loopback: this is a personal GUI, and with auth disabled below it
     # must not be reachable from the LAN. To use it from another device on your
-    # tailnet, change this to your Tailscale IP (e.g. "100.94.5.71:3000:8080") and
+    # tailnet, change this to your Tailscale IP (e.g. "100.100.100.100:3000:8080") and
     # turn WEBUI_AUTH back on.
     ports:
       - "127.0.0.1:3000:8080"

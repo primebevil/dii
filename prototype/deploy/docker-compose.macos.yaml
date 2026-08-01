@@ -29,6 +29,6 @@ services:
 
     # Must match `advertise` in the config. Publishing on all interfaces is what
     # lets a peer reach this node over Tailscale; narrow it to one interface
-    # (e.g. "100.94.5.71:8080:8080") if you would rather it not answer on the LAN.
+    # (e.g. "100.100.100.100:8080:8080") if you would rather it not answer on the LAN.
     ports:
       - "8080:8080"

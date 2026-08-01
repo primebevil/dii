@@ -55,8 +55,9 @@ services:
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"   # native on Desktop; this line is for Linux
     # ports:
-    #   - "8090:8090"                            # must match `advertise` in the config;
-    #                                            # bind one interface: "100.x.y.z:8090:8090"
+    #   - "8080:8080"                            # must match `listen` and `advertise`
+    #                                            # in the config; bind one interface
+    #                                            # with "100.100.100.100:8080:8080"
     #
     # On Linux, if you bridge anyway, make sure the host firewall admits the compose
     # network's subnet and not just the default bridge's — see reason 3 above.
@@ -66,28 +67,10 @@ services:
     # override it, it must be the exec form — `test: ["CMD", "/usr/local/bin/node",
     # "-healthcheck"]`. The shell form cannot work: this image has no shell.
 
-  # An optional GUI, which is not an integration — it is just another consumer.
-  # Open WebUI speaks OpenAI, so it points at the node's /v1 with a consumer token
-  # as its API key and needs no node changes. The embeddings endpoint is what powers
-  # its document and retrieval features.
-  #
-  # Note on identity: the GUI's own login is a layer above the node. Behind one
-  # shared token every GUI user looks like a single consumer to the node, which is
-  # fine for personal use; mapping GUI users to distinct node consumers is M2 work.
-  #
-  # open-webui:
-  #   image: ghcr.io/open-webui/open-webui:main
-  #   container_name: dii-open-webui
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - node
-  #   ports:
-  #     - "3000:8080"
-  #   environment:
-  #     OPENAI_API_BASE_URL: "http://node:8090/v1"
-  #     OPENAI_API_KEY: "dev-secret"    # the node's consumer_token
-  #   volumes:
-  #     - open-webui:/app/backend/data
-
-# volumes:
-#   open-webui:
+# An optional GUI lives in docker-compose.gui.yaml, as an overlay you add with a
+# second -f rather than a block to uncomment here. It is a consumer of a node, not
+# part of one, and the overlay gets two things right that are easy to get wrong by
+# hand: it reaches the node through the host's published port (compose service-name
+# DNS does not resolve under host networking), and it sends no API key, so the GUI
+# uses the node's local door — local-first — instead of the consumer door, which is
+# peer-first and would route your own work off this machine.

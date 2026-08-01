@@ -160,6 +160,41 @@ Definition of done: the node serves chat, coder, and embeddings against atlas's
 Ollama; survives a restart cleanly under systemd; `/readyz` flips when the
 backend is stopped; and every request produces a usage log line. Stop for review.
 
+### Carried into M2 from the M1 code review
+
+A high-effort review of the M1 branch confirmed ten defects. The deployment and
+config ones were fixed before merge; five behavioural ones are deliberately carried
+here, because they are all error-and-attribution handling and M2 touches exactly
+that code. Do these before, or alongside, the identity work — the accounting record
+is about to become load-bearing for M3 budgets, and three of the five corrupt it.
+
+1. **Mid-stream failures are recorded as success.** `relay` writes `200` before any
+   upstream byte arrives, then returns silently on a read or write error. A
+   generation cut off half-way by an OOM-killed model server logs
+   `status: 200, error: ""` with a partial token count, and the caller gets a
+   truncated SSE stream with no `[DONE]` and no error frame. The status is committed
+   before the outcome is known, so the fix is for `relay` to report what happened and
+   for the record to reflect it.
+2. **Oversized request bodies are silently truncated into a wrong error.**
+   `io.ReadAll(io.LimitReader(r.Body, MaxBodyBytes))` reports no error on truncation,
+   so the model probe fails, the model reads as empty, and the caller gets
+   `503 no node in the pod can serve this request` for a model the node serves and
+   advertises. Should be a `413`. Affects both chat and embeddings.
+3. **Oversized embeddings responses are truncated and served as `200`.** Same
+   `LimitReader` pattern in `modelserver.Client.Embeddings` and `peer.Client`: past
+   the 32 MiB cap the caller receives malformed JSON with a success status, and the
+   usage record logs zero tokens for real work — so the fair-use substrate
+   under-counts precisely the largest requests.
+4. **Upstream errors are returned to the caller verbatim**, leaking the model server
+   URL and peer tailnet endpoints to anyone holding only a consumer token. The auth
+   path in the same handler already hides its detail; the routing path should too,
+   logging the full error and returning something opaque. This is the consumer door
+   ADR-0016 wants kept opaque, so it belongs with the identity work.
+5. **`ServedBy` is attributed before the error check**, so a failed request is logged
+   as served by a peer that never ran it. `usage.Record` documents the field as
+   "empty if nothing served it". Reading the log to size offload, a dead peer looks
+   like the busiest node in the pod.
+
 ### M2 — Real consumer identity
 
 Goal: replace the single shared secret with per-consumer credentials that can be

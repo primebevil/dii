@@ -127,8 +127,20 @@ func main() {
 		stopSignals()
 	}
 
-	log.Printf("node %s: shutting down, draining in-flight requests for up to %s", cfg.NodeID, cfg.ShutdownTimeout)
-	shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), cfg.ShutdownTimeout)
+	// A zero shutdown_timeout means "no deadline", matching what the other timeouts
+	// in the config mean by 0. Taken literally as a deadline it would be a deadline
+	// already in the past, which would sever every in-flight stream — the exact
+	// opposite of what someone writing "0s" is asking for. A supervisor still bounds
+	// it (Docker's stop_grace_period, systemd's TimeoutStopSec), and a second signal
+	// still exits immediately, so an unbounded drain cannot hang forever.
+	shutdownCtx := context.Background()
+	cancelShutdown := context.CancelFunc(func() {})
+	if cfg.ShutdownTimeout > 0 {
+		log.Printf("node %s: shutting down, draining in-flight requests for up to %s", cfg.NodeID, cfg.ShutdownTimeout)
+		shutdownCtx, cancelShutdown = context.WithTimeout(context.Background(), cfg.ShutdownTimeout)
+	} else {
+		log.Printf("node %s: shutting down, draining in-flight requests with no deadline", cfg.NodeID)
+	}
 	defer cancelShutdown()
 
 	if err := httpSrv.Shutdown(shutdownCtx); err != nil {

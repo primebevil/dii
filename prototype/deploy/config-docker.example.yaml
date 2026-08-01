@@ -3,27 +3,37 @@
 # With the default host networking, this is just an ordinary host config — the
 # container sees the host's network, so localhost is the host and `listen` can bind
 # a specific interface. That is the point: one config shape, not two that drift.
+#
+# Every value below is a placeholder. The port matches the node's built-in default
+# (:8080) and the compose files ship publishing that same port, so leaving it alone
+# is the path of least resistance; if you change it, change `advertise` and the
+# compose `ports` entry to match or the node will bind a port nothing publishes.
 
-# Bind a specific interface to keep the node off the others. ":8090" binds all.
-listen: "100.118.77.40:8090"
-node_id: "atlas"
+# ":8080" binds every interface. Bind one address instead — a tailnet address, say —
+# to keep the node off the others: "100.100.100.100:8080".
+listen: ":8080"
+
+# A short label for this node. It appears in the manifest and in every accounting line.
+node_id: "my-node"
 
 # The host's Ollama. Under host networking this is plain localhost, exactly as it
 # would be without a container.
 model_server: "http://localhost:11434/v1"
 
-# Stub shared token for the consumer door. M2 replaces this with per-consumer
-# credentials that can be issued and revoked independently.
-consumer_token: "dev-secret"
+# Stub shared token for the consumer door — change it. M2 replaces this with
+# per-consumer credentials that can be issued and revoked independently.
+consumer_token: "change-me"
 
-# The address peers and consumers dial.
-advertise: "http://100.118.77.40:8090"
+# The address peers and consumers dial. Must be reachable from them, and must match
+# the published host port in docker-compose.yaml.
+advertise: "http://192.0.2.10:8080"
 
 # Overflow is optional now (ADR-0015); an empty list is a perfectly good node.
 peers: []
 
 # Drain deadline for in-flight streams on SIGTERM. Keep it under the compose
 # stop_grace_period (30s) so the drain finishes before the runtime SIGKILLs.
+# "0s" means drain without a deadline, bounded only by your supervisor.
 shutdown_timeout: "15s"
 
 # No first-byte limit: a big model on a cold VRAM load can take minutes.
@@ -36,5 +46,5 @@ response_header_timeout: "0s"
 # --- If you bridged instead (macOS/Docker Desktop) ----------------------------
 # model_server must reach the host by name rather than localhost, and listen must
 # bind inside the container while compose publishes it:
-#   listen: ":8090"
+#   listen: ":8080"
 #   model_server: "http://host.docker.internal:11434/v1"

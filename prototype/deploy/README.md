@@ -58,7 +58,7 @@ Three things in the compose file are load-bearing, not incidental:
   Ollama on Linux.
 - **`ports` must match `advertise`.** Peers and consumers dial the address in
   `advertise`; that has to be a host address Docker actually publishes. Bind to one
-  interface (`"100.118.77.40:8090:8090"`) to keep the node off the others.
+  interface (`"100.100.100.100:8080:8080"`) to keep the node off the others.
 
 The health check runs `node -healthcheck`, which probes the node's own `/readyz`
 and exits 0 or 1. The image is distroless — no shell, no curl — so the binary does
@@ -74,15 +74,33 @@ compose, keep the exec form: `test: ["CMD", "/usr/local/bin/node", "-healthcheck
 
 ### The optional GUI
 
-`docker-compose.yaml` has a commented-out `open-webui` service. It is worth
-understanding *why* it is only a comment away and needs no node changes: the node
-is an OpenAI-compatible endpoint, so a web GUI is not an integration, it is just
-another consumer. Point its `OPENAI_API_BASE_URL` at the node's `/v1`, give it a
-consumer token as the API key, and it lists models and chats through the node.
-The embeddings endpoint is what powers its document and retrieval features.
+`docker-compose.gui.yaml` is an overlay you opt into with a second `-f`:
+
+```sh
+docker compose -f docker-compose.yaml -f docker-compose.gui.yaml up -d
+# on macOS, add the bridged override too:
+docker compose -f docker-compose.yaml -f docker-compose.macos.yaml -f docker-compose.gui.yaml up -d
+```
+
+It is an overlay rather than a service in the base file because a GUI is not part
+of a node, it is a *consumer* of one. The node is an OpenAI-compatible endpoint, so
+Open WebUI needs no node changes at all — a base URL and an API key, the two fields
+every OpenAI client already has. The embeddings endpoint is what powers its document
+and retrieval features.
+
+Two things the overlay gets right that are easy to get wrong by hand:
+
+- **It reaches the node through the host's published port** (`DII_NODE_URL`, default
+  `http://host.docker.internal:8080`), not a compose service name. Service-name DNS
+  does not resolve under host networking, and the node is not on the GUI's bridge
+  network.
+- **It sends an empty API key**, so the GUI uses the node's *local* door, which is
+  local-first. Sending the `consumer_token` instead would open the consumer door —
+  peer-first — and route your own work off this machine on purpose. Any other value
+  is a 401; there is no third option.
 
 One caveat: the GUI's own login is a layer above the node, separate from
-per-consumer node identity. Behind one shared token, every GUI user looks like a
+per-consumer node identity. Behind one connection, every GUI user looks like a
 single consumer to the node. That is fine for personal use; mapping GUI users to
 distinct node consumers is M2 work.
 
@@ -118,7 +136,7 @@ ssh <host> 'cd ~/dii-node/deploy && docker compose stop'
 ssh <host> 'sudo install -o dii -g dii /tmp/node /opt/dii/node && sudo systemctl restart dii-node'
 
 # 3. check it, from anywhere that can reach the node
-DII_CHAT_MODEL=<a model it serves> prototype/scripts/m1-check.sh http://<host>:8090
+DII_CHAT_MODEL=<a model it serves> prototype/scripts/m1-check.sh http://<host>:8080
 
 # 4. exercise the things a container otherwise hides
 ssh <host> 'sudo systemctl restart dii-node'                    # restarts clean
@@ -138,9 +156,9 @@ binary.
 ## Verifying either of them
 
 ```sh
-curl -s localhost:8090/healthz    # liveness: the process is up
-curl -s localhost:8090/readyz     # readiness: the model server is reachable too
-curl -s localhost:8090/manifest   # what this node can serve
+curl -s localhost:8080/healthz    # liveness: the process is up
+curl -s localhost:8080/readyz     # readiness: the model server is reachable too
+curl -s localhost:8080/manifest   # what this node can serve
 ```
 
 `/readyz` is the one that tells you something you could not otherwise see: a node
