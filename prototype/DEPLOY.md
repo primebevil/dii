@@ -1,8 +1,10 @@
 # Deploying a multi-machine pod
 
 One binary is a node; a pod is several nodes that know each other. This guide
-covers running nodes on separate machines. For a single-machine two-node run, see
-`README.md`.
+covers the *topology* of running nodes on separate machines: addressing,
+reachability, and start order. For a single-machine two-node run see `README.md`,
+and to run a node as a managed service — a container, or systemd — see
+`deploy/README.md`, which is the preferred way to run a node now.
 
 ## Build
 
@@ -86,7 +88,8 @@ two networks.
 
 ## Run a node (Linux, detached)
 
-Copy the binary + its config over, then start it so it survives your SSH session:
+For anything long-lived, run the node as a container instead, so it restarts on
+failure and drains cleanly on stop. See `deploy/README.md`. For a quick manual run:
 
 ```sh
 mkdir -p ~/dii
@@ -95,6 +98,9 @@ chmod +x ~/dii/node
 setsid nohup ~/dii/node -config ~/dii/config-<name>.yaml > ~/dii/node.log 2>&1 < /dev/null &
 tail ~/dii/node.log
 ```
+
+The config path can also come from `DII_CONFIG` instead of `-config`, which is how
+the container and service units avoid depending on a working directory.
 
 **Start order:** bring up the spoke nodes first, then the hub — a node fetches peer
 manifests only at **startup**, so peers should be listening when it boots. To pick
@@ -111,17 +117,55 @@ scripts/ask.sh qwen2.5:7b        # overflows to the node that has it
 scripts/ask.sh nope:1b           # -> honest 503, no node can serve it
 ```
 
+Per node, the two health endpoints answer different questions — a node that is up
+but whose Ollama has died is `200` on the first and `503` on the second:
+
+```sh
+curl -s -w ' [%{http_code}]\n' http://100.118.77.40:8090/healthz   # liveness
+curl -s -w ' [%{http_code}]\n' http://100.118.77.40:8090/readyz    # readiness
+```
+
+Embeddings route exactly like chat, including overflow to a peer that holds the
+model:
+
+```sh
+curl -s http://100.118.77.40:8090/v1/embeddings \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"all-minilm:l6-v2","input":"the reliable floor"}'
+```
+
 ## Stop a node
 
 ```sh
-ssh <host> 'pkill -f "dii/node"'
+ssh <host> 'pkill -TERM -f "dii/node"'
 ```
 
-## Known limits (POC)
+Use `SIGTERM`, not `SIGKILL`: on `SIGTERM` the node stops accepting connections and
+lets in-flight streams finish (up to `shutdown_timeout`, default 15s) before
+exiting. A managed service does this for you.
 
-- Manifests are built once at **startup**; restart to refresh models or peers.
+## Reading a node's logs
+
+Each node writes one JSON accounting line per request to stdout. Across a pod, a
+peer-served request appears twice — as `served_by: <peer>` on the node the caller
+hit, and as `served_by: local` on the node that ran it — which is what makes
+"where did the work actually go?" answerable. See the usage-accounting section in
+`README.md`.
+
+## Known limits
+
+- Manifests are built once at **startup**; restart to refresh models or peers. Now
+  that `/v1/models` advertises peers' models too, this also means the advertised
+  list can name a model whose holder has since gone down — that request fails as a
+  `502` from the dead peer rather than an immediate `503`. A periodic manifest
+  refresh would fix both this and the restart-to-notice-a-peer annoyance.
 - A node advertises a single `advertise` endpoint even when it's reachable at
   several addresses. Fine for hub-and-spoke (spokes don't call each other), but a
   multi-homed node can't yet advertise different addresses to different peers.
-- `consumer_token` is a shared stub, not real identity.
+- `consumer_token` is a shared stub, not real identity. Per-consumer credentials
+  that can be issued and revoked independently are M2.
+- No fair-use limits or moderation yet (M3, M4). Do not point a public directory at
+  a node serving strangers — that is gated on the ADR-0016 legal review.
 - No discovery: peers are the static list in config.
+- Inter-node calls are unauthenticated. Overflow is optional now (ADR-0015), so
+  node-to-node auth is only needed if overflow between untrusted pods is turned on.

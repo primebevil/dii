@@ -14,6 +14,10 @@ import (
 	"dii/internal/modelserver"
 )
 
+// maxEmbeddingsBytes caps a peer's embeddings response we buffer into memory,
+// matching the cap the model-server client applies to its own backend.
+const maxEmbeddingsBytes = 32 << 20 // 32 MiB
+
 // Client talks to a peer node's OpenAI-compatible endpoint. Inter-node transport
 // is deliberately just the OpenAI HTTP call reused between nodes (BUILD_BRIEF):
 // we call the peer exactly like any other OpenAI client, with no consumer token,
@@ -81,6 +85,32 @@ func (c *Client) ChatCompletionStream(ctx context.Context, req modelserver.ChatR
 		return nil, fmt.Errorf("peer %s: unexpected status %d: %s", c.endpoint, resp.StatusCode, bytes.TrimSpace(body))
 	}
 	return resp.Body, nil
+}
+
+// Embeddings forwards an embeddings request to the peer's own /v1/embeddings,
+// again as a plain OpenAI call with no consumer token, so overflow works for the
+// embeddings half of the floor bundle exactly as it does for chat.
+func (c *Client) Embeddings(ctx context.Context, req modelserver.EmbeddingsRequest) ([]byte, error) {
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint+"/v1/embeddings", bytes.NewReader(req.Body))
+	if err != nil {
+		return nil, err
+	}
+	httpReq.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.http.Do(httpReq)
+	if err != nil {
+		return nil, fmt.Errorf("peer %s: %w", c.endpoint, err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(io.LimitReader(resp.Body, maxEmbeddingsBytes))
+	if err != nil {
+		return nil, fmt.Errorf("peer %s: reading embeddings response: %w", c.endpoint, err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("peer %s: /v1/embeddings status %d: %s", c.endpoint, resp.StatusCode, bytes.TrimSpace(body))
+	}
+	return body, nil
 }
 
 func (c *Client) ListModels(ctx context.Context) ([]string, error) {

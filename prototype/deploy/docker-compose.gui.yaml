@@ -1,0 +1,93 @@
+# Optional GUI overlay. Opt in by adding this file to the compose command:
+#
+#   macOS:  docker compose -f docker-compose.yaml -f docker-compose.macos.yaml \
+#                          -f docker-compose.gui.yaml up -d
+#   Linux:  docker compose -f docker-compose.yaml -f docker-compose.gui.yaml up -d
+#
+# The point of it being an overlay rather than a service in the base file: the GUI
+# is not part of a node. It is a *consumer* of one. Because the node is an
+# OpenAI-compatible endpoint, Open WebUI needs no node changes at all — a base URL
+# and an API key, the two fields every OpenAI client already has. Running it this
+# way keeps that separation visible instead of implying the node ships a frontend.
+
+services:
+  open-webui:
+    # Pinned to a released tag, not `:main`. `main` is the development branch and
+    # rebuilds on every commit, so it moves under you — which makes it useless as a
+    # yardstick when the thing you are actually evaluating is your own node.
+    image: ghcr.io/open-webui/open-webui:v0.11.0
+    container_name: dii-open-webui
+    restart: unless-stopped
+    depends_on:
+      - node
+
+    # Bound to loopback: this is a personal GUI, and with auth disabled below it
+    # must not be reachable from the LAN. To use it from another device on your
+    # tailnet, change this to your Tailscale IP (e.g. "100.100.100.100:3000:8080") and
+    # turn WEBUI_AUTH back on.
+    ports:
+      - "127.0.0.1:3000:8080"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    environment:
+      # --- the node, as an ordinary OpenAI provider ---------------------------
+      # Reached via the host's published port rather than a compose service name:
+      # the node runs on the default bridge (or host networking), neither of which
+      # gives compose's service-name DNS.
+      OPENAI_API_BASE_URL: "${DII_NODE_URL:-http://host.docker.internal:8080}/v1"
+
+      # Empty key => no Authorization header => the node's LOCAL door, which is
+      # local-first. That is what you want for your own daily driver. Setting this
+      # to the consumer_token instead would open the CONSUMER door, which is
+      # peer-first and would route work away from this machine on purpose.
+      # Any other value is rejected with 401 — there is no third option.
+      OPENAI_API_KEY: ""
+
+      # --- make retrieval actually use the node ------------------------------
+      # Open WebUI ships its own local sentence-transformers model for RAG, so by
+      # default it would never call the node at all. Pointing it at the node is
+      # what exercises M1's embeddings endpoint, and it means documents are
+      # embedded by the same pod that answers about them.
+      RAG_EMBEDDING_ENGINE: "openai"
+      RAG_EMBEDDING_MODEL: "${DII_EMBED_MODEL:-all-minilm:l6-v2}"
+      RAG_OPENAI_API_BASE_URL: "${DII_NODE_URL:-http://host.docker.internal:8080}/v1"
+      RAG_OPENAI_API_KEY: ""
+
+      # --- keep the big models off the GUI's chores ---------------------------
+      # Open WebUI generates a title, tags and follow-up suggestions for every
+      # message, using whichever model you are chatting with. On a 30B that turned
+      # one coding question into a burst of seven completions competing for the
+      # same GPU. Point the chores at the small local model instead: titles stay,
+      # they just cost nothing. TASK_MODEL_EXTERNAL is the one that applies here,
+      # since the node is configured as an OpenAI connection.
+      TASK_MODEL: "${DII_TASK_MODEL:-llama3.2:1b}"
+      TASK_MODEL_EXTERNAL: "${DII_TASK_MODEL:-llama3.2:1b}"
+      ENABLE_TAGS_GENERATION: "false"
+      ENABLE_FOLLOW_UP_GENERATION: "false"
+
+      # Open WebUI persists most settings to its database on first run, after which
+      # environment changes are silently ignored. Letting the environment win keeps
+      # this compose file the single source of truth — at the cost that changing
+      # these particular settings in the UI will not survive a restart.
+      ENABLE_PERSISTENT_CONFIG: "false"
+
+      # --- personal-use settings ---------------------------------------------
+      # No login screen. Fine because the port is loopback-only above. Note the
+      # GUI's own login, if enabled, is a layer above the node and is NOT node
+      # identity: behind one connection every GUI user is a single consumer to the
+      # node. Mapping GUI users to distinct node consumers is M2 work.
+      WEBUI_AUTH: "false"
+      WEBUI_NAME: "DII"
+
+      # The node speaks only the standard OpenAI subset, so make sure Open WebUI
+      # does not also try to reach an Ollama-native API that the node does not
+      # implement.
+      ENABLE_OLLAMA_API: "false"
+
+    volumes:
+      - open-webui:/app/backend/data
+
+volumes:
+  open-webui:

@@ -1,0 +1,76 @@
+# A DII node, containerized. `docker compose up -d` from this directory.
+#
+# Ollama is NOT a service here, on purpose. The node is control plane only, so
+# inference runs natively on the host where the GPU is and the node reaches it by
+# URL. On Linux you could later containerize Ollama with GPU passthrough if you
+# want uniformity; on macOS the GPU is not reachable from a container, so Ollama
+# stays native there either way.
+#
+# Before starting: copy config-docker.example.yaml to config-docker.yaml and edit
+# node_id, advertise, and peers for this machine.
+
+services:
+  node:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: dii-node:latest
+    container_name: dii-node
+    restart: unless-stopped
+
+    # On SIGTERM the node drains in-flight streams for up to shutdown_timeout
+    # (default 15s). Keep this grace period comfortably above that value, or the
+    # container runtime SIGKILLs the node part-way through a drain.
+    stop_grace_period: 30s
+
+    # Host networking, which on Linux is the right default here for three reasons
+    # rather than as a shortcut:
+    #
+    #   1. The container's config becomes identical to a host config — the node
+    #      reaches Ollama at plain localhost, so there is one config file to
+    #      maintain, not a host one and a container one that drift.
+    #   2. `listen` can bind a specific host interface (e.g. a Tailscale address),
+    #      which is how a node stays off public interfaces. A bridged container
+    #      cannot bind a host IP; it can only publish to one.
+    #   3. It sidesteps a real failure we hit on atlas: with a bridge, compose
+    #      creates its own subnet (172.19.x, not the default bridge's 172.17.x),
+    #      and a host firewall scoped to the default bridge silently drops the
+    #      traffic. The node then starts with an empty model list and reports
+    #      not-ready, which is honest but not what you wanted.
+    #
+    # The cost is the loss of network-namespace isolation, which buys little for a
+    # process whose whole job is to be reachable on a mesh.
+    network_mode: host
+
+    volumes:
+      - ./config-docker.yaml:/etc/dii/config.yaml:ro
+    environment:
+      DII_CONFIG: /etc/dii/config.yaml
+
+    # --- Bridged alternative, required on macOS/Docker Desktop --------------------
+    # Docker Desktop has no real host networking, so there you must bridge. Replace
+    # `network_mode: host` above with all of the following, and change model_server
+    # in the config to http://host.docker.internal:11434/v1:
+    #
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"   # native on Desktop; this line is for Linux
+    # ports:
+    #   - "8080:8080"                            # must match `listen` and `advertise`
+    #                                            # in the config; bind one interface
+    #                                            # with "100.100.100.100:8080:8080"
+    #
+    # On Linux, if you bridge anyway, make sure the host firewall admits the compose
+    # network's subnet and not just the default bridge's — see reason 3 above.
+
+    # No healthcheck block here on purpose: the image carries its own (see the
+    # Dockerfile), so it is correct however the container is launched. If you do
+    # override it, it must be the exec form — `test: ["CMD", "/usr/local/bin/node",
+    # "-healthcheck"]`. The shell form cannot work: this image has no shell.
+
+# An optional GUI lives in docker-compose.gui.yaml, as an overlay you add with a
+# second -f rather than a block to uncomment here. It is a consumer of a node, not
+# part of one, and the overlay gets two things right that are easy to get wrong by
+# hand: it reaches the node through the host's published port (compose service-name
+# DNS does not resolve under host networking), and it sends no API key, so the GUI
+# uses the node's local door — local-first — instead of the consumer door, which is
+# peer-first and would route your own work off this machine.

@@ -1,0 +1,34 @@
+# macOS / Docker Desktop override.
+#
+# Docker Desktop has no real host networking — a container there already lives in a
+# VM, so `network_mode: host` means the host of that VM, not your Mac. So on macOS
+# the node has to bridge, and this file flips the base compose over to it:
+#
+#   docker compose -f docker-compose.yaml -f docker-compose.macos.yaml up -d
+#
+# Two paired changes belong in your config-docker.yaml, or the node will come up
+# with an empty model list:
+#
+#   listen: ":8080"                                     # bind inside the container;
+#                                                       # `ports` below publishes it
+#   model_server: "http://host.docker.internal:11434/v1"  # not localhost — that is
+#                                                       # the container itself
+#
+# Ollama stays native on macOS regardless: the GPU is not reachable from a
+# container, so there is nothing to gain by moving it.
+
+services:
+  node:
+    # Replaces `network_mode: host` from the base file.
+    network_mode: bridge
+
+    # Native on Docker Desktop; harmless here and required if this file is ever
+    # reused on Linux.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    # Must match `advertise` in the config. Publishing on all interfaces is what
+    # lets a peer reach this node over Tailscale; narrow it to one interface
+    # (e.g. "100.100.100.100:8080:8080") if you would rather it not answer on the LAN.
+    ports:
+      - "8080:8080"

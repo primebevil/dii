@@ -1,0 +1,51 @@
+# The DII node as a systemd service. This is the non-container path; the container
+# in this directory is the preferred way to run a node (see README.md).
+#
+#   sudo useradd --system --home /opt/dii --shell /usr/sbin/nologin dii
+#   sudo install -d -o dii -g dii /opt/dii
+#   sudo install -o dii -g dii node /opt/dii/node
+#   sudo install -d /etc/dii && sudo install -m 0640 -o root -g dii config.yaml /etc/dii/config.yaml
+#   sudo cp dii-node.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now dii-node
+#   systemctl status dii-node && journalctl -u dii-node -f
+
+[Unit]
+Description=DII node (control plane in front of a local model server)
+Documentation=file:/opt/dii/README.md
+# Ordering only, not a hard dependency: the node starts fine without its backend
+# and reports not-ready on /readyz until the backend answers.
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dii
+Group=dii
+WorkingDirectory=/opt/dii
+
+# The config path comes from the environment, so the service is not tied to the
+# working directory.
+Environment=DII_CONFIG=/etc/dii/config.yaml
+ExecStart=/opt/dii/node
+
+Restart=on-failure
+RestartSec=5s
+
+# On stop, the node drains in-flight streams for up to shutdown_timeout (default
+# 15s). Give systemd headroom above that so the drain finishes rather than being
+# SIGKILLed mid-stream.
+KillSignal=SIGTERM
+TimeoutStopSec=30s
+
+# The node reads one config file and speaks HTTP. It needs nothing else.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+ReadOnlyPaths=/etc/dii
+
+[Install]
+WantedBy=multi-user.target

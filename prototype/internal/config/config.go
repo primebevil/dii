@@ -15,6 +15,12 @@ const (
 	defaultStartupTimeout        = 5 * time.Second
 	defaultResponseHeaderTimeout = 30 * time.Second
 	defaultMaxBodyBytes          = 1 << 20 // 1 MiB
+
+	// defaultShutdownTimeout is the drain deadline on SIGINT/SIGTERM. Keep it
+	// comfortably under a container runtime's stop grace period (Docker's default
+	// is 10s, and prototype/deploy/docker-compose.yaml raises it to 30s), or the
+	// runtime sends SIGKILL part-way through the drain.
+	defaultShutdownTimeout = 15 * time.Second
 )
 
 // Config is one node's resolved settings (defaults applied, durations parsed).
@@ -31,6 +37,7 @@ type Config struct {
 	StartupTimeout        time.Duration // boot-time model-list and peer-manifest fetches
 	ResponseHeaderTimeout time.Duration // max wait for first byte from an upstream (0 = no limit)
 	MaxBodyBytes          int64         // request body cap
+	ShutdownTimeout       time.Duration // drain deadline for in-flight requests on shutdown (0 = no deadline)
 }
 
 // rawConfig mirrors the YAML on disk before defaulting and duration parsing.
@@ -45,6 +52,7 @@ type rawConfig struct {
 	StartupTimeout        string `yaml:"startup_timeout"`         // Go duration, e.g. "5s"
 	ResponseHeaderTimeout string `yaml:"response_header_timeout"` // Go duration, e.g. "30s"; "0s" = no limit
 	MaxBodyBytes          int64  `yaml:"max_body_bytes"`
+	ShutdownTimeout       string `yaml:"shutdown_timeout"` // Go duration, e.g. "15s"
 }
 
 // Load reads a node's YAML config, applies defaults, and validates it.
@@ -69,6 +77,10 @@ func Load(path string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("config %s: response_header_timeout: %w", path, err)
 	}
+	shutdownTimeout, err := parseDuration(raw.ShutdownTimeout, defaultShutdownTimeout)
+	if err != nil {
+		return nil, fmt.Errorf("config %s: shutdown_timeout: %w", path, err)
+	}
 	if raw.MaxBodyBytes < 0 {
 		return nil, fmt.Errorf("config %s: max_body_bytes must not be negative", path)
 	}
@@ -83,6 +95,7 @@ func Load(path string) (*Config, error) {
 		StartupTimeout:        startupTimeout,
 		ResponseHeaderTimeout: responseHeaderTimeout,
 		MaxBodyBytes:          orDefaultInt64(raw.MaxBodyBytes, defaultMaxBodyBytes),
+		ShutdownTimeout:       shutdownTimeout,
 	}, nil
 }
 

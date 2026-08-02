@@ -4,7 +4,10 @@
 // POC shortcut); richer capability tags are a later layer.
 package manifest
 
-import "sync"
+import (
+	"sort"
+	"sync"
+)
 
 // Manifest is a node's self-description, served at /manifest and exchanged
 // between peers at startup.
@@ -44,6 +47,55 @@ func (s *Store) Peers() []Manifest {
 	out := make([]Manifest, 0, len(s.peers))
 	for _, m := range s.peers {
 		out = append(out, m)
+	}
+	return out
+}
+
+// ModelSource is a model this node can get served, paired with where it would run.
+type ModelSource struct {
+	Model    string
+	Endpoint string // empty for this node's own backend; otherwise the peer's endpoint
+}
+
+// RoutableModels returns every model this node can have served — its own plus its
+// cached peers' — deduped, with the local copy winning when both hold a model.
+//
+// This is deliberately a wider answer than Own(): what a caller can ask for is the
+// whole pod, not just this node's shelf. A client that populates a model picker
+// from /v1/models can only discover overflow if the node admits to it.
+//
+// It is NOT what /manifest publishes. A manifest says what a node itself holds; if
+// nodes republished models they had merely borrowed, peers would advertise each
+// other's capacity back and forth and the capability table would stop meaning
+// anything.
+func (s *Store) RoutableModels() []ModelSource {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	seen := make(map[string]bool, len(s.own.Models))
+	out := make([]ModelSource, 0, len(s.own.Models))
+	for _, m := range s.own.Models {
+		if !seen[m] {
+			seen[m] = true
+			out = append(out, ModelSource{Model: m})
+		}
+	}
+
+	// Walk peers in a fixed order: map iteration is randomized, and a model list
+	// that reshuffles between calls makes a client's picker jump around.
+	endpoints := make([]string, 0, len(s.peers))
+	for endpoint := range s.peers {
+		endpoints = append(endpoints, endpoint)
+	}
+	sort.Strings(endpoints)
+
+	for _, endpoint := range endpoints {
+		for _, m := range s.peers[endpoint].Models {
+			if !seen[m] {
+				seen[m] = true
+				out = append(out, ModelSource{Model: m, Endpoint: endpoint})
+			}
+		}
 	}
 	return out
 }
